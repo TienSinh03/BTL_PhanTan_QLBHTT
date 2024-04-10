@@ -1,4 +1,4 @@
-package fit.iuh.dao;
+package fit.iuh.dao.impl;
 
 import fit.iuh.connectDB.Connect;
 import fit.iuh.entity.NhaCungCap;

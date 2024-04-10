@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fit.iuh.dao;
+package fit.iuh.dao.impl;
 
 import fit.iuh.connectDB.Connect;
 import fit.iuh.entity.PhanLoai;
@@ -19,9 +19,24 @@ import java.sql.PreparedStatement;
  *
  * @author phant
  */
-public interface Dao_PhanLoai {
+public class Dao_PhanLoai {
     
-    public ArrayList<PhanLoai> getAllPhanLoai();
+    public ArrayList<PhanLoai> getAllPhanLoai() {
+        ArrayList<PhanLoai> listPhanLoai = new ArrayList<>();
+        Connect.getInstance();
+        Connection con = Connect.getConnection();
+        String url = "Select * from PhanLoai";
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(url);
+            while (rs.next()) {
+                listPhanLoai.add(new PhanLoai(rs.getString(1), rs.getString(2)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listPhanLoai;
+    }
     
     /**
      * lấy thông tin phân loại sản phảm theo mã
@@ -37,7 +52,7 @@ public interface Dao_PhanLoai {
         try {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(url);
-            while (rs.next()) {                
+            while (rs.next()) {
                 listPhanLoai.add(new PhanLoai(rs.getString(1), rs.getString(2)));
             }
         } catch (SQLException e) {
@@ -51,12 +66,12 @@ public interface Dao_PhanLoai {
         Connection con = Connect.getConnection();
         PreparedStatement prestmt = null;
         String url = "select * from PhanLoai where maPhanLoai = ?";
-        
+
         try {
             prestmt = con.prepareStatement(url);
             prestmt.setString(1, maPL);
             ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {                
+            while (rs.next()) {
                 PhanLoai pl = new PhanLoai();
                 pl.setMaPhanLoai(rs.getString(1));
                 pl.setLoaiSanPham(rs.getString(2));

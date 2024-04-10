@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package fit.iuh.dao;
+package fit.iuh.dao.impl;
 
 import fit.iuh.connectDB.Connect;
+import fit.iuh.dao.IChatLieuDao;
 import fit.iuh.entity.ChatLieu;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.sql.PreparedStatement;
  *
  * @author phant
  */
-public class Dao_ChatLieu {
+public class Dao_ChatLieu implements IChatLieuDao {
     /**
      * Lấy tất cả chất liệu trong database
      * @return 
