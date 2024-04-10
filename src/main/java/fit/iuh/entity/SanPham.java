@@ -13,7 +13,7 @@ public class SanPham {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long maSP;
 
-    @Column(length = 50, nullable = false)
+    @Column(columnDefinition = "nvarchar(100)", nullable = false)
     private String tenSP;
     private int soLuong;
     private double giaNhap;

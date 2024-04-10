@@ -9,15 +9,20 @@ import lombok.*;
 @Entity
 @Table(name = "TaiKhoan")
 public class TaiKhoan {
-    @Id
-    @Column(length = 20)
+    @Column(columnDefinition = "nvarchar(100)")
+
     private String tenTaiKhoan;
-    @Column(length = 20, nullable = false)
+
+    @Column(columnDefinition = "nvarchar(100)", nullable = false)
     private String matKhau;
-    @Column(length = 20, nullable = false)
+
+
+    @Column(columnDefinition = "nvarchar(100)", nullable = false)
     private String phanQuyen;
 
-    @OneToOne(fetch = FetchType.LAZY)
+
+    @Id
+    @OneToOne
     @JoinColumn(name = "maNV")
     private NhanVien nhanVien;
 

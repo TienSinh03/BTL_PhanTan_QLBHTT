@@ -14,7 +14,7 @@ public class KichThuoc {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long maKichThuoc;
 
-    @Column(name = "tenKichThuoc", length = 50, nullable = false)
+    @Column(name = "tenKichThuoc", columnDefinition = "nvarchar(100)", nullable = false)
     private String kichThuoc;
 
 //    private String auto_ID() {

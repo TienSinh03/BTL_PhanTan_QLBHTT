@@ -16,7 +16,7 @@ public class MauSac {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long maMauSac;
 
-    @Column(name = "tenMauSac", length = 50, nullable = false)
+    @Column(name = "tenMauSac", columnDefinition = "nvarchar(100)", nullable = false)
     private String mauSac;
 
 //    private String auto_ID() {

@@ -13,7 +13,7 @@ public class ChatLieu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long maChatLieu;
 
-    @Column(name = "tenChatLieu", length = 50, nullable = false)
+    @Column(name = "tenChatLieu", columnDefinition = "nvarchar(100)", nullable = false)
     private String chatLieu;
 
 

@@ -13,7 +13,7 @@ public class PhanLoai {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long maPhanLoai;
 
-    @Column(name = "tenPhanLoai", length = 50, nullable = false)
+    @Column(name = "tenPhanLoai",columnDefinition = "nvarchar(100)", nullable = false)
     private String loaiSanPham;
 
 //    private String auto_ID(){

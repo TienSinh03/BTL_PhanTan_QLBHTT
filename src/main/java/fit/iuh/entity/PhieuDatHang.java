@@ -22,6 +22,7 @@ public class PhieuDatHang {
     @JoinColumn(name = "maKH")
     private KhachHang khachHang;
 
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "maNV")
     private NhanVien nhanVien;

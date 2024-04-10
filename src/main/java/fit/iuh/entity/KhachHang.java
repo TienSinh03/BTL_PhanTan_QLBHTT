@@ -13,13 +13,13 @@ public class KhachHang {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long maKH;
-	@Column(length = 50, nullable = false)
+	@Column(columnDefinition = "nvarchar(100)", nullable = false)
 	private String hoTen;
-	@Column(length = 12, nullable = false, unique = true)
+	@Column(columnDefinition = "nvarchar(100)", nullable = false, unique = true)
 	private String sdt;
-	@Column(length = 30, nullable = false, unique = true)
+	@Column(columnDefinition = "nvarchar(100)", nullable = false, unique = true)
 	private String email;
-	@Column(length = 10, nullable = false)
+	@Column(columnDefinition = "nvarchar(100)", nullable = false)
 	private String gioiTinh;
 	
 //	public KhachHang() {

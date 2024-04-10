@@ -15,15 +15,16 @@ public class NhaCungCap {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long maNCC;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "nvarchar(100)", nullable = false)
     private String tenNCC;
 
+    @Column(columnDefinition = "nvarchar(100)", nullable = false)
     private String diaChi;
 
-    @Column(name = "sdt", length = 12, nullable = false)
+    @Column(columnDefinition = "nvarchar(100)",name = "sdt", nullable = false)
     private String sdt;
 
-    @Column(name = "email", length = 50, nullable = false)
+    @Column(name = "email", columnDefinition = "nvarchar(100)", nullable = false)
     private String email;
 
 //    private String auto_ID(){
