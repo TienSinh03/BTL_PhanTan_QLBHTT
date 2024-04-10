@@ -53,6 +53,13 @@ public class NhanVien {
         this.trangThai = trangThai;
     }
 
+    public long getMaNV() {
+        return maNV;
+    }
+
+    public void setMaNV(long maNV) {
+        this.maNV = maNV;
+    }
 //    public String getMaNV() {
 //        return maNV;
 //    }
