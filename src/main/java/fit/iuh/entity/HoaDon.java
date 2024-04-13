@@ -1,6 +1,7 @@
 package fit.iuh.entity;
 
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import jakarta.persistence.*;
@@ -11,7 +12,9 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "HoaDon")
-public class HoaDon {
+public class HoaDon implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "maHD")

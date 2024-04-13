@@ -4,83 +4,57 @@
  */
 package fit.iuh.dao.impl;
 
-import fit.iuh.connectDB.Connect;
+import fit.iuh.dao.IPhanLoaiDao;
 import fit.iuh.entity.PhanLoai;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 
 import java.util.ArrayList;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
 
 /**
  *
  * @author phant
  */
-public class Dao_PhanLoai {
-    
+public class Dao_PhanLoai implements IPhanLoaiDao {
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
+    EntityManager em = emf.createEntityManager();
+    EntityTransaction et = em.getTransaction();
     public ArrayList<PhanLoai> getAllPhanLoai() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = em.getTransaction();
+
         ArrayList<PhanLoai> listPhanLoai = new ArrayList<>();
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
         String url = "Select * from PhanLoai";
+
         try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            while (rs.next()) {
-                listPhanLoai.add(new PhanLoai(rs.getString(1), rs.getString(2)));
-            }
-        } catch (SQLException e) {
+            et.begin();
+            listPhanLoai = (ArrayList<PhanLoai>) em.createNativeQuery(url, PhanLoai.class).getResultList();
+            et.commit();
+        } catch (Exception e) {
+            et.rollback();
             e.printStackTrace();
         }
         return listPhanLoai;
     }
-    
-    /**
-     * lấy thông tin phân loại sản phảm theo mã
-     * @param maPL
-     * @return 
-     */
 
     public ArrayList<PhanLoai> getAllPhanLoaiCuaPhuKien() {
+        EntityManager em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
         ArrayList<PhanLoai> listPhanLoai = new ArrayList<>();
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        String url = "Select * from PhanLoai WHERE maPhanLoai NOT IN ('PL0001', 'PL0002')";
+        String url = "Select * from PhanLoai WHERE maPhanLoai NOT IN ('1', '2')";
         try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            while (rs.next()) {
-                listPhanLoai.add(new PhanLoai(rs.getString(1), rs.getString(2)));
-            }
-        } catch (SQLException e) {
+            listPhanLoai = (ArrayList<PhanLoai>) em.createNativeQuery(url, PhanLoai.class).getResultList();
+        } catch (Exception e) {
             e.printStackTrace();
+            return listPhanLoai;
         }
         return listPhanLoai;
     }
-    
-    public PhanLoai getDLPhanLoaiSPTheoMa(String maPL) {
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        PreparedStatement prestmt = null;
-        String url = "select * from PhanLoai where maPhanLoai = ?";
 
-        try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maPL);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {
-                PhanLoai pl = new PhanLoai();
-                pl.setMaPhanLoai(rs.getString(1));
-                pl.setLoaiSanPham(rs.getString(2));
-                return pl;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public PhanLoai getDLPhanLoaiSPTheoMa(String maPL) {
+        return em.find(PhanLoai.class, maPL);
     }
     
     /**
@@ -89,22 +63,19 @@ public class Dao_PhanLoai {
      * @return 
      */
     public PhanLoai getPhanLoaiTheoTen(String tenPhanLoai){
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        
+        String sql = "select * from PhanLoai where tenPhanLoai = ?";
         try {
-            String sql = "select * from PhanLoai where tenPhanLoai = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, tenPhanLoai);
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
-                PhanLoai phanLoai = new PhanLoai(rs.getString(1), rs.getString(2));
-                return phanLoai;
-            }
-        } catch (SQLException e) {
+            et.begin();
+            PhanLoai phanLoai = (PhanLoai) em.createNativeQuery(sql, PhanLoai.class)
+                    .setParameter(1, tenPhanLoai)
+                    .getSingleResult();
+            et.commit();
+            return phanLoai;
+        } catch (Exception e) {
+            et.rollback();
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
     
     /**
@@ -112,101 +83,84 @@ public class Dao_PhanLoai {
      * @param phanLoai 
      */
     public void themLoaiSanPham(PhanLoai phanLoai) {
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        PreparedStatement stmt = null;
+        EntityTransaction et = em.getTransaction();
         try {
-            String sql = "insert into PhanLoai values(?, ?)";
-            stmt = con.prepareStatement(sql);
-            stmt.setString(1, phanLoai.getMaPhanLoai());
-            stmt.setString(2, phanLoai.getLoaiSanPham());
-            stmt.executeUpdate();
-          
-             
-        } catch (SQLException e) {
+            et.begin();
+            em.merge(phanLoai);
+            et.commit();
+        } catch (Exception e) {
+            et.rollback();
             e.printStackTrace();
-        } finally {
-            try {
-                stmt.close();
-            } catch (Exception e) {
-            }
         }
     }
     
     /**
      * Xóa dữ liệu loại sản phẩm trên database
-     * @param chatLieu 
+     * @param maPhanLoai
      */
-    public void xoaPhanLoaiSanPham(String maPhanLoai) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "delete from PhanLoai where maPhanLoai = ?";
+    public void xoaPhanLoaiSanPham(int maPhanLoai) {
+        EntityTransaction et = em.getTransaction();
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maPhanLoai);
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            et.begin();
+            PhanLoai phanLoai = em.find(PhanLoai.class, maPhanLoai);
+            if (phanLoai == null) {
+                return;
             }
+            em.remove(phanLoai);
+            et.commit();
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
         }
     }
     
     /**
      * Cập nhật dữ liệu phân loại trên database
-     * @param chatLieu 
+     * @param phanLoai
      */
     public void catNhatLoaiSanPham(PhanLoai phanLoai) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "Update PhanLoai set tenPhanLoai = ? where maPhanLoai = ?";
+        EntityTransaction et = em.getTransaction();
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, phanLoai.getLoaiSanPham());
-            prestmt.setString(2, phanLoai.getMaPhanLoai());
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            et.begin();
+            PhanLoai phanLoaiInDBS = em.find(PhanLoai.class, phanLoai.getMaPhanLoai());
+            if (phanLoaiInDBS == null) {
+                return;
             }
+            phanLoaiInDBS = em.merge(phanLoai);
+            et.commit();
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
         }
     }
     
-    /**
-     * Tạo tự động mã
-     * @return 
-     */
-    public String taoMaPhanLoai() {
-        Connection con = Connect.getInstance().getConnection();
-        String url = "select top 1 maPhanLoai from PhanLoai order by maPhanLoai desc";
-        
-        try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            if(rs.next()) {
-                String maPhanLoai = rs.getString(1);
-                int so = Integer.parseInt(maPhanLoai.substring(4));
-                so++;
-                String maPhanLoaiMoi = so + "";
-                while(maPhanLoaiMoi.length() < 4) {
-                    maPhanLoaiMoi = "0" +maPhanLoaiMoi;
-                    
-                }
-                return "PL" + maPhanLoaiMoi;
-            } else {
-                return "PL0001";
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    /**
+//     * Tạo tự động mã
+//     * @return
+//     */
+//    public String taoMaPhanLoai() {
+//        Connection con = Connect.getInstance().getConnection();
+//        String url = "select top 1 maPhanLoai from PhanLoai order by maPhanLoai desc";
+//
+//        try {
+//            Statement stmt = con.createStatement();
+//            ResultSet rs = stmt.executeQuery(url);
+//            if(rs.next()) {
+//                String maPhanLoai = rs.getString(1);
+//                int so = Integer.parseInt(maPhanLoai.substring(4));
+//                so++;
+//                String maPhanLoaiMoi = so + "";
+//                while(maPhanLoaiMoi.length() < 4) {
+//                    maPhanLoaiMoi = "0" +maPhanLoaiMoi;
+//
+//                }
+//                return "PL" + maPhanLoaiMoi;
+//            } else {
+//                return "PL0001";
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 }

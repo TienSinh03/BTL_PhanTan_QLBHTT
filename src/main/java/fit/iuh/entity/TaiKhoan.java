@@ -3,23 +3,24 @@ package fit.iuh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "TaiKhoan")
-public class TaiKhoan {
-    @Column(columnDefinition = "nvarchar(100)")
+public class TaiKhoan implements Serializable {
+    private static final long serialVersionUID = 1L;
 
+    @Column(columnDefinition = "nvarchar(100)")
     private String tenTaiKhoan;
 
     @Column(columnDefinition = "nvarchar(100)", nullable = false)
     private String matKhau;
 
-
     @Column(columnDefinition = "nvarchar(100)", nullable = false)
     private String phanQuyen;
-
 
     @Id
     @OneToOne

@@ -1,5 +1,6 @@
 package fit.iuh.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import java.util.Date;
@@ -12,7 +13,8 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "PhieuDatHang")
-public class PhieuDatHang {
+public class PhieuDatHang implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

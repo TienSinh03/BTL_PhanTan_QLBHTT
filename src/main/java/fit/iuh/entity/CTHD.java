@@ -3,11 +3,14 @@ package fit.iuh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "CTHD")
-public class CTHD {
+public class CTHD implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "maSP")

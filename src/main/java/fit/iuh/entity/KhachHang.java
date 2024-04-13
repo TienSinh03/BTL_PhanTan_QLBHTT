@@ -4,12 +4,14 @@ package fit.iuh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "KhachHang")
-public class KhachHang {
+public class KhachHang implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long maKH;
@@ -21,6 +23,8 @@ public class KhachHang {
 	private String email;
 	@Column(columnDefinition = "nvarchar(100)", nullable = false)
 	private String gioiTinh;
+
+
 	
 //	public KhachHang() {
 //		// TODO Auto-generated constructor stub
@@ -32,13 +36,12 @@ public class KhachHang {
 //        String finalId = idPrefix + String.format("%04d", length + 1);
 //        return finalId;
 //    }
-//        public KhachHang(String hoVaTen, String sdt, String email, String gioiTinh) {
-//        this.maKH = auto_ID();
-//        this.hoTen = hoVaTen;
-//        this.email = email;
-//        this.sdt = sdt;
-//        this.gioiTinh = gioiTinh;
-//    }
+        public KhachHang(String hoVaTen, String sdt, String email, String gioiTinh) {
+        this.hoTen = hoVaTen;
+        this.email = email;
+        this.sdt = sdt;
+        this.gioiTinh = gioiTinh;
+    }
 //
 //	public KhachHang(String maKH, String hoTen, String sdt, String email, String gioiTinh) {
 //

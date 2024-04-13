@@ -3,12 +3,16 @@ package fit.iuh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "PhanLoai")
-public class PhanLoai {
+public class PhanLoai implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long maPhanLoai;

@@ -208,6 +208,9 @@ insert into MauSac (maMauSac,tenMauSac) values (8,N'Hồng');
 insert into MauSac (maMauSac,tenMauSac) values (9,N'Nâu');
 insert into MauSac (maMauSac,tenMauSac) values (10,N'Đỏ');
 go
+
+delete from MauSac where maMauSac = 10
+
  SET IDENTITY_INSERT dbo.MauSac OFF
 GO
 

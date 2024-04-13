@@ -4,120 +4,101 @@
  */
 package fit.iuh.dao.impl;
 
-import fit.iuh.connectDB.Connect;
+import fit.iuh.dao.IPhieuDatHangDao;
 import fit.iuh.entity.*;
 import fit.iuh.entity.PhieuDatHang;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author phant
  */
-public class Dao_PhieuDatHang {
+public class Dao_PhieuDatHang implements IPhieuDatHangDao {
 
-    private Dao_SanPham dao_SanPham = new Dao_SanPham();
-    private Dao_NhanVien dao_NhanVien = new Dao_NhanVien();
-    private Dao_KhachHang dao_KhachHang = new Dao_KhachHang();
-    private Dao_PhanLoai dao_PhanLoai = new Dao_PhanLoai();
-    private Dao_ChatLieu dao_ChatLieu = new Dao_ChatLieu();
-    private Dao_KichThuoc dao_KichThuoc = new Dao_KichThuoc();
-    private Dao_MauSac dao_MauSac = new Dao_MauSac();
-    private Dao_NhaCungCap dao_NhaCungCap = new Dao_NhaCungCap();
+    EntityManager em = null;
+    EntityTransaction tx = null;
 
-    public ArrayList<PhieuDatHang> getAllPhieuDatHang() {
+//    private Dao_SanPham dao_SanPham = new Dao_SanPham();
+//    private Dao_NhanVien dao_NhanVien = new Dao_NhanVien();
+//    private Dao_KhachHang dao_KhachHang = new Dao_KhachHang();
+//    private Dao_PhanLoai dao_PhanLoai = new Dao_PhanLoai();
+//    private Dao_ChatLieu dao_ChatLieu = new Dao_ChatLieu();
+//    private Dao_KichThuoc dao_KichThuoc = new Dao_KichThuoc();
+//    private Dao_MauSac dao_MauSac = new Dao_MauSac();
+//    private Dao_NhaCungCap dao_NhaCungCap = new Dao_NhaCungCap();
 
-        ArrayList<PhieuDatHang> listPhieuDatHang = new ArrayList<>();
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        String url = "select * from PhieuDatHang";
-        try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            while (rs.next()) {
-                String maKH = rs.getString(2);
-                KhachHang khachHang = dao_KhachHang.getKhachHangTheoMa(maKH);
-
-                String maNV = rs.getString(3);
-                NhanVien nhanVien = dao_NhanVien.getNhanVienTheoMa(maNV);
-                listPhieuDatHang.add(new PhieuDatHang(rs.getString(1), khachHang, nhanVien, rs.getDate(4)));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return listPhieuDatHang;
+    public Dao_PhieuDatHang() {
+        em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
+        tx = em.getTransaction();
     }
-    
-    public void themPhieuDatHang(PhieuDatHang pdt) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "insert into PhieuDatHang values(?, ?, ?, ?)";
+
+    @Override
+    public List<PhieuDatHang> getAllPhieuDatHang() {
+        String query = "Select pdt from PhieuDatHang pdt";
+        List<PhieuDatHang> list = null;
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, pdt.getMaPhieuDat());
-            prestmt.setString(2, pdt.getKhachHang().getMaKH());
-            prestmt.setString(3, pdt.getNhanVien().getMaNV());
-            prestmt.setDate(4, new Date(pdt.getNgayLap().getTime()));
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
+            tx.begin();
+            list = em.createQuery(query, PhieuDatHang.class).getResultList();
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
             e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
+        return list;
+
+    }
+    @Override
+    public boolean themPhieuDatHang(PhieuDatHang pdt) {
+        try {
+            tx.begin();
+            em.merge(pdt);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            tx.rollback();
+            e.printStackTrace();
+        }
+        return false;
     }
     /*
     *@param tham số: mã phieu dat hang
     */
-    public void xoaPhieuDatHang(String maPhieuDatHang) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "DELETE FROM PhieuDatHang WHERE maPhieuDatHang = ?";
+    @Override
+    public boolean xoaPhieuDatHang(long maPhieuDatHang) {
+
+        String url = "DELETE FROM PhieuDatHang pd WHERE pd.maPhieuDat = :maPhieuDatHang";
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maPhieuDatHang);
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
+            tx.begin();
+//            PhieuDatHang pdt = em.find(PhieuDatHang.class, maPhieuDatHang);
+//            em.remove(pdt);
+            em.createQuery(url).setParameter("maPhieuDatHang", maPhieuDatHang).executeUpdate();
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            tx.rollback();
             e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
+        return false;
     }
 
     /**
      * Lấy thông tin phiếu đặt hàng theo mã phiếu đặt hàng
      */
-    public PhieuDatHang getPDTTheoMa(String maPDT) {
-        Connection con = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "Select * from PhieuDatHang where maPhieuDatHang =?";
+    @Override
+    public PhieuDatHang getPDTTheoMa(long maPDT) {
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maPDT);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {
-                String maKH = rs.getString(2);
-                KhachHang khachHang = dao_KhachHang.getKhachHangTheoMa(maKH);
-
-                String maNV = rs.getString(3);
-                NhanVien nhanVien = dao_NhanVien.getNhanVienTheoMa(maNV);
-                PhieuDatHang pdt = new PhieuDatHang(rs.getString(1), khachHang, nhanVien, rs.getDate(4));
-                return pdt;
-            }
-        } catch (SQLException e) {
+            tx.begin();
+            PhieuDatHang pdt = em.find(PhieuDatHang.class, maPDT);
+            tx.commit();
+            return pdt;
+        } catch (Exception e) {
+            tx.rollback();
             e.printStackTrace();
         }
         return null;
@@ -126,51 +107,45 @@ public class Dao_PhieuDatHang {
     /**
      * Lấy thông tin phiếu đặt hàng theo mã khách hàng
      */
-    public PhieuDatHang getPDTTheoMaKH(String maKhachHang) {
-        Connection con = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "Select * from PhieuDatHang where maKH =?";
-        try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maKhachHang);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {
-                String maKH = rs.getString(2);
-                KhachHang khachHang = dao_KhachHang.getKhachHangTheoMa(maKH);
+    @Override
+    public PhieuDatHang getPDTTheoMaKH(long maKhachHang) {
 
-                String maNV = rs.getString(3);
-                NhanVien nhanVien = dao_NhanVien.getNhanVienTheoMa(maNV);
-                PhieuDatHang pdt = new PhieuDatHang(rs.getString(1), khachHang, nhanVien, rs.getDate(4));
-                return pdt;
-            }
-        } catch (SQLException e) {
+        String url = "Select p from PhieuDatHang p where p.khachHang.maKH = :maKHachHang";
+        try {
+            tx.begin();
+            PhieuDatHang pdt = em.createQuery(url, PhieuDatHang.class).setParameter("maKHachHang", maKhachHang).getSingleResult();
+            tx.commit();
+            return pdt;
+        } catch (Exception e) {
+            tx.rollback();
             e.printStackTrace();
         }
+
         return null;
     }
    
-    public String taoMaPhieuDatHang() {
-        Connection con = Connect.getInstance().getConnection();
-        String url = "select top 1 maPhieuDatHang from PhieuDatHang order by maPhieuDatHang desc";
-
-        try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            if (rs.next()) {
-                String maPDT = rs.getString(1);
-                int so = Integer.parseInt(maPDT.substring(4));
-                so++;
-                String maPDTMoi = so + "";
-                while (maPDTMoi.length() < 4) {
-                    maPDTMoi = "0" + maPDTMoi;
-                }
-                return "PDT" + maPDTMoi;
-            } else {
-                return "PDT0001";
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public String taoMaPhieuDatHang() {
+//        Connection con = Connect.getInstance().getConnection();
+//        String url = "select top 1 maPhieuDatHang from PhieuDatHang order by maPhieuDatHang desc";
+//
+//        try {
+//            Statement stmt = con.createStatement();
+//            ResultSet rs = stmt.executeQuery(url);
+//            if (rs.next()) {
+//                String maPDT = rs.getString(1);
+//                int so = Integer.parseInt(maPDT.substring(4));
+//                so++;
+//                String maPDTMoi = so + "";
+//                while (maPDTMoi.length() < 4) {
+//                    maPDTMoi = "0" + maPDTMoi;
+//                }
+//                return "PDT" + maPDTMoi;
+//            } else {
+//                return "PDT0001";
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 }

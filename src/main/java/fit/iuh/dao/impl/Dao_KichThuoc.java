@@ -1,191 +1,153 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+/**
+ * @ (#) Dao_KichThuoc.java      4/11/2024
+ * <p>
+ * Copyright (c) 2024 IUH. All rights reserved
  */
+
 package fit.iuh.dao.impl;
 
-import fit.iuh.connectDB.Connect;
+import fit.iuh.dao.IKichThuocDao;
 import fit.iuh.entity.KichThuoc;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-
-/**
- *
- * @author phant
+/*
+ * @description:
+ * @author: Sinh Phan Tien
+ * @date: 4/11/2024
  */
-public class Dao_KichThuoc {
-    
-    public ArrayList<KichThuoc> getAllKichThuoc() {
-        ArrayList<KichThuoc> listKichThuoc = new ArrayList<>();
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        String url = "select * from KichThuoc";
-        try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            while (rs.next()) {                
-                listKichThuoc.add(new KichThuoc(rs.getString(1), rs.getString(2)));                        
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return listKichThuoc;
+public class Dao_KichThuoc implements IKichThuocDao {
+
+    private EntityManager em = null;
+    private EntityTransaction tx = null;
+
+    public Dao_KichThuoc() {
+        em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
+        tx = em.getTransaction();
     }
-    
+
+    /**
+     * Lấy tất cả dữ liệu kích thước
+     *
+     * @return
+     */
+    @Override
+    public ArrayList<KichThuoc> getAllKichThuoc() {
+        String query = "select kt from KichThuoc kt";
+        List<KichThuoc> listKichThuoc = null;
+        try {
+            tx.begin();
+            listKichThuoc = em.createQuery(query, KichThuoc.class).getResultList();
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            tx.rollback();
+        }
+        return (ArrayList<KichThuoc>) listKichThuoc;
+    }
+
     /**
      * Lấy dữ liệu kích thước theo mã
+     *
      * @param maKT
-     * @return 
+     * @return
      */
-    public KichThuoc getDLKichThuocTheoMa(String maKT) {
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        PreparedStatement prestmt = null;
-        String url = "select * from KichThuoc where maKichThuoc = ?";
+    @Override
+    public KichThuoc getDLKichThuocTheoMa(long maKT) {
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maKT);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {                
-                KichThuoc kt = new KichThuoc();
-                kt.setMaKichThuoc(rs.getString(1));
-                kt.setKichThuoc(rs.getString(2));
-                return kt;
-            }
-        } catch (SQLException e) {
+            tx.begin();
+            KichThuoc kichThuoc = em.find(KichThuoc.class, maKT);
+            tx.commit();
+            return kichThuoc;
+        } catch (Exception e) {
             e.printStackTrace();
-        } 
+            tx.rollback();
+        }
         return null;
     }
-    
+
     /**
      * Lấy dữ liệu kích thước theo tên
+     *
      * @param tenKichThuoc
-     * @return 
+     * @return
      */
-    public KichThuoc getKichThuocTheoTen(String tenKichThuoc){
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        
+    public KichThuoc getKichThuocTheoTen(String tenKichThuoc) {
+
+        String sql = "select kt from KichThuoc kt where kt.kichThuoc = :tenKichThuoc";
         try {
-            String sql = "select * from KichThuoc where tenKichThuoc = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, tenKichThuoc);
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
-                KichThuoc kichThuoc = new KichThuoc(rs.getString(1), rs.getString(2));
-                return kichThuoc;
-            }
-        } catch (SQLException e) {
+            tx.begin();
+            KichThuoc kichThuoc = em.createQuery(sql, KichThuoc.class).setParameter("tenKichThuoc", tenKichThuoc).getSingleResult();
+            tx.commit();
+            return kichThuoc;
+        } catch (Exception e) {
             e.printStackTrace();
+            tx.rollback();
         }
+
         return null;
     }
-    
+
     /**
      * Them Kichs thuoc
-     * @param kichThuoc 
-     */
-    public void themDLKichThuoc(KichThuoc kichThuoc) {
-        Connection con = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "insert into KichThuoc values (?, ?)";
-        try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, kichThuoc.getMaKichThuoc());
-            prestmt.setString(2, kichThuoc.getKichThuoc());
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    /**
-     * Xóa dữ liệu Kich Thuoc trên database
-     * @param maKichThuoc
-     */
-    public void xoaDLKichThuoc(String maKichThuoc) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "delete from KichThuoc where maKichThuoc = ?";
-        try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maKichThuoc);
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    /**
-     * Cập nhật dữ liệu  Kich Thuoc trên database
+     *
      * @param kichThuoc
      */
-    public void catNhatDLKichThuoc(KichThuoc kichThuoc) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "Update KichThuoc set tenKichThuoc = ? where maKichThuoc = ?";
+    @Override
+    public boolean themDLKichThuoc(KichThuoc kichThuoc) {
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, kichThuoc.getKichThuoc());
-            prestmt.setString(2, kichThuoc.getMaKichThuoc());
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
+            tx.begin();
+            em.persist(kichThuoc);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            tx.rollback();
         }
+        return false;
     }
-    
+
     /**
-     * Tạo tự động mã
-     * @return 
+     * Xóa dữ liệu Kich Thuoc trên database
+     *
+     * @param maKichThuoc
      */
-    public String taoMaKichThuoc() {
-        Connection con = Connect.getInstance().getConnection();
-        String url = "select top 1 maKichThuoc from KichThuoc order by maKichThuoc desc";
-        
+    @Override
+    public boolean xoaDLKichThuoc(long maKichThuoc) {
+
+        String query = "delete from KichThuoc where maKichThuoc = :maKichThuoc";
         try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            if(rs.next()) {
-                String maKichThuoc = rs.getString(1);
-                int so = Integer.parseInt(maKichThuoc.substring(4));
-                so++;
-                String maKichThuocMoi = so + "";
-                while(maKichThuocMoi.length() < 4) {
-                    maKichThuocMoi = "0" +maKichThuocMoi;
-                    
-                }
-                return "KT" + maKichThuocMoi;
-            } else {
-                return "KT0001";
-            }
-        } catch (SQLException e) {
+            tx.begin();
+            em.createQuery(query).setParameter("maKichThuoc", maKichThuoc).executeUpdate();
+            tx.commit();
+            return true;
+        } catch (Exception e) {
             e.printStackTrace();
+            tx.rollback();
         }
-        return null;
+        return false;
+    }
+
+    /**
+     * Cập nhật dữ liệu  Kich Thuoc trên database
+     *
+     * @param kichThuoc
+     */
+    @Override
+    public boolean capNhatDLKichThuoc(KichThuoc kichThuoc) {
+        try {
+            tx.begin();
+            em.merge(kichThuoc);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            tx.rollback();
+        }
+        return false;
     }
 }

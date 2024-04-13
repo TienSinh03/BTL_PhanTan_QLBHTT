@@ -1,6 +1,7 @@
 package fit.iuh.entity;
 
 
+import java.io.Serializable;
 import java.util.Date;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,7 +11,8 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "CTPhieuDatHang")
-public class CTPhieuDatHang {
+public class CTPhieuDatHang implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "maPhieuDat")

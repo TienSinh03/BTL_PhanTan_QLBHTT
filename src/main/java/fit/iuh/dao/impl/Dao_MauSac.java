@@ -4,188 +4,112 @@
  */
 package fit.iuh.dao.impl;
 
-import fit.iuh.connectDB.Connect;
+import fit.iuh.dao.IMauSacDao;
 import fit.iuh.entity.MauSac;
+import fit.iuh.entity.SanPham;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 
+public class Dao_MauSac implements IMauSacDao {
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+    private final EntityManagerFactory emf;
+    private final EntityManager em;
+    private final EntityTransaction et;
 
-/**
- *
- * @author phant
- */
-public class Dao_MauSac {
-    
+    public Dao_MauSac() {
+        emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
+        em = emf.createEntityManager();
+        et = em.getTransaction();
+    }
+
+    @Override
     public ArrayList<MauSac> getAllMauSac() {
         ArrayList<MauSac> listMauSac = new ArrayList<>();
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        String url = "select * from MauSac";
+        String  sql = "select ms from MauSac ms";
         try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            while (rs.next()) {                
-                listMauSac.add(new MauSac(rs.getString(1), rs.getString(2)));                        
-            }
-        } catch (SQLException e) {
+            et.begin();
+            listMauSac = (ArrayList<MauSac>) em.createQuery(sql).getResultList();
+            et.commit();
+        } catch (Exception e) {
+            et.rollback();
             e.printStackTrace();
         }
         return listMauSac;
     }
-    
-    /**
-     * Lấy dữ liệu màu sắc theo mã
-     * @param maMS
-     * @return 
-     */
-    public MauSac getDLMauSacTheoMa(String maMS) {
-        Connection con = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "select * from MauSac where maMauSac = ?";
-        
+    @Override
+    public MauSac getDLMauSacTheoMa(long maMS) {
+        MauSac mauSac = null;
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maMS);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {                
-                MauSac ms = new MauSac();
-                ms.setMaMauSac(rs.getString(1));
-                ms.setMauSac(rs.getString(2));
-                return ms;
-            }
-        } catch (SQLException e) {
+            et.begin();
+            mauSac = em.find(MauSac.class, maMS);
+            et.commit();
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return mauSac;
+    }
+
+    @Override
+    public MauSac getMauSacTheoTen(String mauSac) {
+        MauSac mauSac1 = null;
+        try {
+            et.begin();
+            mauSac1 = (MauSac) em.createQuery("select ms from MauSac ms where ms.mauSac = :mauSac")
+                    .setParameter("mauSac", mauSac).getSingleResult();
+            et.commit();
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return mauSac1;
+    }
+
+    @Override
+    public boolean themDLMauSac(MauSac mauSac) {
+        try {
+            et.begin();
+            em.persist(mauSac);
+            et.commit();
+            return true;
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean capNhatDLMauSac(MauSac mauSac) {
+        try {
+            et.begin();
+            em.merge(mauSac);
+            et.commit();
+            return true;
+        } catch (Exception e) {
+            et.rollback();
             e.printStackTrace();
         }
         return null;
     }
-    
-    /**
-     * Lấy dữ liệu màu sắc theo tên
-     * @param tenMauSac
-     * @return 
-     */
-    public MauSac getMauSacTheoTen(String tenMauSac){
-        Connection con = Connect.getInstance().getConnection();
-        
+
+    @Override
+    public Boolean xoaDLMauSac(long maMauSac) {
+        String sql = "delete from MauSac ms where ms.maMauSac = :maMauSac";
         try {
-            String sql = "select * from MauSac where tenMauSac = ?";
-            PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(1, tenMauSac);
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()){
-                MauSac mauSac = new MauSac(rs.getString(1), rs.getString(2));
-                return mauSac;
-            }
-        } catch (SQLException e) {
+            et.begin();
+            em.createQuery(sql).setParameter("maMauSac", maMauSac).executeUpdate();
+            et.commit();
+            return true;
+        } catch (Exception e) {
+            et.rollback();
             e.printStackTrace();
         }
-        return null;
+        return false;
     }
-    
-    /**
-     * Thêm màu sắc vào database
-     * @param mauSac 
-     */
-    public void themDLMauSac(MauSac mauSac) {
-        Connection con = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "insert into MauSac values (?, ?)";
-        try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, mauSac.getMaMauSac());
-            prestmt.setString(2, mauSac.getMauSac());
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    /**
-     * Xóa dữ liệu mau Sac trên database
-     * @param mauSac 
-     */
-    public void xoaDLMauSac(String maMauSac) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "delete from MauSac where maMauSac = ?";
-        try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maMauSac);
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    /**
-     * Cập nhật dữ liệu Màu sắc trên database
-     * @param mauSac 
-     */
-    public void catNhatDLMauSac(MauSac mauSac) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "Update MauSac set tenMauSac = ? where maMauSac = ?";
-        try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, mauSac.getMauSac());
-            prestmt.setString(2, mauSac.getMaMauSac());
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    
-    /**
-     * Tạo tự động mã
-     * @return 
-     */
-    public String taoMaMauSac() {
-        Connection con = Connect.getInstance().getConnection();
-        String url = "select top 1 maMauSac from MauSac order by maMauSac desc";
-        
-        try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            if(rs.next()) {
-                String maMauSac = rs.getString(1);
-                int so = Integer.parseInt(maMauSac.substring(4));
-                so++;
-                String maMauSacMoi = so + "";
-                while(maMauSacMoi.length() < 4) {
-                    maMauSacMoi = "0" +maMauSacMoi;
-                    
-                }
-                return "MS" + maMauSacMoi;
-            } else {
-                return "MS0001";
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public void close(){
+        em.close();
+        emf.close();
     }
 }

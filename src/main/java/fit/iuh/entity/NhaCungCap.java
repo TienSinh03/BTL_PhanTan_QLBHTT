@@ -4,13 +4,15 @@ package fit.iuh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "NhaCungCap")
-public class NhaCungCap {
-
+public class NhaCungCap implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long maNCC;

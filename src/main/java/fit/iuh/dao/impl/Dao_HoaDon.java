@@ -1,585 +1,627 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fit.iuh.dao.impl;
 
+import fit.iuh.dao.IHoaDonDao;
 
-import fit.iuh.connectDB.Connect;
-import fit.iuh.entity.HoaDon;
-import fit.iuh.entity.KhachHang;
-import fit.iuh.entity.NhanVien;
-import fit.iuh.entity.SanPham;
+import fit.iuh.entity.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-/**
- *
- * @author phant
- */
-public class Dao_HoaDon {
+public class Dao_HoaDon implements IHoaDonDao {
+    private final EntityManagerFactory emf;
+    private final EntityManager em;
+    private final EntityTransaction et;
 
-    private Dao_SanPham dao_SanPham = new Dao_SanPham();
-    private Dao_NhanVien dao_NhanVien = new Dao_NhanVien();
-    private Dao_KhachHang dao_KhachHang = new Dao_KhachHang();
-    private Dao_PhanLoai dao_PhanLoai = new Dao_PhanLoai();
-    private Dao_ChatLieu dao_ChatLieu = new Dao_ChatLieu();
-    private Dao_KichThuoc dao_KichThuoc = new Dao_KichThuoc();
-    private Dao_MauSac dao_MauSac = new Dao_MauSac();
-    private Dao_NhaCungCap dao_NhaCungCap = new Dao_NhaCungCap();
+    public Dao_HoaDon() {
+        emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
+        em = emf.createEntityManager();
+        et = em.getTransaction();
+    }
 
+    @Override
     public ArrayList<HoaDon> getAllHoaDon() {
-
-        ArrayList<HoaDon> listHoaDon = new ArrayList<>();
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        String url = "select * from HoaDon";
+        ArrayList<HoaDon> listHoaDon = null;
         try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            while (rs.next()) {
-                String maKH = rs.getString(2);
-                KhachHang khachHang = dao_KhachHang.getKhachHangTheoMa(maKH);
-
-                String maNV = rs.getString(3);
-                NhanVien nhanVien = dao_NhanVien.getNhanVienTheoMa(maNV);
-                listHoaDon.add(new HoaDon(rs.getString(1), khachHang, nhanVien, rs.getDate(4)));
-            }
-        } catch (SQLException e) {
+            et.begin();
+            listHoaDon = (ArrayList<HoaDon>) em.createQuery("select hd from HoaDon hd").getResultList();
+            et.commit();
+            return listHoaDon;
+        } catch (Exception e) {
+            et.rollback();
             e.printStackTrace();
         }
-        return listHoaDon;
+        return null;
     }
-    
-    public void themHoaDon(HoaDon hd) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "insert into HoaDon values(?, ?, ?, ?)";
+
+    @Override
+    public Boolean themHoaDon(HoaDon hd) {
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, hd.getMaHoaDon());
-            prestmt.setString(2, hd.getKhachHang().getMaKH());
-            prestmt.setString(3, hd.getNhanVien().getMaNV());
-            prestmt.setDate(4, new Date(hd.getNgayNhap().getTime()));
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
+            et.begin();
+            KhachHang kh = em.find(KhachHang.class, hd.getKhachHang().getMaKH());
+            NhanVien nv = em.find(NhanVien.class, hd.getNhanVien().getMaNV());
+            hd.setKhachHang(kh);
+            hd.setNhanVien(nv);
+            em.persist(hd);
+            et.commit();
+            return true;
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public double tongTienHoaDon(long maHD) {
+        String url = "select hd.maHoaDon, SUM( cthd.soLuong*sp.giaBan) as tongTien " +
+                "from HoaDon hd JOIN CTHD cthd ON hd.maHoaDon = cthd.hoaDon.maHoaDon " +
+                "JOIN SanPham sp ON cthd.sanPham.maSP = sp.maSP " +
+                "where hd.maHoaDon = :maHD " +
+                "group by hd.maHoaDon";
+        try {
+            et.begin();
+            List<Object[]> list = em.createQuery(url).setParameter("maHD", maHD).getResultList();
+            et.commit();
+            for (Object[] obj : list) {
+                return Double.parseDouble(obj[1].toString());
+            }
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public HoaDon getHoaDonTheoMa(long maHD) {
+        HoaDon hd = null;
+        try {
+            et.begin();
+            hd = em.find(HoaDon.class, maHD);
+            et.commit();
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return hd;
+    }
+
+    @Override
+    public ArrayList<HoaDon> getAllHoaDonTheoNgay(Date tuNgay, Date denNgay) {
+        String sql = "select hd from HoaDon hd where hd.ngayNhap >= :tuNgay and hd.ngayNhap <= :denNgay";
+        try {
+            et.begin();
+            ArrayList<HoaDon> listHoaDon = (ArrayList<HoaDon>) em.createQuery(sql).setParameter("tuNgay", tuNgay).setParameter("denNgay", denNgay).getResultList();
+            et.commit();
+            return listHoaDon;
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<SanPham> thongKeTop5SPDTCN() {
+        String sql = "select sp.maSP,sum(sp.giaBan*cthd.soLuong) as DoanhThu from HoaDon hd " +
+                "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon " +
+                "join SanPham sp on cthd.sanPham.maSP=sp.maSP " +
+                "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai " +
+                "join KichThuoc kc on kc.maKichThuoc=sp.kichThuoc.maKichThuoc " +
+                "join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac " +
+                "join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu " +
+                "join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC group by sp.maSP order by sum(sp.giaBan*cthd.soLuong) desc";
+//        String sql = "select  top 5 sp.maSP,sum(sp.giaBan*cthd.soLuong) as DoanhThu from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n" +
+//                "join SanPham sp on cthd.maSP=sp.maSP \n" +
+//                "group by sp.maSP \n" +
+//                "order by sum(sp.giaBan*cthd.soLuong) desc";
+        List<SanPham> listSanPham = new ArrayList<>();
+        try {
+            et.begin();
+            List<Object[]> results = em.createQuery(sql, Object[].class).setMaxResults(5).getResultList();
+            for(Object[] item : results){
+                SanPham sp = em.find(SanPham.class, Long.parseLong(item[0].toString()));
+                listSanPham.add(sp);
+            }
+
+            et.commit();
+            return (ArrayList<SanPham>) listSanPham;
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<SanPham> thongKeTop5SPDTTN() {
+        return null;
+    }
+
+
+    @Override
+    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChi(MauSac mauSac, PhanLoai phanLoai, KichThuoc kichThuoc) {
+        String sql = "select sp.maSP from HoaDon hd " +
+                "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon " +
+                "join SanPham sp on cthd.sanPham.maSP=sp.maSP " +
+                "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai " +
+                "join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc " +
+                "join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac " +
+                "join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu " +
+                "join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC " +
+                "where ms.mauSac like :mauSac and kt.kichThuoc like :kichThuoc and pl.loaiSanPham like :phanLoai group by sp.maSP";
+        try {
+            et.begin();
+            SanPham sp = em.find(SanPham.class, 1);
+            ArrayList<SanPham> results = (ArrayList<SanPham>) em.createQuery(sql)
+                    .setParameter("mauSac", "%"+mauSac.getMauSac()+"%")
+                    .setParameter("kichThuoc", kichThuoc.getKichThuoc())
+                    .setParameter("phanLoai", phanLoai.getLoaiSanPham())
+                    .getResultList();
+            et.commit();
+            return results;
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChiByTime(MauSac mauSac, PhanLoai phanLoai, KichThuoc kichThuoc, Date tuNgay, Date denNgay) {
+        String sql = "select sp from HoaDon hd " + "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon " + "join SanPham sp on cthd.sanPham.maSP=sp.maSP " + "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai " + "join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc " + "join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac " + "join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu " + "join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC " + "where ms.mauSac like :mauSac and kt.kichThuoc like :kichThuoc and pl.loaiSanPham like :phanLoai and hd.ngayNhap >= :tuNgay and hd.ngayNhap <= :denNgay ";
+        try {
+            et.begin();
+            SanPham sp = em.find(SanPham.class, 1);
+            ArrayList<SanPham> results = (ArrayList<SanPham>) em.createQuery(sql).setParameter("mauSac", mauSac.getMauSac()).setParameter("kichThuoc", kichThuoc.getKichThuoc()).setParameter("phanLoai", phanLoai.getLoaiSanPham()).setParameter("tuNgay", tuNgay).setParameter("denNgay", denNgay).getResultList();
+            et.commit();
+            return results;
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<SanPham> thongKeDanhSachSanPhamTheoThangNam(int thangLap, int namLap) {
+        String sql = "select sp from HoaDon hd " + "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon " + "join SanPham sp on cthd.sanPham.maSP=sp.maSP " + "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai " + "join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc " + "join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac " + "join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu " + "join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC " + "WHERE FUNCTION('MONTH', hd.ngayNhap) = :thangLap " + "AND FUNCTION('YEAR', hd.ngayNhap) = :namLap";
+        try {
+            et.begin();
+            ArrayList<SanPham> listSanPham = (ArrayList<SanPham>) em.createQuery(sql).setParameter("thangLap", thangLap).setParameter("namLap", namLap).getResultList();
+            et.commit();
+            for (SanPham sp : listSanPham) {
+                return listSanPham;
+            }
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<KhachHang> thongKeThongTinKhachHangDaMuaHang() {
+        ArrayList<KhachHang> listKhachHang = null;
+        String sql="SELECT DISTINCT hd.khachHang.maKH,kh.hoTen,kh.sdt FROM HoaDon hd" +
+                "                  JOIN KhachHang kh on hd.khachHang.maKH=kh.maKH";
+        try {
+            et.begin();
+            listKhachHang = (ArrayList<KhachHang>) em.createQuery(sql).getResultList();
+            et.commit();
+            return listKhachHang;
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    @Override
+    public double getThanhTienKhachHangMua(long maKH) {
+        String url = "select SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon join SanPham sp on sp.maSP=cthd.sanPham.maSP join KhachHang kh on kh.maKH=hd.khachHang.maKH where hd.khachHang.maKH = :maKH group by hd.khachHang.maKH";
+        try {
+            et.begin();
+            List<Object> results = em.createQuery(url).setParameter("maKH", maKH).getResultList();
+            et.commit();
+            for (Object obj : results) {
+                return (double) obj;
+            }
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getSoLuongKhachHangMua(long maKH) {
+        String url = "select SUM(cthd.soLuong) as soLuong from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon join SanPham sp on sp.maSP=cthd.sanPham.maSP join KhachHang kh on kh.maKH=hd.khachHang.maKH where hd.khachHang.maKH = :maKH group by hd.khachHang.maKH";
+        try {
+            et.begin();
+            List<Long> results = em.createQuery(url, Long.class).setParameter("maKH", maKH).getResultList();
+            et.commit();
+            for (Long count : results) {
+                return count.intValue(); // Chuyển đổi Long thành int
+            }
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
             e.printStackTrace();
         } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if (em != null && em.isOpen()) {
+                em.close();
             }
-        }
-    }
-
-    /**
-     * Tính tổng tiền của 1 hóa đơn
-     *
-     * @param maHD
-     * @return
-     */
-    public double tongTienHoaDon(String maHD) {
-        Connection con = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "select hd.maHD, SUM( cthd.soLuong*sp.giaBan) as tongTien from HoaDon hd \n"
-                + "   JOIN  CTHD cthd ON hd.maHD = cthd.maHD \n"
-                + "   JOIN SanPham sp ON cthd.maSP = sp.maSP\n"
-                + "where hd.maHD = ?\n"
-                + "group by hd.maHD";
-        try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maHD);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {
-                double tongTien = rs.getDouble(2);
-                return tongTien;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return 0;
     }
 
-    /**
-     * Lấy thông tin hóa đơn theo mã
-     */
-    public HoaDon getHoaDonTheoMa(String maHD) {
-        Connection con = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "Select * from HoaDon where maHD =?";
-        try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maHD);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {
-                String maKH = rs.getString(2);
-                KhachHang khachHang = dao_KhachHang.getKhachHangTheoMa(maKH);
-
-                String maNV = rs.getString(3);
-                NhanVien nhanVien = dao_NhanVien.getNhanVienTheoMa(maNV);
-                HoaDon hd = new HoaDon(rs.getString(1), khachHang, nhanVien, rs.getDate(4));
-                return hd;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * Lấy danh sách hóa đơn theo ngày
-     *
-     * @return
-     */
-    public ArrayList<HoaDon> getAllHoaDonTheoNgay(String tuNgay, String denNgay) {
-
-        ArrayList<HoaDon> listHoaDon = new ArrayList<>();
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        String url = "select * from HoaDon where ngayLap >= ? and ngayLap <= ?";
-        try {
-            PreparedStatement prestmt = con.prepareStatement(url);
-            prestmt.setString(1, tuNgay);
-            prestmt.setString(2, denNgay);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {
-                String maKH = rs.getString(2);
-                KhachHang khachHang = dao_KhachHang.getKhachHangTheoMa(maKH);
-
-                String maNV = rs.getString(3);
-                NhanVien nhanVien = dao_NhanVien.getNhanVienTheoMa(maNV);
-                listHoaDon.add(new HoaDon(rs.getString(1), khachHang, nhanVien, rs.getDate(4)));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return listHoaDon;
-    }
-
-    /**
-     * Tạo tự động mã
-     *
-     * @return
-     */
-    public String taoMaHoaDon() {
-        Connection con = Connect.getInstance().getConnection();
-        String url = "select top 1 maHD from HoaDon order by maHD desc";
-
-        try {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(url);
-            if (rs.next()) {
-                String maHD = rs.getString(1);
-                int so = Integer.parseInt(maHD.substring(4));
-                so++;
-                String maHDMoi = so + "";
-                while (maHDMoi.length() < 4) {
-                    maHDMoi = "0" + maHDMoi;
-
-                }
-                return "HD" + maHDMoi;
-            } else {
-                return "HD0001";
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * ==============================Thống kê doanh thu=====================
-     */
-    /**
-     * Thống kê Top 5 san pham doanh thu cao nhat
-     *
-     * @return
-     */
-    public ArrayList<SanPham> thongKeTop5SPDTCN() {
-        ArrayList<SanPham> listSanPham = new ArrayList<>();
-        Connect.getInstance();
-        Connection conn = Connect.getConnection();
-        try {
-            String sql = "select  top 5 sp.maSP,sum(sp.giaBan*cthd.soLuong) as DoanhThu from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD\n" +
-"						join SanPham sp on cthd.maSP=sp.maSP\n" +
-"						join PhanLoai pl on pl.maPhanLoai=sp.maPhanLoai \n" +
-"						join KichThuoc kc on kc.maKichThuoc=sp.maKichThuoc\n" +
-"						join MauSac ms on ms.maMauSac=sp.maMauSac\n" +
-"						join ChatLieu cl on cl.maChatLieu=sp.maChatLieu\n" +
-"						join NhaCungCap ncc on ncc.maNCC=sp.maNhaCungCap\n" +
-"			group by sp.maSP\n" +
-"			order by sum(sp.giaBan*cthd.soLuong) desc";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                SanPham sp = dao_SanPham.getSanPhamTheoMa(rs.getString(1));
-                listSanPham.add(sp);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return listSanPham;
-    }
-     /**
-     * Thống kê Top 5 san pham doanh thu cao nhat
-     *
-     * @return
-     */
-    public ArrayList<SanPham> thongKeTop5SPDTTN() {
-        ArrayList<SanPham> listSanPham = new ArrayList<>();
-        Connect.getInstance();
-        Connection conn = Connect.getConnection();
-        try {
-            String sql = "select  top 5 sp.maSP,sum(sp.giaBan*cthd.soLuong) as DoanhThu from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD\n" +
-"						join SanPham sp on cthd.maSP=sp.maSP\n" +
-"						join PhanLoai pl on pl.maPhanLoai=sp.maPhanLoai \n" +
-"						join KichThuoc kc on kc.maKichThuoc=sp.maKichThuoc\n" +
-"						join MauSac ms on ms.maMauSac=sp.maMauSac\n" +
-"						join ChatLieu cl on cl.maChatLieu=sp.maChatLieu\n" +
-"						join NhaCungCap ncc on ncc.maNCC=sp.maNhaCungCap\n" +
-"			group by sp.maSP\n" +
-"			order by sum(sp.giaBan*cthd.soLuong) asc";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                SanPham sp = dao_SanPham.getSanPhamTheoMa(rs.getString(1));
-                listSanPham.add(sp);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return listSanPham;
-    }
-    /**
-     * Thống kê danh sách sản phẩm với số lượng bán được theo các tiêu chí
-     *
-     * @return
-     */
-    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuoc(String mauSac, String phanLoai, String kichThuoc) {
-        ArrayList<SanPham> listSanPham = new ArrayList<>();
-        Connect.getInstance();
-        Connection conn = Connect.getConnection();
-        PreparedStatement stmt = null;
-        try {
-            String sql = "select sp.maSP from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD\n"
-                    + "						join SanPham sp on cthd.maSP=sp.maSP\n"
-                    + "						join PhanLoai pl on pl.maPhanLoai=sp.maPhanLoai \n"
-                    + "						join KichThuoc kt on kt.maKichThuoc=sp.maKichThuoc\n"
-                    + "						join MauSac ms on ms.maMauSac=sp.maMauSac\n"
-                    + "						join ChatLieu cl on cl.maChatLieu=sp.maChatLieu\n"
-                    + "						join NhaCungCap ncc on ncc.maNCC=sp.maNhaCungCap\n"
-                    + "	where ms.tenMauSac like ? and kt.tenKichThuoc like ? and pl.tenPhanLoai like ?\n"
-                    + "			group by sp.maSP";
-
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, "%" + mauSac + "%");
-            stmt.setString(2, "%" + kichThuoc + "%");
-            stmt.setString(3, "%" + phanLoai + "%");
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                SanPham sp = dao_SanPham.getSanPhamTheoMa(rs.getString(1));
-                listSanPham.add(sp);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-        }
-        return listSanPham;
-    }
-    
-    /**
-     * Thống kê danh sách sản phẩm với số lượng bán được theo từ ngày và đến
-     * ngày
-     *
-     * @return
-     */
-    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuoc(String mauSac, String phanLoai, String kichThuoc, String tuNgay, String denNgay) {
-        ArrayList<SanPham> listSanPham = new ArrayList<>();
-        Connect.getInstance();
-        Connection conn = Connect.getConnection();
-        PreparedStatement stmt = null;
-        try {
-            String sql = "select cthd.maSP from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD\n"
-                    + "                   						join SanPham sp on cthd.maSP=sp.maSP\n"
-                    + "                   						join PhanLoai pl on pl.maPhanLoai=sp.maPhanLoai \n"
-                    + "                   						join KichThuoc kt on kt.maKichThuoc=sp.maKichThuoc\n"
-                    + "                    					join MauSac ms on ms.maMauSac=sp.maMauSac\n"
-                    + "                    					join ChatLieu cl on cl.maChatLieu=sp.maChatLieu\n"
-                    + "                    					join NhaCungCap ncc on ncc.maNCC=sp.maNhaCungCap\n"
-                    + "      	where ms.tenMauSac like ? and kt.tenKichThuoc like ? and pl.tenPhanLoai like ? and hd.ngayLap >= ? and  hd.ngayLap <= ?\n"
-                    + "		group by cthd.maSP;";
-
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, "%" + mauSac + "%");
-            stmt.setString(2, "%" + kichThuoc + "%");
-            stmt.setString(3, "%" + phanLoai + "%");
-            stmt.setString(4, tuNgay);
-            stmt.setString(5, denNgay);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                SanPham sp = dao_SanPham.getSanPhamTheoMa(rs.getString(1));
-                listSanPham.add(sp);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return listSanPham;
-    }
-    
-     /**
-     * Thống kê danh sách sản phẩm đã bán theo tháng năm
-     *
-     * @return
-     */
-    public ArrayList<SanPham> thongKeDanhSachSanPhamTheoThangNam(String thangLap, String namLap) {
-        ArrayList<SanPham> listSanPham = new ArrayList<>();
-        Connect.getInstance();
-        Connection conn = Connect.getConnection();
-        PreparedStatement stmt = null;
-        try {
-            String sql = "select sp.maSP from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD\n"
-                    + "						join SanPham sp on cthd.maSP=sp.maSP\n"
-                    + "						join PhanLoai pl on pl.maPhanLoai=sp.maPhanLoai \n"
-                    + "						join KichThuoc kt on kt.maKichThuoc=sp.maKichThuoc\n"
-                    + "						join MauSac ms on ms.maMauSac=sp.maMauSac\n"
-                    + "						join ChatLieu cl on cl.maChatLieu=sp.maChatLieu\n"
-                    + "						join NhaCungCap ncc on ncc.maNCC=sp.maNhaCungCap\n"
-                    + "	where MONTH(hd.ngayLap) like ? and YEAR(hd.ngayLap) like ?\n"
-                    + "			group by sp.maSP";
-
-            stmt = conn.prepareStatement(sql);         
-            stmt.setString(1, "%" + thangLap + "%");
-            stmt.setString(2, "%" + namLap + "%");
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                SanPham sp = dao_SanPham.getSanPhamTheoMa(rs.getString(1));
-                listSanPham.add(sp);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-        }
-        return listSanPham;
-    }
-
-    /**
-     * ==================THỐNG KÊ KHÁCH HÀNG===============
-     */
-    /**
-     * Thống kê thông tin khách hãng đã mua
-     *
-     * @return
-     */
-    public ArrayList<KhachHang> thongKeThongTinKhachHangDaMuaHang() {
-        ArrayList<KhachHang> listKhachHang = new ArrayList<>();
-        Connect.getInstance();
-        Connection conn = Connect.getConnection();
-        try {
-            String sql = "select hd.maKH,kh.hoTen,kh.sdt from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n"
-                    + "											join KhachHang kh on kh.maKH=hd.maKH\n"
-                    + "											join SanPham sp on sp.maSP=cthd.maSP\n"
-                    + "							group by hd.maKH,kh.hoTen,kh.sdt";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                KhachHang kh = dao_KhachHang.getKhachHangTheoMa(rs.getString(1));
-                listKhachHang.add(kh);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return listKhachHang;
-    }
-
-    /**
-     * Lấy thành tiền khách hàng mua
-     *
-     * @param maKH
-     * @return
-     */
-    public double getThanhTienKhachHangMua(String maKH) {
-
-        Connection conn = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String sql = "select SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n"
-                + "	join KhachHang kh on kh.maKH=hd.maKH\n"
-                + "	join SanPham sp on sp.maSP=cthd.maSP\n"
-                + "where hd.maKH = ? \n"
-                + "group by hd.maKH,kh.hoTen,kh.sdt";
-        try {
-            prestmt = conn.prepareStatement(sql);
-            prestmt.setString(1, maKH);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return 0;
-    }
-
-    /**
-     * lấy số lượng khách hàng mua tại cửa hàng
-     *
-     * @param maKH
-     * @return
-     */
-    public int getSoLuongKhachHangMua(String maKH) {
-
-        Connection conn = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String sql = "select SUM(cthd.soLuong) as SoLuongKHDaMua from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n"
-                + "					join KhachHang kh on kh.maKH=hd.maKH\n"
-                + "					join SanPham sp on sp.maSP=cthd.maSP\n"
-                + "		where hd.maKH = ?"
-                + "		group by hd.maKH,kh.hoTen,kh.sdt";
-        try {
-            prestmt = conn.prepareStatement(sql);
-            prestmt.setString(1, maKH);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(1);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return 0;
-    }
-
-    /**
-     * lấy số lượng khách hàng
-     *
-     * @return
-     */
+    @Override
     public int getSoLuongKhachHang() {
-        Connection conn = Connect.getInstance().getConnection();
-
-        String sql = "select COUNT(*) as tongKH from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD ";
+        String url = "select COUNT(*) as tongKH from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon ";
         try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                return rs.getInt(1);
+            et.begin();
+            List<Long> results = em.createQuery(url, Long.class).getResultList();
+            et.commit();
+            for (Long count : results) {
+                return count.intValue(); // Chuyển đổi Long thành int
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
         return 0;
     }
 
-    /**
-     * Thống kê top 5 khách hàng doanh thu cao nhat
-     *
-     * @return
-     */
+    @Override
+    public int getSoLuongHoaDonKhachHangMua(long maKH) {
+        String url = "select COUNT(hd.maHoaDon) as tongHD from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon join SanPham sp on sp.maSP=cthd.sanPham.maSP join KhachHang kh on kh.maKH=hd.khachHang.maKH where hd.khachHang.maKH = :maKH group by hd.khachHang.maKH";
+        try {
+            et.begin();
+            List<Long> results = em.createQuery(url, Long.class).setParameter("maKH", maKH).getResultList();
+            et.commit();
+            for (Long count : results) {
+                return count.intValue(); // Chuyển đổi Long thành int
+            }
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+        return 0;
+    }
+
+    @Override
     public ArrayList<KhachHang> thongKeThongTinTop5KhachHangDTCaoNhat() {
-        ArrayList<KhachHang> listKhachHang = new ArrayList<>();
-        Connect.getInstance();
-        Connection conn = Connect.getConnection();
-        try {
-            String sql = "select top 5 hd.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua,SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n"
-                    + "																	join KhachHang kh on kh.maKH=hd.maKH\n"
-                    + "																	join SanPham sp on sp.maSP=cthd.maSP\n"
-                    + "							group by hd.maKH,kh.hoTen,kh.sdt\n"
-                    + "							order by SUM(cthd.soLuong*sp.giaBan) desc";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+        String query = "select hd.khachHang.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua,SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd \n" +
+                "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon\n" +
+                "join KhachHang kh on kh.maKH=hd.khachHang.maKH\n" +
+                "join SanPham sp on sp.maSP=cthd.sanPham.maSP\n" +
+                "group by hd.khachHang.maKH,kh.hoTen,kh.sdt\n" +
+                "order by SUM(cthd.soLuong*sp.giaBan) desc";
 
-            while (rs.next()) {
-                KhachHang kh = dao_KhachHang.getKhachHangTheoMa(rs.getString(1));
+        List<KhachHang> listKhachHang = new ArrayList<>();
+        try {
+            et.begin();
+            List<Object[]> results = em.createQuery(query, Object[].class).setMaxResults(5).getResultList();
+            for(Object[] item : results){
+                KhachHang kh = em.find(KhachHang.class, Long.parseLong(item[0].toString()));
                 listKhachHang.add(kh);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+
+            et.commit();
+            return (ArrayList<KhachHang>) listKhachHang;
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
         }
-        return listKhachHang;
+        return null;
     }
-      /**
-     * Thống kê top 5 khách hàng thuong xuyen mua hang nhat
-     *
-     * @return
-     */
+
+    @Override
     public ArrayList<KhachHang> thongKeThongTinTop5KhachHangThuongXuyenMuaHang() {
-        ArrayList<KhachHang> listKhachHang = new ArrayList<>();
-        Connect.getInstance();
-        Connection conn = Connect.getConnection();
+        String query = "select hd.khachHang.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua from HoaDon hd \n" +
+                "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon\n" +
+                "join KhachHang kh on kh.maKH=hd.khachHang.maKH\n" +
+                "group by hd.khachHang.maKH,kh.hoTen,kh.sdt\n" +
+                "order by count(*) desc";
+        List<KhachHang> listKhachHang = new ArrayList<>();
         try {
-            String sql = "select top 5 hd.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua,SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n"
-                    + "																	join KhachHang kh on kh.maKH=hd.maKH\n"
-                    + "																	join SanPham sp on sp.maSP=cthd.maSP\n"
-                    + "							group by hd.maKH,kh.hoTen,kh.sdt\n"
-                    + "							order by count(*) desc";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                KhachHang kh = dao_KhachHang.getKhachHangTheoMa(rs.getString(1));
+            et.begin();
+            List<Object[]> results = em.createQuery(query, Object[].class).setMaxResults(5).getResultList();
+            for(Object[] item : results){
+                KhachHang kh = em.find(KhachHang.class, Long.parseLong(item[0].toString()));
                 listKhachHang.add(kh);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+
+            et.commit();
+            return (ArrayList<KhachHang>) listKhachHang;
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
         }
-        return listKhachHang;
+        return null;
     }
-      /**
-     * Thống kê top 5 khách hàng co so luong mua nhieu nhat
-     *
-     * @return
-     */
+
+    @Override
     public ArrayList<KhachHang> thongKeThongTinTop5KhachHangSLNhieuNhat() {
-        ArrayList<KhachHang> listKhachHang = new ArrayList<>();
-        Connect.getInstance();
-        Connection conn = Connect.getConnection();
+        String query = "select hd.khachHang.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua,SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon \n" +
+                "join KhachHang kh on kh.maKH=hd.khachHang.maKH\n" +
+                "join SanPham sp on sp.maSP=cthd.sanPham.maSP\n" +
+                "group by hd.khachHang.maKH,kh.hoTen,kh.sdt\n" +
+                "order by SUM(cthd.soLuong) desc";
+        List<KhachHang> listKhachHang = new ArrayList<>();
         try {
-            String sql = "select top 5 hd.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua,SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n"
-                    + "																	join KhachHang kh on kh.maKH=hd.maKH\n"
-                    + "																	join SanPham sp on sp.maSP=cthd.maSP\n"
-                    + "							group by hd.maKH,kh.hoTen,kh.sdt\n"
-                    + "							order by SUM(cthd.soLuong) desc";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs.next()) {
-                KhachHang kh = dao_KhachHang.getKhachHangTheoMa(rs.getString(1));
+            et.begin();
+            List<Object[]> results = em.createQuery(query, Object[].class).setMaxResults(5).getResultList();
+            for(Object[] item : results){
+                System.out.println(item[3].toString());
+                KhachHang kh = em.find(KhachHang.class, Long.parseLong(item[0].toString()));
                 listKhachHang.add(kh);
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return listKhachHang;
-    }
-    
 
-    public int getSoLuongHoaDonKhachHangMua(String maKH) {
-        Connection conn = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String sql = "select maKH , COUNT(*) as tongHD from HoaDon\n"
-                + "where maKH = ?\n"
-                + "group by maKH";
-        try {
-            prestmt = conn.prepareStatement(sql);
-            prestmt.setString(1, maKH);
-            ResultSet rs = prestmt.executeQuery();
-            while (rs.next()) {
-                return rs.getInt(2);
+            et.commit();
+            return (ArrayList<KhachHang>) listKhachHang;
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            e.printStackTrace();
         }
-        return 0;
+        return null;
+    }
+
+    public void close() {
+        em.close();
+        emf.close();
     }
 }
+
+//     * ==============================Thống kê doanh thu=====================
+//     */
+//    /**
+//     * Thống kê Top 5 san pham doanh thu cao nhat
+//     *
+//     * @return
+//     */
+//    public ArrayList<SanPham> thongKeTop5SPDTCN() {
+//        ArrayList<SanPham> listSanPham = new ArrayList<>();
+//        Connect.getInstance();
+//        Connection conn = Connect.getConnection();
+//        try {
+//            String sql = "select  top 5 sp.maSP,sum(sp.giaBan*cthd.soLuong) as DoanhThu from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD\n" +
+//"						join SanPham sp on cthd.maSP=sp.maSP\n" +
+//"						join PhanLoai pl on pl.maPhanLoai=sp.maPhanLoai \n" +
+//"						join KichThuoc kc on kc.maKichThuoc=sp.maKichThuoc\n" +
+//"						join MauSac ms on ms.maMauSac=sp.maMauSac\n" +
+//"						join ChatLieu cl on cl.maChatLieu=sp.maChatLieu\n" +
+//"						join NhaCungCap ncc on ncc.maNCC=sp.maNhaCungCap\n" +
+//"			group by sp.maSP\n" +
+//"			order by sum(sp.giaBan*cthd.soLuong) desc";
+//            Statement stmt = conn.createStatement();
+//            ResultSet rs = stmt.executeQuery(sql);
+//
+//            while (rs.next()) {
+//                SanPham sp = dao_SanPham.getSanPhamTheoMa(rs.getString(1));
+//                listSanPham.add(sp);
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        return listSanPham;
+//    }
+//     /**
+//     * Thống kê Top 5 san pham doanh thu cao nhat
+//     *
+//     * @return
+//     */
+//    public ArrayList<SanPham> thongKeTop5SPDTTN() {
+//        ArrayList<SanPham> listSanPham = new ArrayList<>();
+//        Connect.getInstance();
+//        Connection conn = Connect.getConnection();
+//        try {
+//            String sql = "select  top 5 sp.maSP,sum(sp.giaBan*cthd.soLuong) as DoanhThu from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD\n" +
+//"						join SanPham sp on cthd.maSP=sp.maSP\n" +
+//"						join PhanLoai pl on pl.maPhanLoai=sp.maPhanLoai \n" +
+//"						join KichThuoc kc on kc.maKichThuoc=sp.maKichThuoc\n" +
+//"						join MauSac ms on ms.maMauSac=sp.maMauSac\n" +
+//"						join ChatLieu cl on cl.maChatLieu=sp.maChatLieu\n" +
+//"						join NhaCungCap ncc on ncc.maNCC=sp.maNhaCungCap\n" +
+//"			group by sp.maSP\n" +
+//"			order by sum(sp.giaBan*cthd.soLuong) asc";
+//            Statement stmt = conn.createStatement();
+//            ResultSet rs = stmt.executeQuery(sql);
+//
+//            while (rs.next()) {
+//                SanPham sp = dao_SanPham.getSanPhamTheoMa(rs.getString(1));
+//                listSanPham.add(sp);
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        return listSanPham;
+//    }
+
+
+//
+//    /**
+//     * lấy số lượng khách hàng mua tại cửa hàng
+//     *
+//     * @param maKH
+//     * @return
+//     */
+//    public int getSoLuongKhachHangMua(String maKH) {
+//
+//        Connection conn = Connect.getInstance().getConnection();
+//        PreparedStatement prestmt = null;
+//        String sql = "select SUM(cthd.soLuong) as SoLuongKHDaMua from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n"
+//                + "					join KhachHang kh on kh.maKH=hd.maKH\n"
+//                + "					join SanPham sp on sp.maSP=cthd.maSP\n"
+//                + "		where hd.maKH = ?"
+//                + "		group by hd.maKH,kh.hoTen,kh.sdt";
+//        try {
+//            prestmt = conn.prepareStatement(sql);
+//            prestmt.setString(1, maKH);
+//            ResultSet rs = prestmt.executeQuery();
+//            while (rs.next()) {
+//                return rs.getInt(1);
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        return 0;
+//    }
+//
+//    /**
+//     * lấy số lượng khách hàng
+//     *
+//     * @return
+//     */
+//    public int getSoLuongKhachHang() {
+//        Connection conn = Connect.getInstance().getConnection();
+//
+//        String sql = "select COUNT(*) as tongKH from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD ";
+//        try {
+//            Statement stmt = conn.createStatement();
+//            ResultSet rs = stmt.executeQuery(sql);
+//            while (rs.next()) {
+//                return rs.getInt(1);
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        return 0;
+//    }
+//
+//    /**
+//     * Thống kê top 5 khách hàng doanh thu cao nhat
+//     *
+//     * @return
+//     */
+//    public ArrayList<KhachHang> thongKeThongTinTop5KhachHangDTCaoNhat() {
+//        ArrayList<KhachHang> listKhachHang = new ArrayList<>();
+//        Connect.getInstance();
+//        Connection conn = Connect.getConnection();
+//        try {
+//            String sql = "select top 5 hd.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua,SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n"
+//                    + "																	join KhachHang kh on kh.maKH=hd.maKH\n"
+//                    + "																	join SanPham sp on sp.maSP=cthd.maSP\n"
+//                    + "							group by hd.maKH,kh.hoTen,kh.sdt\n"
+//                    + "							order by SUM(cthd.soLuong*sp.giaBan) desc";
+//            Statement stmt = conn.createStatement();
+//            ResultSet rs = stmt.executeQuery(sql);
+//
+//            while (rs.next()) {
+//                KhachHang kh = dao_KhachHang.getKhachHangTheoMa(rs.getString(1));
+//                listKhachHang.add(kh);
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        return listKhachHang;
+//    }
+//      /**
+//     * Thống kê top 5 khách hàng thuong xuyen mua hang nhat
+//     *
+//     * @return
+//     */
+//    public ArrayList<KhachHang> thongKeThongTinTop5KhachHangThuongXuyenMuaHang() {
+//        ArrayList<KhachHang> listKhachHang = new ArrayList<>();
+//        Connect.getInstance();
+//        Connection conn = Connect.getConnection();
+//        try {
+//            String sql = "select top 5 hd.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua,SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n"
+//                    + "																	join KhachHang kh on kh.maKH=hd.maKH\n"
+//                    + "																	join SanPham sp on sp.maSP=cthd.maSP\n"
+//                    + "							group by hd.maKH,kh.hoTen,kh.sdt\n"
+//                    + "							order by count(*) desc";
+//            Statement stmt = conn.createStatement();
+//            ResultSet rs = stmt.executeQuery(sql);
+//
+//            while (rs.next()) {
+//                KhachHang kh = dao_KhachHang.getKhachHangTheoMa(rs.getString(1));
+//                listKhachHang.add(kh);
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        return listKhachHang;
+//    }
+//      /**
+//     * Thống kê top 5 khách hàng co so luong mua nhieu nhat
+//     *
+//     * @return
+//     */
+//    public ArrayList<KhachHang> thongKeThongTinTop5KhachHangSLNhieuNhat() {
+//        ArrayList<KhachHang> listKhachHang = new ArrayList<>();
+//        Connect.getInstance();
+//        Connection conn = Connect.getConnection();
+//        try {
+//            String sql = "select top 5 hd.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua,SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD \n"
+//                    + "																	join KhachHang kh on kh.maKH=hd.maKH\n"
+//                    + "																	join SanPham sp on sp.maSP=cthd.maSP\n"
+//                    + "							group by hd.maKH,kh.hoTen,kh.sdt\n"
+//                    + "							order by SUM(cthd.soLuong) desc";
+//            Statement stmt = conn.createStatement();
+//            ResultSet rs = stmt.executeQuery(sql);
+//
+//            while (rs.next()) {
+//                KhachHang kh = dao_KhachHang.getKhachHangTheoMa(rs.getString(1));
+//                listKhachHang.add(kh);
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        return listKhachHang;
+//    }
+//
+//
+//    public int getSoLuongHoaDonKhachHangMua(String maKH) {
+//        Connection conn = Connect.getInstance().getConnection();
+//        PreparedStatement prestmt = null;
+//        String sql = "select maKH , COUNT(*) as tongHD from HoaDon\n"
+//                + "where maKH = ?\n"
+//                + "group by maKH";
+//        try {
+//            prestmt = conn.prepareStatement(sql);
+//            prestmt.setString(1, maKH);
+//            ResultSet rs = prestmt.executeQuery();
+//            while (rs.next()) {
+//                return rs.getInt(2);
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        return 0;
+//    }
+//}

@@ -4,88 +4,78 @@
  */
 package fit.iuh.dao.impl;
 
-import fit.iuh.connectDB.Connect;
+import fit.iuh.dao.ICTPhieuDatHangDao;
 import fit.iuh.entity.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+
+
 /**
  *
  * @author phant
  */
-public class Dao_CTPhieuDatHang {
-    private Dao_SanPham dao_SanPham = new Dao_SanPham();
-    private Dao_PhieuDatHang dao_PhieuDatHang = new Dao_PhieuDatHang();
-    
+public class Dao_CTPhieuDatHang implements ICTPhieuDatHangDao {
+    //    private Dao_SanPham dao_SanPham = new Dao_SanPham();
+//    private Dao_PhieuDatHang dao_PhieuDatHang = new Dao_PhieuDatHang();
+//
+    EntityManager em = null;
+    EntityTransaction tx = null;
+
+    public Dao_CTPhieuDatHang() {
+        em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
+        tx = em.getTransaction();
+    }
+
     /**
      * Lấy Chi tiết phieu dat hang theo mã phieu dat hang
+     *
      * @param maPhieuDatHang
-     * @return 
+     * @return
      */
-    public ArrayList<CTPhieuDatHang> getAllCTPhieuDatHang(String maPhieuDatHang) {
-              
-        ArrayList<CTPhieuDatHang> listCTPhieuDatHang = new ArrayList<>();
-        Connect.getInstance();
-        Connection con = Connect.getConnection();
-        String url ="select * from CTPhieuDatHang where maPhieuDatHang = ?";
+    @Override
+    public ArrayList<CTPhieuDatHang> getAllCTPhieuDatHang(long maPhieuDatHang) {
+        String query = "Select ctpdt from CTPhieuDatHang ctpdt where ctpdt.phieuDatHang.maPhieuDat = :maPhieuDatHang";
+        List<CTPhieuDatHang> list = null;
         try {
-            PreparedStatement prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maPhieuDatHang);
-            ResultSet rs = prestmt.executeQuery();
-            while(rs.next()){
-                String maSP = rs.getString(2);
-                SanPham sanPham = dao_SanPham.getSanPhamTheoMa(maSP);
-                sanPham.setSoLuong(rs.getInt(3));
-                PhieuDatHang pdt = dao_PhieuDatHang.getPDTTheoMa(maPhieuDatHang);
-                listCTPhieuDatHang.add(new CTPhieuDatHang(sanPham, pdt, rs.getInt(3)));
-                        
-            }
-        } catch (SQLException e) {
+            tx.begin();
+            list = em.createQuery(query, CTPhieuDatHang.class).setParameter("maPhieuDatHang", maPhieuDatHang).getResultList();
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
             e.printStackTrace();
         }
-        return listCTPhieuDatHang;
+        return (ArrayList<CTPhieuDatHang>) list;
     }
-    
-    public void themCTPDT(CTPhieuDatHang ctpdt) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "insert into CTPhieuDatHang values(?, ?, ?)";
+    @Override
+    public boolean themCTPDT(CTPhieuDatHang ctpdt) {
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, ctpdt.getPhieuDatHang().getMaPhieuDat());
-            prestmt.setString(2, ctpdt.getSanPham().getMaSP());
-            prestmt.setInt(3, ctpdt.getSoLuong());
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
+            tx.begin();
+            em.persist(ctpdt);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            tx.rollback();
             e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
+        return false;
     }
-    
-    public void xoaCTPhieuDatHang(String maPhieuDatHang) {
-        Connection con  = Connect.getInstance().getConnection();
-        PreparedStatement prestmt = null;
-        String url = "DELETE FROM CTPhieuDatHang WHERE maPhieuDatHang = ?";
+
+    @Override
+    public boolean xoaCTPhieuDatHang(long maPhieuDatHang) {
+        String url = "DELETE FROM CTPhieuDatHang ctpdh WHERE ctpdh.phieuDatHang.maPhieuDat = :maPhieuDatHang";
         try {
-            prestmt = con.prepareStatement(url);
-            prestmt.setString(1, maPhieuDatHang);
-            prestmt.executeUpdate();
-        } catch (SQLException e) {
+            tx.begin();
+            em.createQuery(url).setParameter("maPhieuDatHang", maPhieuDatHang).executeUpdate();
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            tx.rollback();
             e.printStackTrace();
-        } finally {
-            try {
-                prestmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            return false;
         }
     }
 }

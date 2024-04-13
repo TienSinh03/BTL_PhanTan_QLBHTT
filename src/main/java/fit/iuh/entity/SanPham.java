@@ -1,5 +1,6 @@
 package fit.iuh.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +9,9 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "SanPham")
-public class SanPham {
+public class SanPham implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long maSP;
