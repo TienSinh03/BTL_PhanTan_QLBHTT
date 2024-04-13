@@ -11,11 +11,23 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "NhaCungCap")
+<<<<<<< HEAD
 public class NhaCungCap implements Serializable {
     private static final long serialVersionUID = 1L;
+=======
+@NamedQueries(value = {
+        @NamedQuery(name = "NhaCungCap.getAll", query = "SELECT ncc FROM NhaCungCap ncc"),
+        @NamedQuery(name = "NhaCungCap.findNhaCungCap", query = "SELECT ncc FROM NhaCungCap ncc WHERE ncc.maNCC = :maNCC or ncc.tenNCC = :tenNCC or ncc.sdt = :sdt or ncc.email = :email"),
+        @NamedQuery(name = "NhaCungCap.findTenNhaCungCap", query = "SELECT ncc FROM NhaCungCap ncc WHERE ncc.tenNCC = :tenNCC"),
+        @NamedQuery(name = "NhaCungCap.findNhaCungCapTheoMa", query = "SELECT ncc FROM NhaCungCap ncc WHERE ncc.maNCC = :maNCC"),
+
+})
+public class NhaCungCap {
+
+>>>>>>> c02e2e69975c5c96b6f87cb50345e3b5ea49c21f
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long maNCC;
+    private long maNCC;
 
     @Column(columnDefinition = "nvarchar(100)", nullable = false)
     private String tenNCC;
@@ -23,7 +35,7 @@ public class NhaCungCap implements Serializable {
     @Column(columnDefinition = "nvarchar(100)", nullable = false)
     private String diaChi;
 
-    @Column(columnDefinition = "nvarchar(100)",name = "sdt", nullable = false)
+    @Column(columnDefinition = "nvarchar(100)", name = "sdt", nullable = false)
     private String sdt;
 
     @Column(name = "email", columnDefinition = "nvarchar(100)", nullable = false)

@@ -10,8 +10,22 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "TaiKhoan")
+<<<<<<< HEAD
 public class TaiKhoan implements Serializable {
     private static final long serialVersionUID = 1L;
+=======
+@NamedQueries(value = {
+        @NamedQuery(name = "TaiKhoan.getAll", query = "SELECT tk FROM TaiKhoan tk"),
+        @NamedQuery(name = "TaiKhoan.getTrangThai", query = "SELECT tk FROM TaiKhoan tk where tk.trangThai = true"),
+        @NamedQuery(name = "TaiKhoan.kiemTraTaiKhoan", query = "SELECT tk FROM TaiKhoan tk where tk.tenTaiKhoan = :tenTaiKhoan and tk.matKhau = :matKhau and tk.trangThai = true"),
+        @NamedQuery(name = "TaiKhoan.getMatKhau", query = "SELECT tk.matKhau FROM TaiKhoan tk where tk.tenTaiKhoan = :ten"),
+        @NamedQuery(name = "TaiKhoan.getTaiKhoanByMaNV", query = "SELECT tk FROM TaiKhoan tk where tk.nhanVien.maNV = :maNV"),
+        @NamedQuery(name = "TaiKhoan.updateMatKhau", query = "UPDATE TaiKhoan tk SET tk.matKhau = :matKhau where tk.nhanVien.maNV = :maNV")
+
+})
+public class TaiKhoan {
+    @Column(columnDefinition = "nvarchar(100)")
+>>>>>>> c02e2e69975c5c96b6f87cb50345e3b5ea49c21f
 
     @Column(columnDefinition = "nvarchar(100)")
     private String tenTaiKhoan;
