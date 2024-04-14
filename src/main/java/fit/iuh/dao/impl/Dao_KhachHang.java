@@ -54,17 +54,18 @@ public class Dao_KhachHang implements IKhachHangDao {
         }
    }
    
-     public ArrayList<KhachHang> timKiemKhachHang(int maKhachHang,String tenKhachHang,String soDienThoai, String email){
+     public ArrayList<KhachHang> timKiemKhachHang(long maKhachHang,String tenKhachHang,String soDienThoai, String email){
         EntityTransaction et = em.getTransaction();
         ArrayList<KhachHang> listKhachHang =new ArrayList<>();
-        String sql = "select * from KhachHang where maKH like ? and hoten like ? and sdt like ? and email like ?";
+        String sql = "select kh from KhachHang kh where (:maKHCheck = '' or kh.maKH = :maKH) and kh.hoTen like :hoTen and kh.sdt like :sdt and kh.email like :email";
         try {
             et.begin();
-            listKhachHang = (ArrayList<KhachHang>) em.createNativeQuery(sql, KhachHang.class)
-                    .setParameter(1, "%"+maKhachHang+"%")
-                    .setParameter(2, "%"+tenKhachHang+"%")
-                    .setParameter(3, "%"+soDienThoai+"%")
-                    .setParameter(4, "%"+email+"%")
+            listKhachHang = (ArrayList<KhachHang>) em.createQuery(sql, KhachHang.class)
+                    .setParameter("maKHCheck", maKhachHang==0 ? "":String.valueOf(maKhachHang))
+                    .setParameter("maKH", maKhachHang)
+                    .setParameter("hoTen", "%"+tenKhachHang+"%")
+                    .setParameter("sdt", "%"+soDienThoai+"%")
+                    .setParameter("email", "%"+email+"%")
                     .getResultList();
             et.commit();
         } catch (Exception e) {
@@ -79,7 +80,7 @@ public class Dao_KhachHang implements IKhachHangDao {
       * @param maKH
       * @return 
       */
-    public KhachHang getKhachHangTheoMa(int maKH) {
+    public KhachHang getKhachHangTheoMa(long maKH) {
        return em.find(KhachHang.class, maKH);
     }
     

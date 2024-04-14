@@ -3,31 +3,32 @@ package fit.iuh.dao;
 
 import fit.iuh.entity.TaiKhoan;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface iTaiKhoanDao {
 
-    public List<TaiKhoan> getAllTaiKhoan();
+    public ArrayList<TaiKhoan> getAllTaiKhoan();
 
-    public List<TaiKhoan> getTrangThai();
-
-
-    public boolean addTaiKhoan(TaiKhoan taiKhoan);
-
-    public boolean deleteTrangThai(Long maNv);
-
-    public boolean updateTrangThai(Long maNv);
-
-    public boolean doiMtatKhau(Long maNv, String matKhau);
-
-    public TaiKhoan kiemTraTaiKhoan(TaiKhoan taiKhoan);
+    public ArrayList<TaiKhoan> getAllTaiKhoanConHoatDong();
 
 
-    public void getMatKhau(String tenTaiKhoan);
+    public boolean themTaiKhoan(TaiKhoan taiKhoan);
 
-    public TaiKhoan getTaiKhoanByMaNV(Long maNV);
+    public boolean xoaTaiKhoan(Long maNv);
 
-    public boolean datLaiMatKhau(TaiKhoan taiKhoan, Long maNV);
+    public boolean capNhatTaiKhoan(Long maNv);
+
+    public void doiMatKhauTaiKhoan(TaiKhoan taiKhoan);
+
+    public TaiKhoan dangNhapTaiKhoan(String tenTaiKhoan, String matKhau);
+
+
+    public String getMatKhau(String tenTK);
+
+    public TaiKhoan getTaiKhoanNV(Long maNV);
+
+    public boolean datLaiMatKhau(TaiKhoan taiKhoan, String matKhau);
 
 
 

@@ -57,7 +57,7 @@ public class Dao_CTHD implements ICTHDDao {
         String url = "select hd.maHoaDon, cthd.soLuong*sp.giaBan as thanhTien from HoaDon hd JOIN CTHD cthd ON hd.maHoaDon = cthd.hoaDon.maHoaDon JOIN SanPham sp ON cthd.sanPham.maSP = sp.maSP where hd.maHoaDon = :maHD and cthd.sanPham.maSP = :maSP";
         try {
             et.begin();
-            List<Object[]> list = em.createQuery(url).setParameter("maHD", maHD).setParameter("maSP", maSP).getResultList();
+            List<Object[]> list = em.createQuery(url, Object[].class).setParameter("maHD", maHD).setParameter("maSP", maSP).getResultList();
             et.commit();
             for (Object[] obj : list) {
                 return (double) obj[1];
@@ -70,11 +70,14 @@ public class Dao_CTHD implements ICTHDDao {
     }
 
     @Override
-    public double getTongDoanhThu(long maSP, int thangLap, int namLap) {
+    public double getTongDoanhThu(long maSP, String thangLap, String namLap) {
         String url = "SELECT SUM(cthd.soLuong * sp.giaBan) AS DoanhThu FROM CTHD cthd JOIN SanPham sp on cthd.sanPham.maSP=sp.maSP JOIN HoaDon hd on cthd.hoaDon.maHoaDon=hd.maHoaDon WHERE sp.maSP = :maSP and month(hd.ngayNhap) = :thangLap and year(hd.ngayNhap) = :namLap";
         try {
             et.begin();
-            List<Object> results = em.createQuery(url).setParameter("maSP", maSP).setParameter("thangLap", thangLap).setParameter("namLap", namLap).getResultList();
+            List<Object> results = em.createQuery(url,Object.class).setParameter("maSP", maSP)
+                    .setParameter("thangLap", Integer.parseInt(thangLap))
+                    .setParameter("namLap", Integer.parseInt(namLap))
+                    .getResultList();
             et.commit();
             for (Object obj : results) {
                 return (double) obj;
@@ -87,14 +90,14 @@ public class Dao_CTHD implements ICTHDDao {
     }
 
     @Override
-    public int getSoLuongSanPhamBanDuoc(long maSP, int thangLap, int namLap) {
+    public int getSoLuongSanPhamBanDuoc(long maSP, String thangLap, String namLap) {
         String url = "SELECT sp.maSP, SUM(cthd.soLuong) as tongSoLuongBan from SanPham sp JOIN CTHD cthd ON sp.maSP = cthd.sanPham.maSP JOIN HoaDon hd ON cthd.hoaDon.maHoaDon = hd.maHoaDon WHERE sp.maSP = :maSP and month(hd.ngayNhap) = :thangLap and year(hd.ngayNhap) = :namLap group by sp.maSP";
         try {
             et.begin();
-            List<Object[]> results = em.createQuery(url)
+            List<Object[]> results = em.createQuery(url, Object[].class)
                     .setParameter("maSP", maSP)
-                    .setParameter("thangLap", thangLap)
-                    .setParameter("namLap", namLap)
+                    .setParameter("thangLap", Integer.parseInt(thangLap))
+                    .setParameter("namLap", Integer.parseInt(namLap))
                     .getResultList();
             et.commit();
             for (Object[] obj : results) {
@@ -116,18 +119,17 @@ public class Dao_CTHD implements ICTHDDao {
     }
 
     @Override
-    public double getDoanhThuSanPhamBanDuoc(long maSP, int thangLap, int namLap) {
+    public double getDoanhThuSanPhamBanDuoc(long maSP, String thangLap, String namLap) {
         String url = "SELECT sum(cthd.soLuong*sp.giaBan) as doanhThu from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon join SanPham sp on cthd.sanPham.maSP=sp.maSP WHERE sp.maSP = :maSP and month(hd.ngayNhap) = :thangLap and year(hd.ngayNhap) = :namLap group by sp.maSP";
         try {
             et.begin();
-            List<Object> results = em.createQuery(url)
+            List<Object> results = em.createQuery(url, Object.class)
                     .setParameter("maSP", maSP)
-                    .setParameter("thangLap", thangLap)
-                    .setParameter("namLap", namLap)
+                    .setParameter("thangLap", Integer.parseInt(thangLap))
+                    .setParameter("namLap", Integer.parseInt(namLap))
                     .getResultList();
             et.commit();
-            for (Object obj : results) {
-                return (double) obj;
+            for (Object obj : results) {return (double) obj;
             }
         } catch (Exception e) {
             if (et != null && et.isActive()) {

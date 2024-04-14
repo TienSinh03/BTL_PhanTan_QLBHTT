@@ -9,6 +9,7 @@ package fit.iuh.dao;
 import fit.iuh.entity.CTPhieuDatHang;
 import fit.iuh.entity.ChatLieu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -17,7 +18,7 @@ import java.util.List;
  * @date: 4/10/2024
  */
 public interface IChatLieuDao {
-    public List<ChatLieu> getAllChatLieu();
+    public ArrayList<ChatLieu> getAllChatLieu();
     public boolean themDLChatLieu(ChatLieu chatLieu);
     public boolean xoaDLChatLieu(long maChatLieu);
     public boolean catNhatDLChatLieu(ChatLieu chatLieu);

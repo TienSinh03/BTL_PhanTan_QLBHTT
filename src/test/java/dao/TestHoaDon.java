@@ -59,16 +59,7 @@ public class TestHoaDon {
         HoaDon hd = dao_hoaDon.getHoaDonTheoMa(1);
         System.out.println(hd);
     }
-    @Test
-    public void testGetAllHoaDonTheoNgay() throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date tuNgay = sdf.parse("2023-10-19");
-        Date denNgay = sdf.parse("2023-10-31");
-        ArrayList<HoaDon> dsHoaDon = dao_hoaDon.getAllHoaDonTheoNgay(tuNgay, denNgay);
-        for (HoaDon hd : dsHoaDon) {
-            System.out.println(hd);
-        }
-    }
+
     @Test
     public void testThongKeTop5SPDTCN() {
         ArrayList<SanPham> dsSanPham = dao_hoaDon.thongKeTop5SPDTCN();
@@ -76,10 +67,9 @@ public class TestHoaDon {
     }
     @Test
     public void testThongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChi() {
-        MauSac mauSac = dao_mauSac.getMauSacTheoTen("Đen");
-        PhanLoai phanLoai = dao_phanLoai.getPhanLoaiTheoTen("Áo");
-        KichThuoc kichThuoc = dao_kichThuoc.getKichThuocTheoTen("M");
-
+        String mauSac = "";
+        String phanLoai = "";
+        String kichThuoc = "XL";
         ArrayList<SanPham> dsSanPham = dao_hoaDon.thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChi(mauSac, phanLoai, kichThuoc);
         for (SanPham sp : dsSanPham) {
             System.out.println(sp);
@@ -87,13 +77,12 @@ public class TestHoaDon {
     }
     @Test
     public void testThongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChiByTime() throws ParseException {
-        MauSac mauSac = dao_mauSac.getMauSacTheoTen("Đen");
-        PhanLoai phanLoai = dao_phanLoai.getPhanLoaiTheoTen("Áo");
-        KichThuoc kichThuoc = dao_kichThuoc.getKichThuocTheoTen("M");
+        String mauSac = "";
+        String phanLoai = "";
+        String kichThuoc = "XL";
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date tuNgay = sdf.parse("2023-10-19");
-        Date denNgay = sdf.parse("2023-10-31");
+        String tuNgay = "2023-10-19";
+        String denNgay = "2023-10-31";
 
         ArrayList<SanPham> dsSanPham = dao_hoaDon.thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChiByTime(mauSac, phanLoai, kichThuoc, tuNgay, denNgay);
         for (SanPham sp : dsSanPham) {
@@ -103,11 +92,20 @@ public class TestHoaDon {
 
     @Test
     public void testThongKeDanhSachSanPhamTheoThangNam() {
-        int thangLap = 10;
-        int namLap = 2023;
+        String thangLap = "10";
+        String namLap = "2023";
         ArrayList<SanPham> dsSanPham = dao_hoaDon.thongKeDanhSachSanPhamTheoThangNam(thangLap, namLap);
         for (SanPham sp : dsSanPham) {
             System.out.println(sp);
+        }
+    }
+    @Test
+    public void testGetAllHoaDonTheoNgay() throws ParseException {
+        String tuNgay = "2023-10-19";
+        String denNgay = "2023-10-31";
+        ArrayList<HoaDon> dsHoaDon = dao_hoaDon.getAllHoaDonTheoNgay(tuNgay, denNgay);
+        for (HoaDon hd : dsHoaDon) {
+            System.out.println(hd);
         }
     }
 
@@ -158,6 +156,12 @@ public class TestHoaDon {
     public void testthongKeThongTinTop5KhachHangSLNhieuNhat() {
         ArrayList<KhachHang> list = dao_hoaDon.thongKeThongTinTop5KhachHangSLNhieuNhat();
         list.forEach(System.out::println);
+    }
+
+    @Test
+    public void testthongKeTop5SPDTTN() {
+        ArrayList<SanPham> dsSanPham = dao_hoaDon.thongKeTop5SPDTTN();
+        dsSanPham.forEach(System.out::println);
     }
 
     @AfterAll

@@ -9,8 +9,8 @@ public interface IMauSacDao {
     public MauSac getDLMauSacTheoMa(long maMS) ;
     public MauSac getMauSacTheoTen(String tenMauSac);
     public boolean themDLMauSac(MauSac mauSac);
-    public Boolean capNhatDLMauSac(MauSac mauSac) ;
-    public Boolean xoaDLMauSac(long maMauSac) ;
+    public boolean capNhatDLMauSac(MauSac mauSac) ;
+    public boolean xoaDLMauSac(long maMauSac) ;
 
 
 }

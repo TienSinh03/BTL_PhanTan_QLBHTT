@@ -20,6 +20,6 @@ public interface IKhachHangDao {
     public ArrayList<KhachHang> getAllKhachHang();
     public void themKhachHang(KhachHang kh);
     public void capNhatKhachHang(KhachHang kh);
-    public ArrayList<KhachHang> timKiemKhachHang(int maKhachHang,String tenKhachHang,String soDienThoai, String email);
-    public KhachHang getKhachHangTheoMa(int maKH);
+    public ArrayList<KhachHang> timKiemKhachHang(long maKhachHang,String tenKhachHang,String soDienThoai, String email);
+    public KhachHang getKhachHangTheoMa(long maKH);
 }

@@ -29,11 +29,9 @@ public class MauSac implements Serializable {
 //        return idPrefix;
 //    }
 //
-//    public MauSac(String mauSac) {
-//        this.maMauSac = auto_ID();
-//        this.mauSac = mauSac;
-//
-//    }
+    public MauSac(String mauSac) {
+        this.mauSac = mauSac;
+    }
 //
 //    public MauSac() {
 //    }

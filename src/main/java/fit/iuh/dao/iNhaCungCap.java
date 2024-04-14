@@ -2,22 +2,23 @@ package fit.iuh.dao;
 
 import fit.iuh.entity.NhaCungCap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface iNhaCungCap {
-    public List<NhaCungCap> getAllNhaCungCap();
+    public ArrayList<NhaCungCap> getAllNhaCungCap();
 
-    public boolean addNhaCungCap(NhaCungCap nhaCungCap);
-    public boolean deleteNhaCungCap(Long maNCC);
-    public boolean updateNhaCungCap(Long maNCC, NhaCungCap nhaCungCap);
+    public boolean themNhaCungCap(NhaCungCap nhaCungCap);
+    public boolean xoaNhaCungCap(Long maNCC);
+    public boolean capNhatNhaCungCap(NhaCungCap ncc);
 
     //    String maNCC, String tenNCC, String sdt, String email
 
-    public List<NhaCungCap> findNhaCungCap(Long maNCC, String tenNCC, String sdt, String email );
+    public NhaCungCap timKiemNhaCungCap(Long maNCC, String tenNCC, String sdt, String email );
 
-    public List<NhaCungCap>  getNhaCungCapTheoTen(String tenNCC);
+    public NhaCungCap  getNhaCungCapTheoTen(String tenNCC);
 
-    public List<NhaCungCap>  getNhaCungCapTheoMa(Long maNCC);
+    public NhaCungCap  getNhaCungCapTheoMa(Long maNCC);
 
 //    taoMaNhaCungCap không viết
 

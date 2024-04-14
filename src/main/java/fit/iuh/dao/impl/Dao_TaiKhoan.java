@@ -31,17 +31,17 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public List<TaiKhoan> getAllTaiKhoan() {
-        return em.createNamedQuery("TaiKhoan.getAll", TaiKhoan.class).getResultList();
+    public ArrayList<TaiKhoan> getAllTaiKhoan() {
+        return (ArrayList<TaiKhoan>) em.createNamedQuery("TaiKhoan.getAll", TaiKhoan.class).getResultList();
     }
 
     @Override
-    public List<TaiKhoan> getTrangThai() {
-        return em.createNamedQuery("TaiKhoan.getTrangThai", TaiKhoan.class).getResultList();
+    public ArrayList<TaiKhoan> getAllTaiKhoanConHoatDong() {
+        return (ArrayList<TaiKhoan>) em.createNamedQuery("TaiKhoan.getTrangThai", TaiKhoan.class).getResultList();
     }
 
     @Override
-    public boolean addTaiKhoan(TaiKhoan taiKhoan) {
+    public boolean themTaiKhoan(TaiKhoan taiKhoan) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -56,7 +56,7 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public boolean deleteTrangThai(Long maNv) {
+    public boolean xoaTaiKhoan(Long maNv) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -73,7 +73,7 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public boolean updateTrangThai(Long maNv) {
+    public boolean capNhatTaiKhoan(Long maNv) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -90,44 +90,40 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public boolean doiMtatKhau(Long maNv, String matKhau) {
+    public void doiMatKhauTaiKhoan(TaiKhoan taiKhoan) {
         EntityTransaction tx = em.getTransaction();
+        String query="update TaiKhoan tk set tk.matKhau = :matKhau where tk.tenTaiKhoan = :tenTaiKhoan";
         try {
             tx.begin();
-            TaiKhoan taiKhoan = em.find(TaiKhoan.class, maNv);
-            taiKhoan.setMatKhau(matKhau);
-            em.merge(taiKhoan);
+            em.createQuery(query)
+                    .setParameter("matKhau", taiKhoan.getMatKhau())
+                    .setParameter("tenTaiKhoan", taiKhoan.getTenTaiKhoan())
+                    .executeUpdate();
             tx.commit();
-            return true;
+
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
         }
-        return false;
     }
 
     @Override
-    public TaiKhoan kiemTraTaiKhoan(TaiKhoan taiKhoan) {
+    public TaiKhoan dangNhapTaiKhoan(String tenTaiKhoan, String matKhau) {
         return em.createNamedQuery("TaiKhoan.kiemTraTaiKhoan", TaiKhoan.class)
-                .setParameter("tenTaiKhoan", taiKhoan.getTenTaiKhoan())
-                .setParameter("matKhau", taiKhoan.getMatKhau())
+                .setParameter("tenTaiKhoan", tenTaiKhoan)
+                .setParameter("matKhau", matKhau)
                 .getSingleResult();
     }
 
     @Override
-    public void getMatKhau(String tenTaiKhoan) {
-        List<String> list= em.createNamedQuery("TaiKhoan.getMatKhau", String.class)
-                .setParameter("ten", tenTaiKhoan)
-                .getResultList();
-        if(list.isEmpty()){
-            System.out.println("Không tìm thấy tài khoản");
-        }else {
-            System.out.println(list.get(1));
-        }
+    public String getMatKhau(String tenTK) {
+        return em.createNamedQuery("TaiKhoan.getMatKhau", String.class)
+                .setParameter("ten", tenTK)
+                .getSingleResult();
     }
 
     @Override
-    public TaiKhoan getTaiKhoanByMaNV(Long maNV) {
+    public TaiKhoan getTaiKhoanNV(Long maNV) {
         return em.createNamedQuery("TaiKhoan.getTaiKhoanByMaNV", TaiKhoan.class)
                 .setParameter("maNV", maNV)
                 .getSingleResult();
@@ -135,13 +131,15 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public boolean datLaiMatKhau(TaiKhoan taiKhoan, Long maNV) {
+    public boolean datLaiMatKhau(TaiKhoan taiKhoan, String matKhau) {
         EntityTransaction tx = em.getTransaction();
+        String query = "update TaiKhoan tk set tk.matKhau = :matKhau where tk.tenTaiKhoan = :tenTaiKhoan";
         try {
             tx.begin();
-            TaiKhoan taiKhoan1 = em.find(TaiKhoan.class, maNV);
-            taiKhoan1.setMatKhau(taiKhoan.getMatKhau());
-            em.merge(taiKhoan1);
+            em.createQuery(query)
+                    .setParameter("matKhau", matKhau)
+                    .setParameter("tenTaiKhoan", taiKhoan.getTenTaiKhoan())
+                    .executeUpdate();
             tx.commit();
             return true;
         } catch (Exception e) {

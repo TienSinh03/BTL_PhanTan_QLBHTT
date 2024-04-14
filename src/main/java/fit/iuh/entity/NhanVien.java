@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "NhanVien")
 public class NhanVien implements Serializable {
@@ -54,10 +55,6 @@ public class NhanVien implements Serializable {
         this.diaChi = diaChi;
         this.gioiTinh = gioiTinh;
         this.trangThai = trangThai;
-    }
-
-    public long getMaNV() {
-        return maNV;
     }
 
     public void setMaNV(long maNV) {

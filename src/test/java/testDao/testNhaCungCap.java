@@ -38,11 +38,12 @@ public class testNhaCungCap {
         nhaCungCap.setEmail("john@gamil.com");
         nhaCungCap.setTenNCC("HCM");
 
-        boolean checked = nhaCungCapDao.addNhaCungCap(nhaCungCap);
+        boolean checked = nhaCungCapDao.themNhaCungCap(nhaCungCap);
     }
+
     @Test
     public void deleteNhaCungCap() {
-        boolean checked = nhaCungCapDao.deleteNhaCungCap(8L);
+        boolean checked = nhaCungCapDao.xoaNhaCungCap(8L);
     }
 
     @Test
@@ -52,11 +53,12 @@ public class testNhaCungCap {
         nhaCungCap.setSdt("0123456789");
         nhaCungCap.setEmail("111@gmail.com");
         nhaCungCap.setTenNCC("HCM");
-        boolean checked = nhaCungCapDao.updateNhaCungCap(7L, nhaCungCap);
+        boolean checked = nhaCungCapDao.capNhatNhaCungCap(nhaCungCap);
     }
+
     @Test
     public void testFindById() {
-        System.out.println(nhaCungCapDao.findNhaCungCap(7L,null,null,null));
+        System.out.println(nhaCungCapDao.timKiemNhaCungCap(7L,null,null,null));
     }
 
     @Test
@@ -68,6 +70,7 @@ public class testNhaCungCap {
     public void testFindByMa() {
         System.out.println(nhaCungCapDao.getNhaCungCapTheoMa(7L));
     }
+
     @AfterAll
     public void tearDown() {
         em.close();

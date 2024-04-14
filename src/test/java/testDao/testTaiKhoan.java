@@ -33,77 +33,65 @@ public class testTaiKhoan {
 
     @Test
     public void testGetTrangThai() {
-        System.out.println(taiKhoanDao.getTrangThai());
+        System.out.println(taiKhoanDao.getAllTaiKhoanConHoatDong());
     }
 
     @Test
     public void addTaiKhoan() {
         TaiKhoan taiKhoan = new TaiKhoan();
-        taiKhoan.setTenTaiKhoan("admin");
+        taiKhoan.setTenTaiKhoan("NV004");
         taiKhoan.setMatKhau("2222");
         taiKhoan.setTrangThai(true);
         taiKhoan.setPhanQuyen("Nhân viên");
 
 
-        NhanVien nhanVien = new NhanVien();
-        nhanVien.setMaNV(5L);
+        NhanVien nhanVien = em.find(NhanVien.class, 4);
         taiKhoan.setNhanVien(nhanVien);
 
 
-        boolean checked = taiKhoanDao.addTaiKhoan(taiKhoan);
+        boolean checked = taiKhoanDao.themTaiKhoan(taiKhoan);
 
     }
 
     @Test
     public void deleteTaiKhoan() {
-        boolean checked = taiKhoanDao.deleteTrangThai(5L);
+        boolean checked = taiKhoanDao.xoaTaiKhoan(4L);
     }
 
     @Test
     public void updateTaiKhoan() {
-        boolean checked = taiKhoanDao.updateTrangThai(5L);
+        boolean checked = taiKhoanDao.capNhatTaiKhoan(4L);
     }
 
     @Test
     public void testDoiMatKhau() {
-        boolean checked = taiKhoanDao.doiMtatKhau(5L, "111222");
-        System.out.println(checked);
+        TaiKhoan tk = taiKhoanDao.getTaiKhoanNV(4L);
+        tk.setMatKhau("1212");
+        taiKhoanDao.doiMatKhauTaiKhoan(tk);
+        System.out.println(tk);
+//        System.out.println(checked);
     }
 
     @Test
     public void kiemTraDangNhap() {
-        TaiKhoan taiKhoan = new TaiKhoan();
-        taiKhoan.setTenTaiKhoan("Admin");
-        taiKhoan.setMatKhau("admin");
-        taiKhoan.setTrangThai(true);
-        taiKhoan.setPhanQuyen("Quản lý");
-        NhanVien nhanVien = new NhanVien();
-        nhanVien.setMaNV(1L);
-        taiKhoan.setNhanVien(nhanVien);
-        taiKhoanDao.kiemTraTaiKhoan(taiKhoan);
-
+        TaiKhoan taiKhoan = taiKhoanDao.dangNhapTaiKhoan("Admin", "admin");
+        System.out.println(taiKhoan);
     }
 
     @Test
     public void testGetMatKhau() {
-
-        taiKhoanDao.getMatKhau("admin");
-
+        System.out.println(taiKhoanDao.getMatKhau("Admin"));
     }
 
     @Test
     public void testGetTaiKhoanByMaNV() {
-        System.out.println(taiKhoanDao.getTaiKhoanByMaNV(1L));
+        System.out.println(taiKhoanDao.getTaiKhoanNV(1L));
     }
 
     @Test
     public void testDatLaiMatKhau() {
-        TaiKhoan taiKhoan = new TaiKhoan();
-        taiKhoan.setTenTaiKhoan("admin");
-        taiKhoan.setMatKhau("333333");
-        taiKhoan.setTrangThai(true);
-        taiKhoan.setPhanQuyen("Nhân viên");
-        taiKhoanDao.datLaiMatKhau(taiKhoan, 5L);
+        TaiKhoan tk = taiKhoanDao.getTaiKhoanNV(4L);
+        taiKhoanDao.datLaiMatKhau(tk, "1121");
 
     }
 

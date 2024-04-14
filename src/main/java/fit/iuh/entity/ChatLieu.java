@@ -31,10 +31,9 @@ public class ChatLieu implements Serializable {
 //        return idPrefix;
 //    }
 //
-//    public ChatLieu(String chatLieu) {
-//        this.maChatLieu = auto_ID();
-//        this.chatLieu = chatLieu;
-//    }
+    public ChatLieu(String chatLieu) {
+        this.chatLieu = chatLieu;
+    }
 //
 //    public ChatLieu(String maChatLieu, String chatLieu) {
 //        this.maChatLieu = maChatLieu;

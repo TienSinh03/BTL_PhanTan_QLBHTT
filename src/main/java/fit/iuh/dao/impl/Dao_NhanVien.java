@@ -7,15 +7,12 @@ package fit.iuh.dao.impl;
 
 import fit.iuh.dao.INhanVienDao;
 import fit.iuh.entity.NhanVien;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
  * @author phant
  */
 public class Dao_NhanVien implements INhanVienDao {
@@ -23,11 +20,12 @@ public class Dao_NhanVien implements INhanVienDao {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
     EntityManager em = emf.createEntityManager();
     EntityTransaction et = em.getTransaction();
+
     public ArrayList<NhanVien> getAllNhanVien() {
         return (ArrayList<NhanVien>) em.createQuery("SELECT nv FROM NhanVien nv").getResultList();
     }
 
-        public ArrayList<NhanVien> getAllNhanVienConHoaDong() {
+    public ArrayList<NhanVien> getAllNhanVienConHoaDong() {
         ArrayList<NhanVien> listNhanVien = new ArrayList<>();
         String url = "Select * from NhanVien where trangThai = 1";
 
@@ -105,6 +103,7 @@ public class Dao_NhanVien implements INhanVienDao {
 
     /**
      * Tìm kiếm nhân viên
+     *
      * @param maNV
      * @param tenNV
      * @param sdt
@@ -112,33 +111,47 @@ public class Dao_NhanVien implements INhanVienDao {
      * @param chucVu
      * @param diaChi
      * @param trangThai
-     * @return 
+     * @return
      */
     public ArrayList<NhanVien> timKiemNhanVien(long maNV, String tenNV, String sdt, String email, String chucVu, String diaChi, boolean trangThai) {
-        ArrayList<NhanVien> listNhanVienTim = new ArrayList<>();
-        String url = "SELECT * FROM NhanVien WHERE maNV LIKE ? AND hoTen LIKE ? AND sdt LIKE ? AND email LIKE ? AND chuVu LIKE ? AND diaChi LIKE ? AND trangThai = ?";
+        List<NhanVien> listNhanVienTim = null;
+
         try {
             et.begin();
-            String maNVCheck = null;
-            if(maNV == 0) {
-                maNVCheck = "";
-            } 
-                
-            listNhanVienTim = (ArrayList<NhanVien>) em.createNativeQuery(url, NhanVien.class)
-                    .setParameter(1, "%" + maNVCheck + "%")
-                    .setParameter(2, "%" + tenNV + "%")
-                    .setParameter(3, "%" + sdt + "%")
-                    .setParameter(4, "%" + email + "%")
-                    .setParameter(5, "%" + chucVu + "%")
-                    .setParameter(6, "%" + diaChi + "%")
-                    .setParameter(7, trangThai)
+
+            String queryString = "SELECT nv FROM NhanVien nv WHERE (:maNVCheck = '' OR nv.maNV = :maNVParam) " +
+                    "AND nv.hoTen LIKE :tenNVParam " +
+                    "AND nv.sdt LIKE :sdtParam " +
+                    "AND nv.email LIKE :emailParam " +
+                    "AND nv.chuVu LIKE :chucVuParam " +
+                    "AND nv.diaChi LIKE :diaChiParam " +
+                    "AND nv.trangThai = :trangThaiParam";
+
+            listNhanVienTim = em.createQuery(queryString, NhanVien.class)
+                    .setParameter("maNVCheck", maNV == 0 ? "" : String.valueOf(maNV))
+                    .setParameter("maNVParam", maNV)
+                    .setParameter("tenNVParam", "%" + tenNV + "%")
+                    .setParameter("sdtParam", "%" + sdt + "%")
+                    .setParameter("emailParam", "%" + email + "%")
+                    .setParameter("chucVuParam", "%" + chucVu + "%")
+                    .setParameter("diaChiParam", "%" + diaChi + "%")
+                    .setParameter("trangThaiParam", trangThai)
                     .getResultList();
+
             et.commit();
+
+            return (ArrayList<NhanVien>) listNhanVienTim;
         } catch (Exception e) {
-            et.rollback();
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
             e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
-        return listNhanVienTim;
+        return null;
     }
 
     public static NhanVien getNhanVienTheoMa(long maNV) {

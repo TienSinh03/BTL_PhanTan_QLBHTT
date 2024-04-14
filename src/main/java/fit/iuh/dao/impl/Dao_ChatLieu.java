@@ -32,14 +32,14 @@ public class Dao_ChatLieu implements IChatLieuDao {
      * @return
      */
     @Override
-    public List<ChatLieu> getAllChatLieu() {
+    public ArrayList<ChatLieu> getAllChatLieu() {
         String query = "select cl from ChatLieu cl";
         List<ChatLieu> list = null;
         try {
             tx.begin();
             list = em.createQuery(query, ChatLieu.class).getResultList();
             tx.commit();
-            return list;
+            return (ArrayList<ChatLieu>) list;
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();

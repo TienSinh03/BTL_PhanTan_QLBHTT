@@ -25,11 +25,9 @@ public class KichThuoc {
 //
 //    }
 //
-//    public KichThuoc(String kichThuoc) {
-//        this.maKichThuoc = auto_ID();
-//        this.kichThuoc = kichThuoc;
-//
-//    }
+    public KichThuoc(String kichThuoc) {
+        this.kichThuoc = kichThuoc;
+    }
 //
 //    public KichThuoc() {
 //    }

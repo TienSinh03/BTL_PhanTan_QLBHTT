@@ -3,33 +3,35 @@ package fit.iuh.dao;
 
 import fit.iuh.entity.SanPham;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public interface iSanPhamDao {
 
-    public List<SanPham> getAllSanPham();
-    public List<SanPham> getAllQuanAo();
-    public List<SanPham> getAllPhuKien();
+    public ArrayList<SanPham> getAllSanPham();
+    public ArrayList<SanPham> getAllQuanAo();
+    public ArrayList<SanPham> getAllPhuKien();
 
-    public boolean addSanPham(SanPham sanPham);
-    public boolean deleteSanPham(Long masp);
+    public boolean themSanPham(SanPham sanPham);
+    public boolean xoaSanPham(long masp);
+    public boolean capNhatSanPham(SanPham sanPham);
 
+    public ArrayList<SanPham> timKiemQuanAo(long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc);
+    public ArrayList<SanPham> timKiemPhuKien(long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc);
 
-    public List<SanPham> findQuanAo(Long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc);
-    public List<SanPham> findPhuKien(Long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc);
+    public SanPham getSanPhamTheoMa(long maSP);
 
-    public SanPham getSanPhamTheoMa(Long maSP);
+    public ArrayList<SanPham> getAllSanPhamTheoTieuChi(String maPhanLoai, String maMauSac, String maKichThuoc);
+    public ArrayList<SanPham> getAllSanPhamHetHang(String maPhanLoai, String maMauSac, String maKichThuoc);
 
-    public List<SanPham> getAllSanPhamTheoTieuChi(String mauSac, String chatLieu, String kichThuoc);
-    public List<SanPham> getAllSanPhamHetHang(String mauSac, String chatLieu, String kichThuoc);
+    public ArrayList<SanPham>  getSanPhamBanChay();
+    public ArrayList<SanPham>  getSanPhamBanCham();
 
-    public Map<Long, Integer> getSanPhamBanChay();
-    public Map<Long, Integer> getSanPhamBanCham();
+    public ArrayList<SanPham>  getSoLuongSPTheoMaPL();
+    public  ArrayList<SanPham> getAllSanPhamTheoNgay(String tuNgay, String denNgay);
 
-    public Map<Long, Integer> getSoLuongSPTheoMaPL();
-    public List<SanPham> getAllSanPhamTheoNgay(Date ngayNhap, Date ngayKetThuc);
-
-
+    public void giamSoLuongSanPham(SanPham sp);
+    public void tangSoLuongSanPham(long maSP, int soLuong);
 }

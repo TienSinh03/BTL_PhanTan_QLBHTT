@@ -58,7 +58,7 @@ public class NhanVienImpl_Test {
 
     @Test
     public void testGetNhanVienByID(){
-        System.out.println(nhanVienImpl.getNhanVienTheoTen("Nguyen Van A"));
+        System.out.println(nhanVienImpl.getNhanVienTheoTen("Phan Tiên Sinh"));
     }
 
     @Test

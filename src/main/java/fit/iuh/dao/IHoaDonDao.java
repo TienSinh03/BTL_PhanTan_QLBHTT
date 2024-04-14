@@ -2,6 +2,7 @@ package fit.iuh.dao;
 
 import fit.iuh.entity.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -11,12 +12,12 @@ public interface IHoaDonDao {
     public Boolean themHoaDon(HoaDon hd);
     public double tongTienHoaDon(long maHD);
     public HoaDon getHoaDonTheoMa(long maHD);
-    public ArrayList<HoaDon> getAllHoaDonTheoNgay(Date tuNgay, Date denNgay);
+    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChi(String mauSac, String phanLoai, String kichThuoc);
     public ArrayList<SanPham> thongKeTop5SPDTCN();
     public ArrayList<SanPham> thongKeTop5SPDTTN();
-    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChi(MauSac mauSac, PhanLoai phanLoai, KichThuoc kichThuoc);
-    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChiByTime(MauSac mauSac, PhanLoai phanLoai, KichThuoc kichThuoc, Date tuNgay, Date denNgay);
-    public ArrayList<SanPham> thongKeDanhSachSanPhamTheoThangNam(int thangLap, int namLap);
+    public ArrayList<HoaDon> getAllHoaDonTheoNgay(String tuNgay, String denNgay) throws ParseException;
+    public  ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChiByTime(String mauSac, String phanLoai, String kichThuoc, String tuNgay, String denNgay) throws ParseException ;
+    public  ArrayList<SanPham> thongKeDanhSachSanPhamTheoThangNam(String thangLap, String namLap);
     public ArrayList<KhachHang> thongKeThongTinKhachHangDaMuaHang();
     public double getThanhTienKhachHangMua(long maKH);
     public int getSoLuongKhachHangMua(long maKH);

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -48,28 +49,23 @@ public class testSanPhamDao {
     @Test
     public void testAddSanPham() {
 //       insert into dbo.sanPham (maSP,tenSP,soLuong,giaBan,giaNhap, ngayNhap, hinhAnh, maChatLieu, maKichThuoc, maMauSac, maPhanLoai, maNhaCungCap) values (2,N'Nón xoè teelab', 30, 150000,120000,'2023-10-16','SP0002.jpg',2,5,4,3,1);
-        fit.iuh.entity.SanPham sanPham = new SanPham();
+        SanPham sanPham = new SanPham();
         sanPham.setTenSP("Nón");
-        sanPham.setSoLuong(30);
+        sanPham.setSoLuong(0);
         sanPham.setGiaBan(150000);
         sanPham.setGiaNhap(120000);
         sanPham.setNgayNhap(java.sql.Date.valueOf("2023-10-16"));
         sanPham.setHinhAnh("SP0002.jpg");
 
-        ChatLieu chatLieu = new ChatLieu();
-        chatLieu.setMaChatLieu(2L);
+        ChatLieu chatLieu = em.find(ChatLieu.class, 2);
 
-        KichThuoc kichThuoc = new KichThuoc();
-        kichThuoc.setMaKichThuoc(5L);
+        KichThuoc kichThuoc = em.find(KichThuoc.class, 5);
 
-        MauSac mauSac = new MauSac();
-        mauSac.setMaMauSac(4L);
+        MauSac mauSac = em.find(MauSac.class, 4);
 
-        PhanLoai phanLoai = new PhanLoai();
-        phanLoai.setMaPhanLoai(3L);
+        PhanLoai phanLoai = em.find(PhanLoai.class, 3);
 
-        NhaCungCap nhaCungCap = new NhaCungCap();
-        nhaCungCap.setMaNCC(1L);
+        NhaCungCap nhaCungCap = em.find(NhaCungCap.class, 1);
 
         sanPham.setChatLieu(chatLieu);
         sanPham.setKichThuoc(kichThuoc);
@@ -78,13 +74,13 @@ public class testSanPhamDao {
         sanPham.setNhaCungCap(nhaCungCap);
 
 
-        boolean checked = daoSanPham.addSanPham(sanPham);
+        boolean checked = daoSanPham.themSanPham(sanPham);
         System.out.println(checked);
     }
 
     @Test
     public void testDeleteSanPham() {
-        boolean checked = daoSanPham.deleteSanPham(2L);
+        boolean checked = daoSanPham.xoaSanPham(2);
         System.out.println(checked);
     }
 
@@ -99,20 +95,20 @@ public class testSanPhamDao {
     }
     @Test
     public void testTangSL(){
-        SanPham sanPham = new SanPham();
-        sanPham.setMaSP(1L);
-        sanPham.setSoLuong(10);
+//        SanPham sanPham = new SanPham();
+//        sanPham.setMaSP(1L);
+//        sanPham.setSoLuong(10);
 
-        daoSanPham.tangSoLuongSanPham(sanPham);
+        daoSanPham.tangSoLuongSanPham(1, 10);
     }
     @Test
     public void testFindQuanAo(){
-        System.out.println(daoSanPham.findQuanAo(1L,"Áo","Áo","A","Trắng","Vải","M"));
+        System.out.println(daoSanPham.timKiemQuanAo(0,"Áo","Áo","A","Trắng","Vải","M"));
     }
 
     @Test
     public void testFindPhuKien(){
-        System.out.println(daoSanPham.findPhuKien(1L,"Áo","Áo","A","Trắng","Vải","M"));
+        System.out.println(daoSanPham.timKiemPhuKien(11,"","","","Đen","","L"));
     }
 
     @Test
@@ -122,34 +118,36 @@ public class testSanPhamDao {
 
     @Test
     public void testGetAllSanPhamTheoTieuChi(){
-        System.out.println(daoSanPham.getAllSanPhamTheoTieuChi("Xanh","Da","XL"));
+        System.out.println(daoSanPham.getAllSanPhamTheoTieuChi("Áo","Đen","XL"));
     }
 
     @Test
     public void testGetAllSanPhamHetHang(){
-        System.out.println(daoSanPham.getAllSanPhamTheoTieuChi("Xanh","Da","XL"));
+        System.out.println(daoSanPham.getAllSanPhamHetHang("","",""));
     }
 
     @Test
     public void testGetSanPhamBanChay(){
-        Map<Long, Integer> topSellingProducts = daoSanPham.getSanPhamBanChay();
-        System.out.println(topSellingProducts);
+        ArrayList<SanPham> sanPhams = daoSanPham.getSanPhamBanChay();
+        System.out.println(sanPhams);
     }
 
     @Test
     public void testGetSanPhamBanCham(){
-        Map<Long, Integer> topSellingProducts = daoSanPham.getSanPhamBanCham();
-        System.out.println(topSellingProducts);
+        ArrayList<SanPham> sanPhams = daoSanPham.getSanPhamBanCham();
+        System.out.println(sanPhams);
     }
 
     @Test
     public void testGetSoLuongSPTheoMaPL(){
-        Map<Long, Integer> topSellingProducts = daoSanPham.getSoLuongSPTheoMaPL();
-        System.out.println(topSellingProducts);
+        ArrayList<SanPham> sanPhams = daoSanPham.getSoLuongSPTheoMaPL();
+        sanPhams.forEach(sanPham -> {
+            System.out.println(sanPham.getPhanLoai().getMaPhanLoai() + " - " + sanPham.getPhanLoai().getLoaiSanPham() + " - " + sanPham.getSoLuong());
+        });
     }
     @Test
     public void testGetAllSanPhamTheoNgay(){
-        System.out.println(daoSanPham.getAllSanPhamTheoNgay(java.sql.Date.valueOf("2023-10-16"),java.sql.Date.valueOf("2023-10-26")));
+        System.out.println(daoSanPham.getAllSanPhamTheoNgay("2023-10-16","2023-10-26"));
     }
     @AfterAll
     public void tearDown() {

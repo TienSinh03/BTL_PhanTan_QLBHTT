@@ -41,7 +41,7 @@ public class TestMauSac {
      */
     @Test
     public void testGetMauSacTheoTen() {
-        MauSac mauSac = dao_mauSac.getMauSacTheoTen("Đỏ");
+        MauSac mauSac = dao_mauSac.getMauSacTheoTen("Hồng");
         System.out.println(mauSac);
     }
     /*

@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Dao_NhaCungCap implements iNhaCungCap {
@@ -21,13 +22,13 @@ public class Dao_NhaCungCap implements iNhaCungCap {
     }
 
     @Override
-    public List<NhaCungCap> getAllNhaCungCap() {
-        return em.createNamedQuery("NhaCungCap.getAll", NhaCungCap.class)
+    public ArrayList<NhaCungCap> getAllNhaCungCap() {
+        return (ArrayList<NhaCungCap>) em.createNamedQuery("NhaCungCap.getAll", NhaCungCap.class)
                 .getResultList();
     }
 
     @Override
-    public boolean addNhaCungCap(NhaCungCap nhaCungCap) {
+    public boolean themNhaCungCap(NhaCungCap nhaCungCap) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -42,7 +43,7 @@ public class Dao_NhaCungCap implements iNhaCungCap {
     }
 
     @Override
-    public boolean deleteNhaCungCap(Long maNCC) {
+    public boolean xoaNhaCungCap(Long maNCC) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -53,21 +54,15 @@ public class Dao_NhaCungCap implements iNhaCungCap {
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
-
         }
         return false;
     }
 
     @Override
-    public boolean updateNhaCungCap(Long maNCC, NhaCungCap nhaCungCap) {
+    public boolean capNhatNhaCungCap(NhaCungCap ncc) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            NhaCungCap ncc = em.find(NhaCungCap.class, maNCC);
-            ncc.setTenNCC(nhaCungCap.getTenNCC());
-            ncc.setDiaChi(nhaCungCap.getDiaChi());
-            ncc.setSdt(nhaCungCap.getSdt());
-            ncc.setEmail(nhaCungCap.getEmail());
             em.merge(ncc);
             tx.commit();
             return true;
@@ -80,31 +75,30 @@ public class Dao_NhaCungCap implements iNhaCungCap {
     }
 
     @Override
-    public List<NhaCungCap> findNhaCungCap(Long maNCC, String tenNCC, String sdt, String email) {
-        List<NhaCungCap> nhaCungCap = em.createNamedQuery("NhaCungCap.findNhaCungCap", NhaCungCap.class)
+    public NhaCungCap timKiemNhaCungCap(Long maNCC, String tenNCC, String sdt, String email) {
+        return em.createNamedQuery("NhaCungCap.findNhaCungCap", NhaCungCap.class)
                 .setParameter("maNCC", String.valueOf(maNCC)) // convert Long to String
                 .setParameter("tenNCC", tenNCC)
                 .setParameter("sdt", sdt)
                 .setParameter("email", email)
-                .getResultList();
-        return nhaCungCap;
+                .getSingleResult();
+
 
     }
 
     @Override
-    public List<NhaCungCap> getNhaCungCapTheoTen(String tenNCC) {
-        List<NhaCungCap> nhaCungCap = em.createNamedQuery("NhaCungCap.findTenNhaCungCap", NhaCungCap.class)
+    public NhaCungCap getNhaCungCapTheoTen(String tenNCC) {
+        return em.createNamedQuery("NhaCungCap.findTenNhaCungCap", NhaCungCap.class)
                 .setParameter("tenNCC", tenNCC)
-                .getResultList();
-        return nhaCungCap;
+                .getSingleResult();
+
     }
 
     @Override
-    public List<NhaCungCap> getNhaCungCapTheoMa(Long maNCC) {
-        List<NhaCungCap> nhaCungCap = em.createNamedQuery("NhaCungCap.findNhaCungCapTheoMa", NhaCungCap.class)
+    public NhaCungCap getNhaCungCapTheoMa(Long maNCC) {
+        return em.createNamedQuery("NhaCungCap.findNhaCungCapTheoMa", NhaCungCap.class)
                 .setParameter("maNCC", String.valueOf(maNCC))
-                .getResultList();
-        return nhaCungCap;
+                .getSingleResult();
     }
 
 

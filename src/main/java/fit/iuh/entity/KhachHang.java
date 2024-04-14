@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "KhachHang")
 public class KhachHang implements Serializable {

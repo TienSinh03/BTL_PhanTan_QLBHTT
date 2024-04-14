@@ -10,29 +10,24 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "SanPham")
-<<<<<<< HEAD
-public class SanPham implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-=======
 @NamedQueries({
         @NamedQuery(name = "getAllSanPham", query = "SELECT sp FROM SanPham sp"),
         @NamedQuery(name = "getAllQuaNAo", query = "SELECT sp FROM SanPham sp where sp.phanLoai.maPhanLoai in (1,2)"),
         @NamedQuery(name = "getAllPhuKien", query = "SELECT sp FROM SanPham sp where sp.phanLoai.maPhanLoai not in (1,2)"),
         @NamedQuery(name = "timKiemQuanAo",
-                query = "SELECT sp FROM SanPham sp WHERE sp.phanLoai.maPhanLoai IN (1, 2) AND sp.maSP = :maSP AND " +
+                query = "SELECT sp FROM SanPham sp WHERE sp.phanLoai.maPhanLoai IN (1, 2) AND (:maSPCheck = '' OR sp.maSP = :maSP) AND " +
                         "sp.tenSP LIKE :tenSP AND sp.phanLoai.loaiSanPham LIKE :loaiSanPham AND sp.nhaCungCap.tenNCC LIKE :tenNCC " +
                         "AND sp.mauSac.mauSac LIKE :mauSac AND sp.chatLieu.chatLieu LIKE :chatLieu AND sp.kichThuoc.kichThuoc LIKE :kichThuoc"
         ),
         @NamedQuery(name = "timKiemPhuKien",
-                query = "SELECT sp FROM SanPham sp WHERE sp.phanLoai.maPhanLoai NOT IN (1, 2) AND sp.maSP = :maSP AND " +
+                query = "SELECT sp FROM SanPham sp WHERE sp.phanLoai.maPhanLoai NOT IN (1, 2) AND (:maSPCheck = '' OR sp.maSP = :maSP) AND " +
                         "sp.tenSP LIKE :tenSP AND sp.phanLoai.loaiSanPham LIKE :loaiSanPham AND sp.nhaCungCap.tenNCC LIKE :tenNCC " +
                         "AND sp.mauSac.mauSac LIKE :mauSac AND sp.chatLieu.chatLieu LIKE :chatLieu AND sp.kichThuoc.kichThuoc LIKE :kichThuoc"
         ),
 //
         @NamedQuery(name = "getSanPhamTheoMa", query = "SELECT sp FROM SanPham sp WHERE sp.maSP = :maSP"),
-        @NamedQuery(name = "getAllSanPhamTheoTieuChi", query = "SELECT sp FROM SanPham sp where sp.mauSac.mauSac LIKE :mauSac AND sp.chatLieu.chatLieu LIKE :chatLieu AND sp.kichThuoc.kichThuoc LIKE :kichThuoc"),
-        @NamedQuery(name = "getAllSanPhamHetHang", query = "SELECT sp FROM SanPham sp where sp.mauSac.mauSac LIKE :mauSac AND sp.chatLieu.chatLieu LIKE :chatLieu AND sp.kichThuoc.kichThuoc LIKE :kichThuoc AND sp.soLuong = 0"),
+        @NamedQuery(name = "getAllSanPhamTheoTieuChi", query = "SELECT sp FROM SanPham sp where sp.phanLoai.loaiSanPham LIKE  :maPhanLoai AND sp.mauSac.mauSac LIKE :mauSac AND sp.kichThuoc.kichThuoc LIKE :kichThuoc"),
+        @NamedQuery(name = "getAllSanPhamHetHang", query = "SELECT sp FROM SanPham sp where sp.phanLoai.loaiSanPham LIKE  :maPhanLoai AND sp.mauSac.mauSac LIKE :mauSac AND sp.kichThuoc.kichThuoc LIKE :kichThuoc AND sp.soLuong = 0"),
         @NamedQuery(name="getSanPhamBanChay", query = "SELECT sp.maSP,  SUM(cthd.soLuong) FROM SanPham sp JOIN  CTHD cthd ON sp.maSP = cthd.sanPham.maSP GROUP BY sp.maSP ORDER BY SUM(cthd.soLuong)  DESC"),
         @NamedQuery(name="getSanPhamBanCham", query = "SELECT sp.maSP,  SUM(cthd.soLuong) FROM SanPham sp JOIN  CTHD cthd ON sp.maSP = cthd.sanPham.maSP GROUP BY sp.maSP ORDER BY SUM(cthd.soLuong)  asc "),
         @NamedQuery(name="getSoLuongSPTheoMaPL", query = "SELECT sp.phanLoai.maPhanLoai, COUNT(sp) FROM SanPham sp GROUP BY sp.phanLoai.maPhanLoai ORDER BY sp.phanLoai.maPhanLoai"),
@@ -41,8 +36,8 @@ public class SanPham implements Serializable {
         @NamedQuery(name="getAllSanPhamTheoNgay", query = "SELECT sp FROM SanPham sp where sp.ngayNhap >= :ngayNhap AND sp.ngayNhap <= :ngayKetThuc"),
 
 })
-public class SanPham {
->>>>>>> c02e2e69975c5c96b6f87cb50345e3b5ea49c21f
+public class SanPham implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long maSP;
@@ -111,8 +106,22 @@ public class SanPham {
         this.phanLoai = phanLoai;
     }
 
+    public SanPham(long maSP, String tenSP, int soLuong, double giaNhap, double giaBan, Date ngayNhap, String hinhAnh, ChatLieu chatLieu, KichThuoc kichThuoc, MauSac mauSac, PhanLoai phanLoai, NhaCungCap nhaCungCap) {
+        this.maSP = maSP;
+        this.tenSP = tenSP;
+        this.soLuong = soLuong;
+        this.giaNhap = giaNhap;
+        this.giaBan = giaBan;
+        this.ngayNhap = ngayNhap;
+        this.hinhAnh = hinhAnh;
+        this.chatLieu = chatLieu;
+        this.kichThuoc = kichThuoc;
+        this.mauSac = mauSac;
+        this.phanLoai = phanLoai;
+        this.nhaCungCap = nhaCungCap;
+    }
 
-//    public String getMaSP() {
+    //    public String getMaSP() {
 //        return maSP;
 //    }
 //

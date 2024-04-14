@@ -8,6 +8,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -92,13 +94,19 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public ArrayList<HoaDon> getAllHoaDonTheoNgay(Date tuNgay, Date denNgay) {
+    public ArrayList<HoaDon> getAllHoaDonTheoNgay(String tuNgay, String denNgay) throws ParseException {
         String sql = "select hd from HoaDon hd where hd.ngayNhap >= :tuNgay and hd.ngayNhap <= :denNgay";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date tuNgayDate = dateFormat.parse(tuNgay);
+        Date denNgayDate = dateFormat.parse(denNgay);
         try {
             et.begin();
-            ArrayList<HoaDon> listHoaDon = (ArrayList<HoaDon>) em.createQuery(sql).setParameter("tuNgay", tuNgay).setParameter("denNgay", denNgay).getResultList();
+            List<HoaDon> list = em.createQuery(sql, HoaDon.class)
+                    .setParameter("tuNgay", tuNgayDate)
+                    .setParameter("denNgay", denNgayDate)
+                    .getResultList();
             et.commit();
-            return listHoaDon;
+            return (ArrayList<HoaDon>) list;
         } catch (Exception e) {
             et.rollback();
             e.printStackTrace();
@@ -142,72 +150,127 @@ public class Dao_HoaDon implements IHoaDonDao {
 
     @Override
     public ArrayList<SanPham> thongKeTop5SPDTTN() {
+        String query = "select cthd.sanPham.maSP,sum(sp.giaBan*cthd.soLuong) as DoanhThu from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.sanPham.maSP\n" +
+                "join SanPham sp on cthd.sanPham.maSP=sp.maSP\n" +
+                "group by cthd.sanPham.maSP\n" +
+                "order by sum(sp.giaBan*cthd.soLuong) asc";
+
+        List<SanPham> listSanPham = new ArrayList<>();
+        try {
+            et.begin();
+            List<Object[]> results = em.createQuery(query, Object[].class).setMaxResults(5).getResultList();
+            for(Object[] item : results){
+                SanPham sp = em.find(SanPham.class, Long.parseLong(item[0].toString()));
+                listSanPham.add(sp);
+            }
+
+            et.commit();
+            return (ArrayList<SanPham>) listSanPham;
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        }
         return null;
     }
 
 
     @Override
-    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChi(MauSac mauSac, PhanLoai phanLoai, KichThuoc kichThuoc) {
-        String sql = "select sp.maSP from HoaDon hd " +
-                "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon " +
-                "join SanPham sp on cthd.sanPham.maSP=sp.maSP " +
-                "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai " +
-                "join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc " +
-                "join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac " +
-                "join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu " +
-                "join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC " +
-                "where ms.mauSac like :mauSac and kt.kichThuoc like :kichThuoc and pl.loaiSanPham like :phanLoai group by sp.maSP";
+    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChi(String mauSac, String phanLoai, String kichThuoc) {
+        String sql = "select cthd.sanPham.maSP from HoaDon hd " + "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon " + "join SanPham sp on cthd.sanPham.maSP=sp.maSP " + "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai " + "join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc " + "join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac " + "join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu " + "join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC " + "where ms.mauSac like :mauSac and kt.kichThuoc like :kichThuoc and pl.loaiSanPham like :phanLoai group by cthd.sanPham.maSP";
+
+        List<SanPham> listSanPham = new ArrayList<>();
         try {
             et.begin();
-            SanPham sp = em.find(SanPham.class, 1);
-            ArrayList<SanPham> results = (ArrayList<SanPham>) em.createQuery(sql)
-                    .setParameter("mauSac", "%"+mauSac.getMauSac()+"%")
-                    .setParameter("kichThuoc", kichThuoc.getKichThuoc())
-                    .setParameter("phanLoai", phanLoai.getLoaiSanPham())
+            List<Object[]> list = em.createQuery(sql, Object[].class)
+                    .setParameter("mauSac", "%"+mauSac+"%")
+                    .setParameter("kichThuoc","%"+ kichThuoc+"%")
+                    .setParameter("phanLoai", "%"+ phanLoai+"%")
                     .getResultList();
+            for(Object[] item : list){
+                SanPham sp = em.find(SanPham.class, Long.parseLong(item[0].toString()));
+                listSanPham.add(sp);
+            }
             et.commit();
-            return results;
+            return (ArrayList<SanPham>) listSanPham;
         } catch (Exception e) {
             if (et != null && et.isActive()) {
                 et.rollback();
             }
             e.printStackTrace();
         }
+
         return null;
     }
 
     @Override
-    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChiByTime(MauSac mauSac, PhanLoai phanLoai, KichThuoc kichThuoc, Date tuNgay, Date denNgay) {
-        String sql = "select sp from HoaDon hd " + "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon " + "join SanPham sp on cthd.sanPham.maSP=sp.maSP " + "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai " + "join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc " + "join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac " + "join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu " + "join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC " + "where ms.mauSac like :mauSac and kt.kichThuoc like :kichThuoc and pl.loaiSanPham like :phanLoai and hd.ngayNhap >= :tuNgay and hd.ngayNhap <= :denNgay ";
+    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChiByTime(String mauSac, String phanLoai, String kichThuoc, String tuNgay, String denNgay) throws ParseException {
+        String sql = "select cthd.sanPham.maSP from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon\n" +
+                "join SanPham sp on cthd.sanPham.maSP=sp.maSP\n" +
+                "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai \n" +
+                "join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc\n" +
+                "join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac\n" +
+                "join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu\n" +
+                "join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC\n" +
+                "where ms.mauSac like :mauSac and kt.kichThuoc like :kichThuoc and pl.loaiSanPham like :loaiSanPham and hd.ngayNhap >= :tuNgay and  hd.ngayNhap <= :denNgay\n" +
+                "group by cthd.sanPham.maSP";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date tuNgayDate = dateFormat.parse(tuNgay);
+        Date denNgayDate = dateFormat.parse(denNgay);
+        List<SanPham> listSanPham = new ArrayList<>();
         try {
             et.begin();
-            SanPham sp = em.find(SanPham.class, 1);
-            ArrayList<SanPham> results = (ArrayList<SanPham>) em.createQuery(sql).setParameter("mauSac", mauSac.getMauSac()).setParameter("kichThuoc", kichThuoc.getKichThuoc()).setParameter("phanLoai", phanLoai.getLoaiSanPham()).setParameter("tuNgay", tuNgay).setParameter("denNgay", denNgay).getResultList();
+            List<Object[]> list = em.createQuery(sql, Object[].class)
+                    .setParameter("mauSac", "%"+mauSac+"%")
+                    .setParameter("kichThuoc","%"+ kichThuoc+"%")
+                    .setParameter("loaiSanPham", "%"+ phanLoai+"%")
+                    .setParameter("tuNgay", tuNgayDate)
+                    .setParameter("denNgay", denNgayDate)
+                    .getResultList();
+            for(Object[] item : list){
+//                System.out.println(item.toString());
+                SanPham sp = em.find(SanPham.class, Long.parseLong(item[0].toString()));
+                listSanPham.add(sp);
+            }
             et.commit();
-            return results;
+            return (ArrayList<SanPham>) listSanPham;
         } catch (Exception e) {
             if (et != null && et.isActive()) {
                 et.rollback();
             }
             e.printStackTrace();
         }
+
         return null;
     }
 
     @Override
-    public ArrayList<SanPham> thongKeDanhSachSanPhamTheoThangNam(int thangLap, int namLap) {
-        String sql = "select sp from HoaDon hd " + "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon " + "join SanPham sp on cthd.sanPham.maSP=sp.maSP " + "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai " + "join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc " + "join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac " + "join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu " + "join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC " + "WHERE FUNCTION('MONTH', hd.ngayNhap) = :thangLap " + "AND FUNCTION('YEAR', hd.ngayNhap) = :namLap";
+    public ArrayList<SanPham> thongKeDanhSachSanPhamTheoThangNam(String thangLap, String namLap) {
+        String sql = "select sp.maSP from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon"
+                + "						join SanPham sp on cthd.sanPham.maSP=sp.maSP"
+                + "						join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai "
+                + "						join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc"
+                + "						join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac"
+                + "						join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu"
+                + "						join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC"
+                + "	where MONTH(hd.ngayNhap) = :thangLap and YEAR(hd.ngayNhap) = :namLap"
+                + "			group by sp.maSP";
+        List<SanPham> listSanPham = new ArrayList<>();
         try {
             et.begin();
-            ArrayList<SanPham> listSanPham = (ArrayList<SanPham>) em.createQuery(sql).setParameter("thangLap", thangLap).setParameter("namLap", namLap).getResultList();
+            List<Object[]> results = em.createQuery(sql, Object[].class)
+                    .setParameter("thangLap", Integer.parseInt(thangLap))
+                    .setParameter("namLap", Integer.parseInt(namLap))
+                    .getResultList();
+            for (Object[] obj : results) {
+                SanPham sp = em.find(SanPham.class, Long.parseLong(obj[0].toString()));
+                listSanPham.add(sp);
+            }
             et.commit();
-            for (SanPham sp : listSanPham) {
-                return listSanPham;
-            }
+            return (ArrayList<SanPham>) listSanPham;
         } catch (Exception e) {
-            if (et != null && et.isActive()) {
-                et.rollback();
-            }
+            et.rollback();
             e.printStackTrace();
         }
         return null;
@@ -215,13 +278,17 @@ public class Dao_HoaDon implements IHoaDonDao {
 
     @Override
     public ArrayList<KhachHang> thongKeThongTinKhachHangDaMuaHang() {
-        ArrayList<KhachHang> listKhachHang = null;
-        String sql="SELECT DISTINCT hd.khachHang.maKH,kh.hoTen,kh.sdt FROM HoaDon hd" +
+        String sql = "SELECT DISTINCT hd.khachHang.maKH,kh.hoTen,kh.sdt FROM HoaDon hd" +
                 "                  JOIN KhachHang kh on hd.khachHang.maKH=kh.maKH";
         try {
             et.begin();
-            listKhachHang = (ArrayList<KhachHang>) em.createQuery(sql).getResultList();
+            List<Object[]> results = em.createQuery(sql, Object[].class).getResultList();
             et.commit();
+            ArrayList<KhachHang> listKhachHang = new ArrayList<>();
+            for (Object[] obj : results) {
+                KhachHang kh = em.find(KhachHang.class, Long.parseLong(obj[0].toString()));
+                listKhachHang.add(kh);
+            }
             return listKhachHang;
         } catch (Exception e) {
             et.rollback();

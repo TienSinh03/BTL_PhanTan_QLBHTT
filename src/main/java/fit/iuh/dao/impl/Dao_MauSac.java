@@ -56,7 +56,7 @@ public class Dao_MauSac implements IMauSacDao {
         MauSac mauSac1 = null;
         try {
             et.begin();
-            mauSac1 = (MauSac) em.createQuery("select ms from MauSac ms where ms.mauSac = :mauSac")
+            mauSac1 = em.createQuery("select ms from MauSac ms where ms.mauSac = :mauSac", MauSac.class)
                     .setParameter("mauSac", mauSac).getSingleResult();
             et.commit();
         } catch (Exception e) {
@@ -81,7 +81,7 @@ public class Dao_MauSac implements IMauSacDao {
     }
 
     @Override
-    public Boolean capNhatDLMauSac(MauSac mauSac) {
+    public boolean capNhatDLMauSac(MauSac mauSac) {
         try {
             et.begin();
             em.merge(mauSac);
@@ -91,11 +91,11 @@ public class Dao_MauSac implements IMauSacDao {
             et.rollback();
             e.printStackTrace();
         }
-        return null;
+        return false;
     }
 
     @Override
-    public Boolean xoaDLMauSac(long maMauSac) {
+    public boolean xoaDLMauSac(long maMauSac) {
         String sql = "delete from MauSac ms where ms.maMauSac = :maMauSac";
         try {
             et.begin();

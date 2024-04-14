@@ -19,10 +19,10 @@ import java.util.ArrayList;
 public interface IPhanLoaiDao {
     public ArrayList<PhanLoai> getAllPhanLoai();
     public ArrayList<PhanLoai> getAllPhanLoaiCuaPhuKien();
-    public PhanLoai getDLPhanLoaiSPTheoMa(String maPL);
+    public PhanLoai getDLPhanLoaiSPTheoMa(long maPL);
     public PhanLoai getPhanLoaiTheoTen(String tenPhanLoai);
     public void themLoaiSanPham(PhanLoai phanLoai);
-    public void xoaPhanLoaiSanPham(int maPhanLoai);
+    public void xoaPhanLoaiSanPham(long maPhanLoai);
     public void catNhatLoaiSanPham(PhanLoai phanLoai);
 
 }

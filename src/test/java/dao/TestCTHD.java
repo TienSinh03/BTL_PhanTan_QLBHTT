@@ -51,17 +51,17 @@ public class TestCTHD {
     }
     @Test
     public void testGetTongDoanhThu(){
-        double doanhThu = dao_cthd.getTongDoanhThu(1, 10, 2023);
+        double doanhThu = dao_cthd.getTongDoanhThu(1, "10", "2023");
         System.out.println(doanhThu);
     }
     @Test
     public void testGetSoLuongSanPhamBanDuoc(){
-        int soLuong = dao_cthd.getSoLuongSanPhamBanDuoc(1, 10, 2023);
+        int soLuong = dao_cthd.getSoLuongSanPhamBanDuoc(1, "10", "2023");
         System.out.println(soLuong);
     }
     @Test
     public void testGetDoanhThuSanPhamBanDuoc(){
-        double doanhThu = dao_cthd.getDoanhThuSanPhamBanDuoc(1, 10, 2023);
+        double doanhThu = dao_cthd.getDoanhThuSanPhamBanDuoc(1, "10", "2023");
         System.out.println(doanhThu);
     }
     @AfterAll

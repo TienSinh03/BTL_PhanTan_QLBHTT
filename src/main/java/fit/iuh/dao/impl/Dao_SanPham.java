@@ -1,13 +1,11 @@
 package fit.iuh.dao.impl;
 
 import fit.iuh.dao.iSanPhamDao;
+import fit.iuh.entity.PhanLoai;
 import fit.iuh.entity.SanPham;
 import jakarta.persistence.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Dao_SanPham implements iSanPhamDao {
     private EntityManager em;
@@ -22,30 +20,30 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public List<SanPham> getAllSanPham() {
-        return em.createNamedQuery("getAllSanPham", SanPham.class)
+    public ArrayList<SanPham> getAllSanPham() {
+        return (ArrayList<SanPham>) em.createNamedQuery("getAllSanPham", SanPham.class)
                 .getResultList();
     }
 
     @Override
-    public List<SanPham> getAllQuanAo() {
-        return em.createNamedQuery("getAllQuaNAo", SanPham.class)
+    public ArrayList<SanPham> getAllQuanAo() {
+        return (ArrayList<SanPham>) em.createNamedQuery("getAllQuaNAo", SanPham.class)
                 .getResultList();
     }
 
     @Override
-    public List<SanPham> getAllPhuKien() {
-        return em.createNamedQuery("getAllPhuKien", SanPham.class)
+    public ArrayList<SanPham> getAllPhuKien() {
+        return (ArrayList<SanPham>) em.createNamedQuery("getAllPhuKien", SanPham.class)
                 .getResultList();
     }
 
     @Override
-    public boolean addSanPham(SanPham sanPham) {
+    public boolean themSanPham(SanPham sanPham) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             em.merge(sanPham);
-//            tx.commit();
+            tx.commit();
             return true;
         } catch (RollbackException e) {
             e.printStackTrace();
@@ -66,7 +64,7 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public boolean deleteSanPham(Long masp) {
+    public boolean xoaSanPham(long masp) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -86,8 +84,27 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public List<SanPham> findQuanAo(Long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc) {
-        return em.createNamedQuery("timKiemQuanAo", SanPham.class)
+    public boolean capNhatSanPham(SanPham sanPham) {
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            em.merge(sanPham);
+            tx.commit();
+            return true;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @Override
+    public ArrayList<SanPham> timKiemQuanAo(long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc) {
+        return (ArrayList<SanPham>) em.createNamedQuery("timKiemQuanAo", SanPham.class)
+                .setParameter("maSPCheck", maSP==0 ? "" : String.valueOf(maSP))
                 .setParameter("maSP", maSP)
                 .setParameter("tenSP", "%" + tenSP + "%")
                 .setParameter("loaiSanPham", "%" + tenPhanLoai + "%")
@@ -99,8 +116,10 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public List<SanPham> findPhuKien(Long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc) {
-        return em.createNamedQuery("timKiemQuanAo", SanPham.class)
+    public ArrayList<SanPham> timKiemPhuKien(long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc) {
+
+        return (ArrayList<SanPham>) em.createNamedQuery("timKiemPhuKien", SanPham.class)
+                .setParameter("maSPCheck", maSP==0 ? "" : String.valueOf(maSP))
                 .setParameter("maSP", maSP)
                 .setParameter("tenSP", "%" + tenSP + "%")
                 .setParameter("loaiSanPham", "%" + tenPhanLoai + "%")
@@ -112,86 +131,96 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public SanPham getSanPhamTheoMa(Long maSP) {
+    public SanPham getSanPhamTheoMa(long maSP) {
         return em.createNamedQuery("getSanPhamTheoMa", SanPham.class)
                 .setParameter("maSP", maSP)
                 .getSingleResult();
     }
 
     @Override
-    public List<SanPham> getAllSanPhamTheoTieuChi(String mauSac, String chatLieu, String kichThuoc) {
-        return em.createNamedQuery("getAllSanPhamTheoTieuChi", SanPham.class)
-                .setParameter("mauSac", "%" + mauSac + "%")
-                .setParameter("chatLieu", "%" + chatLieu + "%")
-                .setParameter("kichThuoc", "%" + kichThuoc + "%")
+    public ArrayList<SanPham> getAllSanPhamTheoTieuChi(String maPhanLoai, String maMauSac, String maKichThuoc) {
+        return (ArrayList<SanPham>) em.createNamedQuery("getAllSanPhamTheoTieuChi", SanPham.class)
+                .setParameter("maPhanLoai", "%" + maPhanLoai + "%")
+                .setParameter("mauSac", "%" + maMauSac + "%")
+                .setParameter("kichThuoc", "%" + maKichThuoc + "%")
                 .getResultList();
     }
 
     @Override
-    public List<SanPham> getAllSanPhamHetHang(String mauSac, String chatLieu, String kichThuoc) {
-        return em.createNamedQuery("getAllSanPhamTheoTieuChi", SanPham.class)
-                .setParameter("mauSac", "%" + mauSac + "%")
-                .setParameter("chatLieu", "%" + chatLieu + "%")
-                .setParameter("kichThuoc", "%" + kichThuoc + "%")
+    public ArrayList<SanPham> getAllSanPhamHetHang(String maPhanLoai, String maMauSac, String maKichThuoc) {
+        return (ArrayList<SanPham>) em.createNamedQuery("getAllSanPhamHetHang", SanPham.class)
+                .setParameter("maPhanLoai", "%" + maPhanLoai + "%")
+                .setParameter("mauSac", "%" + maMauSac + "%")
+                .setParameter("kichThuoc", "%" + maKichThuoc + "%")
                 .getResultList();
     }
 
     @Override
-    public Map<Long, Integer> getSanPhamBanChay() {
-        Map<Long, Integer> map = new HashMap<>();
-        List<Object[]> list = em.createNamedQuery("getSanPhamBanChay", Object[].class)
-                .getResultList();
-//        Chạy end 5 for chạy tới 5
-        for (int i = 0; i < 5; i++) {
-            Object[] objects = list.get(i);
-            Long productId = (Long) objects[0];
-            Integer salesVolume = ((Number) objects[1]).intValue();
-            map.put(productId, salesVolume);
+    public ArrayList<SanPham> getSanPhamBanChay() {
+        EntityTransaction tx = em.getTransaction();
+        String query = "SELECT sp.maSP,  SUM(cthd.soLuong) FROM SanPham sp JOIN  CTHD cthd ON sp.maSP = cthd.sanPham.maSP GROUP BY sp.maSP ORDER BY SUM(cthd.soLuong)  DESC";
+        List<SanPham> list = new ArrayList<>();
+        try {
+            List<Object[]> results = em.createQuery(query, Object[].class).setMaxResults(5).getResultList();
+            for (Object[] result : results) {
+                SanPham sanPham = em.find(SanPham.class, (Long) result[0]);
+                list.add(sanPham);
+            }
+            return (ArrayList<SanPham>) list;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return map;
-//        for (Object[] objects : list) {
-//            Long productId = (Long) objects[0];
-//            Integer salesVolume = ((Number) objects[1]).intValue();
-//            map.put(productId, salesVolume);
-//        }
-//        return map;
+        return null;
     }
 
     @Override
-    public Map<Long, Integer> getSanPhamBanCham() {
-        Map<Long, Integer> map = new HashMap<>();
-        List<Object[]> list = em.createNamedQuery("getSanPhamBanCham", Object[].class)
-                .getResultList();
-        for (int i = 0; i < 5; i++) {
-            Object[] objects = list.get(i);
-            Long productId = (Long) objects[0];
-            Integer salesVolume = ((Number) objects[1]).intValue();
-            map.put(productId, salesVolume);
+    public ArrayList<SanPham> getSanPhamBanCham() {
+        EntityTransaction tx = em.getTransaction();
+        String query = "SELECT sp.maSP,  SUM(cthd.soLuong) FROM SanPham sp JOIN  CTHD cthd ON sp.maSP = cthd.sanPham.maSP GROUP BY sp.maSP ORDER BY SUM(cthd.soLuong)  ASC";
+        List<SanPham> list = new ArrayList<>();
+        try {
+            List<Object[]> results = em.createQuery(query, Object[].class).setMaxResults(5).getResultList();
+            for (Object[] result : results) {
+                SanPham sanPham = em.find(SanPham.class, (Long) result[0]);
+                list.add(sanPham);
+            }
+            return (ArrayList<SanPham>) list;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return map;
+        return null;
+    }
+    @Override
+    public ArrayList<SanPham> getSoLuongSPTheoMaPL() {
+        EntityTransaction tx = em.getTransaction();
+        String query = "SELECT sp.phanLoai.maPhanLoai, COUNT(sp) FROM SanPham sp GROUP BY sp.phanLoai.maPhanLoai ORDER BY sp.phanLoai.maPhanLoai";
+        List<SanPham> list = new ArrayList<>();
+        try {
+            List<Object[]> results = em.createQuery(query, Object[].class).getResultList();
+            for (Object[] result : results) {
+                PhanLoai phanLoai = em.find(PhanLoai.class, (Long) result[0]);
+                Long soLuong = (Long) result[1];
+                SanPham sanPham = new SanPham(soLuong.intValue(), phanLoai);
+                list.add(sanPham);
+            }
+            return (ArrayList<SanPham>) list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
-    public Map<Long, Integer> getSoLuongSPTheoMaPL() {
-        Map<Long, Integer> map = new HashMap<>();
-        List<Object[]> list = em.createNamedQuery("getSoLuongSPTheoMaPL", Object[].class)
-                .getResultList();
-        for (Object[] objects : list) {
-            Long productId = (Long) objects[0];
-            Integer salesVolume = ((Number) objects[1]).intValue();
-            map.put(productId, salesVolume);
-        }
-        return map;    }
-
-    @Override
-    public List<SanPham> getAllSanPhamTheoNgay(Date ngayNhap, Date ngayKetThuc) {
-        return em.createNamedQuery("getAllSanPhamTheoNgay", SanPham.class)
+    public ArrayList<SanPham> getAllSanPhamTheoNgay(String tuNgay, String denNgay) {
+        Date ngayNhap = java.sql.Date.valueOf(tuNgay);
+        Date ngayKetThuc = java.sql.Date.valueOf(denNgay);
+        return (ArrayList<SanPham>) em.createNamedQuery("getAllSanPhamTheoNgay", SanPham.class)
                 .setParameter("ngayNhap", ngayNhap)
                 .setParameter("ngayKetThuc", ngayKetThuc)
                 .getResultList();
     }
 
-
+    @Override
     public void giamSoLuongSanPham(SanPham sp) {
         EntityTransaction tx = em.getTransaction();
         try {
@@ -210,13 +239,14 @@ public class Dao_SanPham implements iSanPhamDao {
         }
     }
 
-    public void tangSoLuongSanPham(SanPham sp) {
+    @Override
+    public void tangSoLuongSanPham(long maSP, int soLuong) {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            SanPham sanPhamToUpdate = em.find(SanPham.class, sp.getMaSP());
+            SanPham sanPhamToUpdate = em.find(SanPham.class, maSP);
             if (sanPhamToUpdate != null) {
-                sanPhamToUpdate.setSoLuong(sanPhamToUpdate.getSoLuong() + sp.getSoLuong());
+                sanPhamToUpdate.setSoLuong(sanPhamToUpdate.getSoLuong() + soLuong);
                 em.merge(sanPhamToUpdate);
             }
             tx.commit();

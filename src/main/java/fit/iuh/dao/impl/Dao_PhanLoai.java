@@ -53,7 +53,7 @@ public class Dao_PhanLoai implements IPhanLoaiDao {
         return listPhanLoai;
     }
 
-    public PhanLoai getDLPhanLoaiSPTheoMa(String maPL) {
+    public PhanLoai getDLPhanLoaiSPTheoMa(long maPL) {
         return em.find(PhanLoai.class, maPL);
     }
     
@@ -98,7 +98,7 @@ public class Dao_PhanLoai implements IPhanLoaiDao {
      * Xóa dữ liệu loại sản phẩm trên database
      * @param maPhanLoai
      */
-    public void xoaPhanLoaiSanPham(int maPhanLoai) {
+    public void xoaPhanLoaiSanPham(long maPhanLoai) {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();

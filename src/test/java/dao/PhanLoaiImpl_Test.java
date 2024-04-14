@@ -38,7 +38,7 @@ public class PhanLoaiImpl_Test {
 
     @Test
     public void testgetDLPhanLoaiSPTheoMa() {
-        System.out.println(phanLoaiImpl.getDLPhanLoaiSPTheoMa("3"));
+        System.out.println(phanLoaiImpl.getDLPhanLoaiSPTheoMa(3));
     }
 
     @Test

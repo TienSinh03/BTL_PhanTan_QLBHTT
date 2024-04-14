@@ -29,10 +29,9 @@ public class PhanLoai implements Serializable {
 //    public PhanLoai() {
 //    }
 //
-//    public PhanLoai(String loaiSanPham) {
-//        this.maPhanLoai = auto_ID();
-//        this.loaiSanPham = loaiSanPham;
-//    }
+    public PhanLoai(String loaiSanPham) {
+        this.loaiSanPham = loaiSanPham;
+    }
 //
 //    public PhanLoai(String maPhanLoai, String loaiSanPham) {
 //        this.maPhanLoai = maPhanLoai;
