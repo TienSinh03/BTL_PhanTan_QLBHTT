@@ -186,7 +186,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
             return;
         }
 
-        long maNV = Long.parseLong(txt_MaNV.getText());
+//        long maNV = Long.parseLong(txt_MaNV.getText());
         String tenNV = txt_TenNV.getText();
         String gioiTinh = "";
         if (rad_Nam.isSelected()) {

@@ -103,7 +103,7 @@ public class testSanPhamDao {
     }
     @Test
     public void testFindQuanAo(){
-        System.out.println(daoSanPham.timKiemQuanAo(0,"Áo","Áo","A","Trắng","Vải","M"));
+        System.out.println(daoSanPham.timKiemQuanAo(0,"","","A","Trắng","Vải","M"));
     }
 
     @Test

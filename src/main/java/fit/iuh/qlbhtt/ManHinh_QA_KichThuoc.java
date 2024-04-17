@@ -158,7 +158,13 @@ public class ManHinh_QA_KichThuoc extends javax.swing.JPanel {
      * Tìm kiếm chất liệu
      */
     public void xuLyTimKiemKichThuoc() {
-        long tuKhoaMaKichThuoc = Long.parseLong(txt_MaKichThuoc.getText());
+        String convertString = null;
+        if(txt_MaKichThuoc.getText().equals("")) {
+            convertString = "0";
+        } else {
+            convertString = txt_MaKichThuoc.getText();
+        }
+        long tuKhoaMaKichThuoc = Long.parseLong(convertString);
         String tuKhoaTenKichThuoc= txt_TenKichThuoc.getText();
 
         if(tuKhoaMaKichThuoc == 0 && tuKhoaTenKichThuoc.equals("")){

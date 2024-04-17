@@ -247,21 +247,32 @@ public class Dao_HoaDon implements IHoaDonDao {
 
     @Override
     public ArrayList<SanPham> thongKeDanhSachSanPhamTheoThangNam(String thangLap, String namLap) {
-        String sql = "select sp.maSP from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon"
-                + "						join SanPham sp on cthd.sanPham.maSP=sp.maSP"
-                + "						join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai "
-                + "						join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc"
-                + "						join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac"
-                + "						join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu"
-                + "						join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC"
-                + "	where MONTH(hd.ngayNhap) = :thangLap and YEAR(hd.ngayNhap) = :namLap"
+//        String sql = "select sp.maSP from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon"
+//                + "						join SanPham sp on cthd.sanPham.maSP=sp.maSP"
+//                + "						join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai "
+//                + "						join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc"
+//                + "						join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac"
+//                + "						join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu"
+//                + "						join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC"
+//                + "	where MONTH(hd.ngayNhap) like :thangLap and YEAR(hd.ngayNhap) like :namLap"
+//                + "			group by sp.maSP";
+        String sql = "select sp.maSP from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD\n"
+                + "						join SanPham sp on cthd.maSP=sp.maSP\n"
+                + "						join PhanLoai pl on pl.maPhanLoai=sp.maPhanLoai \n"
+                + "						join KichThuoc kt on kt.maKichThuoc=sp.maKichThuoc\n"
+                + "						join MauSac ms on ms.maMauSac=sp.maMauSac\n"
+                + "						join ChatLieu cl on cl.maChatLieu=sp.maChatLieu\n"
+                + "						join NhaCungCap ncc on ncc.maNCC=sp.maNhaCungCap\n"
+                + "	where MONTH(hd.ngayNhap) like :thangLap and YEAR(hd.ngayNhap) like :namLap\n"
                 + "			group by sp.maSP";
         List<SanPham> listSanPham = new ArrayList<>();
         try {
             et.begin();
-            List<Object[]> results = em.createQuery(sql, Object[].class)
-                    .setParameter("thangLap", Integer.parseInt(thangLap))
-                    .setParameter("namLap", Integer.parseInt(namLap))
+            List<Object[]> results = em.createNativeQuery(sql)
+//                    .setParameter("thangLap", Integer.parseInt(thangLap))
+//                    .setParameter("namLap", Integer.parseInt(namLap))
+                    .setParameter("thangLap", "%" + thangLap + "%")
+                    .setParameter("namLap", "%" + namLap + "%")
                     .getResultList();
             for (Object[] obj : results) {
                 SanPham sp = em.find(SanPham.class, Long.parseLong(obj[0].toString()));
@@ -309,7 +320,9 @@ public class Dao_HoaDon implements IHoaDonDao {
                 return (double) obj;
             }
         } catch (Exception e) {
-            et.rollback();
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
             e.printStackTrace();
         }
         return 0;
@@ -330,10 +343,6 @@ public class Dao_HoaDon implements IHoaDonDao {
                 et.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
         }
         return 0;
     }
@@ -353,10 +362,6 @@ public class Dao_HoaDon implements IHoaDonDao {
                 et.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
         }
         return 0;
     }
@@ -376,10 +381,6 @@ public class Dao_HoaDon implements IHoaDonDao {
                 et.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null && em.isOpen()) {
-                em.close();
-            }
         }
         return 0;
     }
@@ -468,10 +469,10 @@ public class Dao_HoaDon implements IHoaDonDao {
         return null;
     }
 
-    public void close() {
-        em.close();
-        emf.close();
-    }
+//    public void close() {
+//        em.close();
+//        emf.close();
+//    }
 }
 
 //     * ==============================Thống kê doanh thu=====================

@@ -160,7 +160,13 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
      * Tìm kiếm chất liệu
      */
     public void xuLyTimKiemMauSac() {
-        long tuKhoaMaMauSac = Long.parseLong(txt_MaMauSac.getText());
+        String msConvert = null;
+        if(txt_MaMauSac.getText().equals("")) {
+            msConvert = "0";
+        } else {
+            msConvert = txt_MaMauSac.getText();
+        }
+        long tuKhoaMaMauSac = Long.parseLong(msConvert);
         String tuKhoaTenMauSac = txt_TenMauSac.getText();
 
         if(tuKhoaMaMauSac == 0 && tuKhoaTenMauSac.equals("")){

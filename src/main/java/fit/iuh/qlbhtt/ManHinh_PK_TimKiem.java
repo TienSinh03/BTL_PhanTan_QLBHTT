@@ -658,7 +658,13 @@ public class ManHinh_PK_TimKiem extends javax.swing.JPanel {
     }
 
     private void xuLyTiemKiemPhuKien() {
-        long maSP = Long.parseLong(txt_MaPK.getText());
+        String spCN = null;
+        if(txt_MaPK.getText().equals("")) {
+            spCN = "0";
+        } else {
+            spCN = txt_MaPK.getText();
+        }
+        long maSP = Long.parseLong(spCN);
         String tenSP = txt_TenPK.getText();
         String tenPhanLoai = cmb_PhanLoai.getSelectedItem().toString();
         String tenNCC = cmb_NCC.getSelectedItem().toString();

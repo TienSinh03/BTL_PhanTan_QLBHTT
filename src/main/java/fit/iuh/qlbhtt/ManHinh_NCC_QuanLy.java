@@ -486,6 +486,8 @@ public class ManHinh_NCC_QuanLy extends javax.swing.JPanel {
         txt_Email.setText("");
         txt_MaNCC.setText("");
         tbl_NhaCungCap.clearSelection();
+        modelNhaCungCap = (DefaultTableModel) tbl_NhaCungCap.getModel();
+        modelNhaCungCap.setRowCount(0);
     }
     
     /**
@@ -532,6 +534,7 @@ public class ManHinh_NCC_QuanLy extends javax.swing.JPanel {
      */
      public void docDuLieuNhaCungCap() {
         modelNhaCungCap = (DefaultTableModel) tbl_NhaCungCap.getModel();
+        modelNhaCungCap.setRowCount(0);
         for(NhaCungCap ncc: daoNhaCungCap.getAllNhaCungCap()) {
             Object[] object = new Object[5];
             object[0] = ncc.getMaNCC();

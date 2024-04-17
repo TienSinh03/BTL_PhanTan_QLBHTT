@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Table(name = "NhaCungCap")
 @NamedQueries(value = {
         @NamedQuery(name = "NhaCungCap.getAll", query = "SELECT ncc FROM NhaCungCap ncc"),
-        @NamedQuery(name = "NhaCungCap.findNhaCungCap", query = "SELECT ncc FROM NhaCungCap ncc WHERE ncc.maNCC = :maNCC or ncc.tenNCC = :tenNCC or ncc.sdt = :sdt or ncc.email = :email"),
+        @NamedQuery(name = "NhaCungCap.findNhaCungCap", query = "SELECT ncc FROM NhaCungCap ncc WHERE (:maNVCheck = '' OR ncc.maNCC = :maNVParam) and  ncc.tenNCC like :tenNCC and ncc.sdt like :sdt and ncc.email like :email"),
         @NamedQuery(name = "NhaCungCap.findTenNhaCungCap", query = "SELECT ncc FROM NhaCungCap ncc WHERE ncc.tenNCC = :tenNCC"),
         @NamedQuery(name = "NhaCungCap.findNhaCungCapTheoMa", query = "SELECT ncc FROM NhaCungCap ncc WHERE ncc.maNCC = :maNCC"),
 

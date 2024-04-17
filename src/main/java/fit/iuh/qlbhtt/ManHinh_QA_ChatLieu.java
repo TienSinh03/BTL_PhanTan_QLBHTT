@@ -157,7 +157,13 @@ public class ManHinh_QA_ChatLieu extends javax.swing.JPanel {
      * Tìm kiếm chất liệu
      */
     public void xuLyTimKiemChatLieu() {
-        long tuKhoaMaChatLieu = Long.parseLong(txt_MaChatLieu.getText());
+        String msConvert = null;
+        if(txt_MaChatLieu.getText().equals("")) {
+            msConvert = "0";
+        } else {
+            msConvert = txt_MaChatLieu.getText();
+        }
+        long tuKhoaMaChatLieu = Long.parseLong(msConvert);
         String tuKhoaTenChatLieu = txt_TenChatLieu.getText();
 
         if(tuKhoaMaChatLieu == 0 && tuKhoaTenChatLieu.equals("")){

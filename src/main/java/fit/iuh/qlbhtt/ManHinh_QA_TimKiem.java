@@ -654,7 +654,13 @@ public class ManHinh_QA_TimKiem extends javax.swing.JPanel {
     }
 
     private void xuLyTiemKiemQuanAo() {
-        long maSP = Long.parseLong(txt_MaQA.getText());
+        String spCN = null;
+        if(txt_MaQA.getText().equals("")) {
+            spCN = "0";
+        } else {
+            spCN = txt_MaQA.getText();
+        }
+        long maSP = Long.parseLong(spCN);
         String tenSP = txt_TenQA.getText();
         String tenPhanLoai = cmb_PhanLoai.getSelectedItem().toString();
         String tenNCC = cmb_NCC.getSelectedItem().toString();

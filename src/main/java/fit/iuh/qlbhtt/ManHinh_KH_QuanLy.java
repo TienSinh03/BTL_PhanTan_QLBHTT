@@ -536,10 +536,13 @@ public class ManHinh_KH_QuanLy extends javax.swing.JPanel {
         rad_Nam.setSelected(false);
         rad_Nu.setSelected(false);
         tbl_KhachHang.clearSelection();
+        modelKhachHang = (DefaultTableModel) tbl_KhachHang.getModel();
+        modelKhachHang.setRowCount(0);
     }
 
     public void docDuLieuKhachHang() {
         modelKhachHang = (DefaultTableModel) tbl_KhachHang.getModel();
+        modelKhachHang.setRowCount(0);
         for (KhachHang kh : dao_KhachHang.getAllKhachHang()) {
             Object[] object = new Object[5];
             object[0] = kh.getMaKH();
@@ -616,6 +619,7 @@ public class ManHinh_KH_QuanLy extends javax.swing.JPanel {
         object[4] = kh.getSdt();
         
         modelKhachHang.addRow(object);
+        docDuLieuKhachHang();
         xoaTrang();
         JOptionPane.showMessageDialog(this, "Thêm thành công");
     }

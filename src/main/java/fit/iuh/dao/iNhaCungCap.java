@@ -14,7 +14,7 @@ public interface iNhaCungCap {
 
     //    String maNCC, String tenNCC, String sdt, String email
 
-    public NhaCungCap timKiemNhaCungCap(Long maNCC, String tenNCC, String sdt, String email );
+    public List<NhaCungCap> timKiemNhaCungCap(Long maNCC, String tenNCC, String sdt, String email );
 
     public NhaCungCap  getNhaCungCapTheoTen(String tenNCC);
 
