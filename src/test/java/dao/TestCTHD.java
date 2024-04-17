@@ -64,9 +64,5 @@ public class TestCTHD {
         double doanhThu = dao_cthd.getDoanhThuSanPhamBanDuoc(1, "10", "2023");
         System.out.println(doanhThu);
     }
-    @AfterAll
-    public void close(){
-        dao_cthd.close();
-        dao_hoaDon.close();
-    }
+
 }

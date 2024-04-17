@@ -8,9 +8,7 @@ package dao;
 
 import fit.iuh.dao.impl.Dao_CTPhieuDatHang;
 import fit.iuh.dao.impl.Dao_PhieuDatHang;
-import fit.iuh.entity.CTPhieuDatHang;
-import fit.iuh.entity.PhieuDatHang;
-import fit.iuh.entity.SanPham;
+import fit.iuh.entity.*;
 import jakarta.persistence.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,10 +40,14 @@ public class TestDaoCTPhieuDat {
 
     @Test
     public void testThemCTPDT() {
-        PhieuDatHang pdt = daoPhieuDatHang.getPDTTheoMa(2);
+//        PhieuDatHang pdt = daoPhieuDatHang.getPDTTheoMa(2);
+        KhachHang kh = em.find(KhachHang.class, 12);
+        NhanVien nv = em.find(NhanVien.class, 1);
+        PhieuDatHang pdt = new PhieuDatHang(kh, nv, java.sql.Date.valueOf("2024-04-11"));
+        pdt.setMaPhieuDat(daoPhieuDatHang.getPDTTheoMaKH(kh.getMaKH()).getMaPhieuDat());
         System.out.println(pdt);
-        SanPham sp = em.find(SanPham.class, 3);
-        CTPhieuDatHang ctpdt = new CTPhieuDatHang(sp, pdt, 10);
+        SanPham sp = em.find(SanPham.class, 6);
+        CTPhieuDatHang ctpdt = new CTPhieuDatHang(sp, pdt, 2);
         System.out.println(ctpdt);
         boolean check = daoCTPhieuDat.themCTPDT(ctpdt);
         Assertions.assertTrue(check);

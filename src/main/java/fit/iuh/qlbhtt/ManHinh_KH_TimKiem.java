@@ -363,7 +363,7 @@ public class ManHinh_KH_TimKiem extends javax.swing.JPanel {
     }//GEN-LAST:event_btn_TimKiemActionPerformed
 
     private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XoaTrangActionPerformed
-        // TODO add your handling code here:
+        xoaTrang();
     }//GEN-LAST:event_btn_XoaTrangActionPerformed
 
     private void btn_TimKiemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TimKiemMouseEntered
@@ -409,6 +409,7 @@ public class ManHinh_KH_TimKiem extends javax.swing.JPanel {
     }
 
     public void xoaTrang() {
+        clearTable();
         txt_MaKH.setText("");
         txt_TenKH.setText("");
         txt_Email.setText("");
@@ -432,7 +433,13 @@ public class ManHinh_KH_TimKiem extends javax.swing.JPanel {
     }
 
     private void xuLyTiemKiemKhachHang() {
-        long maKhachHang = Long.parseLong(txt_MaKH.getText());
+        String msConvert = null;
+        if(txt_MaKH.getText().equals("")) {
+            msConvert = "0";
+        } else {
+            msConvert = txt_MaKH.getText();
+        }
+        long maKhachHang = Long.parseLong(msConvert);
         String tenKhachHang = txt_TenKH.getText();
         String soDienThoai = txt_SoDienThoai.getText();
         String email = txt_Email.getText();

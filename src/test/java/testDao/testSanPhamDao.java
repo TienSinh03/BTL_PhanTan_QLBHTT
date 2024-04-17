@@ -88,7 +88,7 @@ public class testSanPhamDao {
 //    updateSanPham
     public void testGiamSL(){
         SanPham sanPham = new SanPham();
-        sanPham.setMaSP(1L);
+        sanPham.setMaSP(13L);
         sanPham.setSoLuong(10);
 
         daoSanPham.giamSoLuongSanPham(sanPham);
@@ -103,7 +103,7 @@ public class testSanPhamDao {
     }
     @Test
     public void testFindQuanAo(){
-        System.out.println(daoSanPham.timKiemQuanAo(0,"Áo","Áo","A","Trắng","Vải","M"));
+        System.out.println(daoSanPham.timKiemQuanAo(0,"","","A","Trắng","Vải","M"));
     }
 
     @Test

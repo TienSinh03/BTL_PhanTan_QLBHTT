@@ -122,11 +122,7 @@ public class Dao_PhanLoai implements IPhanLoaiDao {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
-            PhanLoai phanLoaiInDBS = em.find(PhanLoai.class, phanLoai.getMaPhanLoai());
-            if (phanLoaiInDBS == null) {
-                return;
-            }
-            phanLoaiInDBS = em.merge(phanLoai);
+            em.merge(phanLoai);
             et.commit();
         } catch (Exception e) {
             et.rollback();

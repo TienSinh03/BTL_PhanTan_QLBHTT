@@ -164,8 +164,5 @@ public class TestHoaDon {
         dsSanPham.forEach(System.out::println);
     }
 
-    @AfterAll
-    public void close() {
-        dao_hoaDon.close();
-    }
+
 }

@@ -146,10 +146,6 @@ public class Dao_NhanVien implements INhanVienDao {
                 et.rollback();
             }
             e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
         }
         return null;
     }

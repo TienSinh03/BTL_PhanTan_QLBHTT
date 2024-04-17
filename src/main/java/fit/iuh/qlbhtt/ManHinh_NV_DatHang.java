@@ -57,6 +57,7 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
     KhachHang khachHang = null;
     ArrayList<SanPham> gioHang;
     long maPDH = 0;
+    String maPDH_String = null;
     private boolean ngonNgu = Login.ngonNgu;
 
     /**
@@ -1129,15 +1130,24 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
     }
 
     public void xulyDatHang() {
+        System.out.println("Khanh hàng: " + khachHang);
+        System.out.println("Nhan vien: " + Login.nhanVien);
         PhieuDatHang pdt = new PhieuDatHang(khachHang, Login.nhanVien, new Date());
         //Them vao csdl HoaDon
         if (maPDH != 0) {
+            maPDH = (dao_PhieuDatHang.getPDTTheoMaKH(khachHang.getMaKH()).getMaPhieuDat());
             pdt.setMaPhieuDat(maPDH);
             dao_CTPDT.xoaCTPhieuDatHang(maPDH);
             dao_PhieuDatHang.xoaPhieuDatHang(maPDH);
         }
+        if(pdt == null) {
+            System.out.println("Khach hang null");
+        }
+        System.out.println("Phieu dat hang: " + pdt);
         dao_PhieuDatHang.themPhieuDatHang(pdt);
-        
+        pdt.setMaPhieuDat(dao_PhieuDatHang.getPDTTheoMaKH(khachHang.getMaKH()).getMaPhieuDat());
+        System.out.println("Phieu dat hang2: " + pdt);
+
         //Them vao csdl CTHD
         for (SanPham sanPham : gioHang) {
             CTPhieuDatHang ctpdt = new CTPhieuDatHang(sanPham, pdt, sanPham.getSoLuong());
@@ -1189,6 +1199,7 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
 
     private void kiemTraDonDatCuaKH(KhachHang kh) {
         PhieuDatHang pdh = dao_PhieuDatHang.getPDTTheoMaKH(kh.getMaKH());
+        System.out.println("Ma phieu dat hang: " + pdh);
         if (pdh != null) {
             maPDH = pdh.getMaPhieuDat();
             ArrayList<CTPhieuDatHang> ctpdh = dao_CTPDT.getAllCTPhieuDatHang(pdh.getMaPhieuDat());

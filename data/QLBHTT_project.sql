@@ -359,6 +359,7 @@ go
 
 -- xử lý dữ liệu trong database-----
 select * from SanPham
+select * from KhachHang
 select * from NhanVien
 select * from NhaCungCap
 select * from KichThuoc
@@ -367,6 +368,8 @@ select * from PhanLoai
 select * from ChatLieu
 select * from HoaDon
 select * from CTHD
+select * from PhieuDatHang
+select * from CTPhieuDatHang
 
 
 Select * from NhanVien where maNV like '%%' and hoTen like '%%' and sdt like '%%' and email like '%%' and chucVu like '%%' and diaChi like '%%' and trangThai = 0
@@ -513,5 +516,24 @@ select sp.maSP, sp.tenSP, SUM(ct.soLuong*sp.giaBan) as thanhTien from HoaDon hd 
                     	join MauSac ms on ms.maMauSac=sp.maMauSac
                     	join ChatLieu cl on cl.maChatLieu=sp.maChatLieu
                     	join NhaCungCap ncc on ncc.maNCC=sp.maNhaCungCap
-						where MONTH(hd.ngayLap) like '%10%' and YEAR(hd.ngayLap) like '%%'
+						where MONTH(hd.ngayNhap) like '%10%' and YEAR(hd.ngayNhap) like '%%'
 						group by sp.maSP, sp.tenSP
+
+select sum(cthd.soLuong*sp.giaBan) as doanhThu from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD
+                					join SanPham sp on cthd.maSP=sp.maSP
+                	where sp.maSP= 1 and MONTH(hd.ngayNhap) like '%10%' and YEAR(hd.ngayNhap) like '%%'
+                			group by sp.maSP
+
+Select * from PhieuDatHang where maKH = 'KH0006'
+
+							select * from PhieuDatHang
+
+
+select top 1 * from HoaDon
+order by maHD desc
+
+select * from SanPham
+select * from HoaDon
+select * from CTHD
+
+UPDATE SanPham  SET soLuong = soLuong - 2 WHERE maSP = 9

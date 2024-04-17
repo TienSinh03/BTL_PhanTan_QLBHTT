@@ -12,12 +12,12 @@ import java.io.Serializable;
 public class CTHD implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maSP")
     @Id
     private SanPham sanPham;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maHD")
     @Id
     private HoaDon hoaDon;

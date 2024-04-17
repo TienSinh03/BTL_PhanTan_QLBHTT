@@ -104,7 +104,7 @@ public class Dao_SanPham implements iSanPhamDao {
     @Override
     public ArrayList<SanPham> timKiemQuanAo(long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc) {
         return (ArrayList<SanPham>) em.createNamedQuery("timKiemQuanAo", SanPham.class)
-                .setParameter("maSPCheck", maSP==0 ? "" : String.valueOf(maSP))
+                .setParameter("maSPCheck", maSP == 0 ? "" : String.valueOf(maSP))
                 .setParameter("maSP", maSP)
                 .setParameter("tenSP", "%" + tenSP + "%")
                 .setParameter("loaiSanPham", "%" + tenPhanLoai + "%")
@@ -119,7 +119,7 @@ public class Dao_SanPham implements iSanPhamDao {
     public ArrayList<SanPham> timKiemPhuKien(long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc) {
 
         return (ArrayList<SanPham>) em.createNamedQuery("timKiemPhuKien", SanPham.class)
-                .setParameter("maSPCheck", maSP==0 ? "" : String.valueOf(maSP))
+                .setParameter("maSPCheck", maSP == 0 ? "" : String.valueOf(maSP))
                 .setParameter("maSP", maSP)
                 .setParameter("tenSP", "%" + tenSP + "%")
                 .setParameter("loaiSanPham", "%" + tenPhanLoai + "%")
@@ -190,6 +190,7 @@ public class Dao_SanPham implements iSanPhamDao {
         }
         return null;
     }
+
     @Override
     public ArrayList<SanPham> getSoLuongSPTheoMaPL() {
         EntityTransaction tx = em.getTransaction();
@@ -222,15 +223,26 @@ public class Dao_SanPham implements iSanPhamDao {
 
     @Override
     public void giamSoLuongSanPham(SanPham sp) {
+        String query = "UPDATE SanPham SET soLuong = soLuong - ? WHERE maSP = ?";
+        System.out.println(sp.getMaSP() + " : " + sp.getSoLuong());
+        int updatedQuantity1 = em.find(SanPham.class, sp.getMaSP()).getSoLuong();
+        System.out.println("Số lượng trc  khi cập nhật: " + updatedQuantity1);
+
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
-            SanPham sanPhamToUpdate = em.find(SanPham.class, sp.getMaSP());
-            if (sanPhamToUpdate != null) {
-                sanPhamToUpdate.setSoLuong(sanPhamToUpdate.getSoLuong() - sp.getSoLuong());
-                em.merge(sanPhamToUpdate);
-            }
+
+            em.createNativeQuery(query)
+                    .setParameter(1, sp.getSoLuong())
+                    .setParameter(1, sp.getMaSP())
+                    .executeUpdate();
+
             tx.commit();
+
+            // Kiểm tra lại số lượng sau khi cập nhật
+            int updatedQuantity = em.find(SanPham.class, sp.getMaSP()).getSoLuong();
+            System.out.println("Số lượng sau khi cập nhật: " + updatedQuantity);
+
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
@@ -239,16 +251,18 @@ public class Dao_SanPham implements iSanPhamDao {
         }
     }
 
+
     @Override
     public void tangSoLuongSanPham(long maSP, int soLuong) {
         EntityTransaction tx = em.getTransaction();
+        String url = "UPDATE SanPham SET soLuong = soLuong + ? WHERE maSP = ?";
+
         try {
             tx.begin();
-            SanPham sanPhamToUpdate = em.find(SanPham.class, maSP);
-            if (sanPhamToUpdate != null) {
-                sanPhamToUpdate.setSoLuong(sanPhamToUpdate.getSoLuong() + soLuong);
-                em.merge(sanPhamToUpdate);
-            }
+            em.createNativeQuery(url)
+                    .setParameter(1, soLuong)
+                    .setParameter(2, maSP)
+                    .executeUpdate();
             tx.commit();
         } catch (Exception e) {
             if (tx.isActive()) {

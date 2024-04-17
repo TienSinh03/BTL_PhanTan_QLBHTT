@@ -1081,6 +1081,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                         int truongHop = 2;
                         int index = 0;
                         for (SanPham sp : gioHang) {
+                            System.out.println("sp" + sp);
                             if (sp.getMaSP() == sanPham.getMaSP()) {
                                 truongHop = 1;
                                 //Kiểm tra số lượng mua so với số lượng tồn
@@ -1110,6 +1111,8 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                                 tbl_SanPham.clearSelection();
                                 //Hợp lệ, tiến hành thêm
                                 sanPham.setSoLuong(soLuongMua);
+                                System.out.println("sl mua1" + soLuongMua);
+                                System.out.println("sl mua2" + sanPham.getSoLuong());
                                 //Them vao danh sach gio hang
                                 gioHang.add(sanPham);
 
@@ -1162,6 +1165,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                         //Lay thong tin san pham can giam so luong
                         long maSanPham = Long.parseLong(tbl_GioHang.getValueAt(row, 0).toString());
                         for (SanPham sanPham : gioHang) {
+
                             if (sanPham.getMaSP() == maSanPham) {
                                 //Hai trường hợp: 1 là giảm số lượng nhưng số lượng mua vẫn > 0
                                 //                2 là giảm số lượng mua đến 0, tiến hành xóa sản phẩm ra khỏi giỏ hàng
@@ -1278,6 +1282,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
     public void xuLyGiamSLSanPhamTrongKho() {
         for (SanPham sanPham : gioHang) {
+            System.out.println("sp" + sanPham);
             dao_SanPham.giamSoLuongSanPham(sanPham);
         }
     }
@@ -1286,15 +1291,19 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         HoaDon hd = new HoaDon(khachHang, Login.nhanVien, new Date());
         //Them vao csdl HoaDon
         dao_HoaDon.themHoaDon(hd);
+        hd.setMaHoaDon(dao_HoaDon.getHoaDon().getMaHoaDon());
+
+        System.out.println("Ma hoa don: " + hd.getMaHoaDon());
         //Them vao csdl CTHD
         for (SanPham sanPham : gioHang) {
+            System.out.println("sp1:" + sanPham);
             CTHD cthd = new CTHD(sanPham, hd, sanPham.getSoLuong());
             dao_CTHD.themCTHD(cthd);
         }
         xuLyGiamSLSanPhamTrongKho();
 
         xuatHoaDon(hd);
-        guiHoaDonVeEmail(hd);
+//        guiHoaDonVeEmail(hd);
         resetPanel();
         if (maPDH != 0) {
             //Xoa CTPhieuDatHang

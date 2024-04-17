@@ -75,13 +75,14 @@ public class Dao_NhaCungCap implements iNhaCungCap {
     }
 
     @Override
-    public NhaCungCap timKiemNhaCungCap(Long maNCC, String tenNCC, String sdt, String email) {
+    public List<NhaCungCap> timKiemNhaCungCap(Long maNCC, String tenNCC, String sdt, String email) {
         return em.createNamedQuery("NhaCungCap.findNhaCungCap", NhaCungCap.class)
-                .setParameter("maNCC", String.valueOf(maNCC)) // convert Long to String
-                .setParameter("tenNCC", tenNCC)
-                .setParameter("sdt", sdt)
-                .setParameter("email", email)
-                .getSingleResult();
+                .setParameter("maNVCheck", maNCC == 0 ? "" : String.valueOf(maNCC))
+                .setParameter("maNVParam", maNCC)
+                .setParameter("tenNCC", "%" + tenNCC+ "%")
+                .setParameter("sdt", "%" + sdt+ "%")
+                .setParameter("email", "%" +  email+ "%")
+                .getResultList();
 
 
     }

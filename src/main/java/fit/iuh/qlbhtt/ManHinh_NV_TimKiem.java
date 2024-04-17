@@ -35,7 +35,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
      */
     public ManHinh_NV_TimKiem() throws SQLException {
         daoNhanVien = new Dao_NhanVien();
-        connect = new Connect();
+//        connect = new Connect();
 //        connect.connect();
         initComponents();
         activeThayDoiTT = false;
@@ -117,7 +117,13 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
     public void xuLyTimKiemNhanVien() {
         xoaDongBang();
 
-        long tuKhoaMaNV = Long.parseLong(txt_MaNV.getText());
+        String msConvert = null;
+        if(txt_MaNV.getText().equals("")) {
+            msConvert = "0";
+        } else {
+            msConvert = txt_MaNV.getText();
+        }
+        long tuKhoaMaNV = Long.parseLong(msConvert);
         String tuKhoaTenNV = txt_TenNV.getText();
         String tuKhoaChucVu = cmb_ChucVu.getSelectedItem().toString();
         if (tuKhoaChucVu.equalsIgnoreCase("Tất cả")) {

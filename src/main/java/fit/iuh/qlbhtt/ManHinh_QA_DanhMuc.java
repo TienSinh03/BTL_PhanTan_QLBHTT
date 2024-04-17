@@ -148,7 +148,13 @@ public class ManHinh_QA_DanhMuc extends javax.swing.JPanel {
     }
     
      public void xuLyTimKiemChatLieu() {
-        long tuKhoaMaPhanLoai= Long.parseLong(txt_MaDanhMuc.getText());
+         String msConvert = null;
+         if(txt_MaDanhMuc.getText().equals("")) {
+             msConvert = "0";
+         } else {
+             msConvert = txt_MaDanhMuc.getText();
+         }
+         long tuKhoaMaPhanLoai = Long.parseLong(msConvert);
         String tuKhoaTenPhanLoai= txt_TenDanhMuc.getText();
 
          if(tuKhoaMaPhanLoai == 0 && tuKhoaTenPhanLoai.equals("")){

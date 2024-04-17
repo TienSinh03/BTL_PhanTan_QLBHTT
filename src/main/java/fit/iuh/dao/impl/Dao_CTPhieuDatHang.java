@@ -52,9 +52,14 @@ public class Dao_CTPhieuDatHang implements ICTPhieuDatHangDao {
     }
     @Override
     public boolean themCTPDT(CTPhieuDatHang ctpdt) {
+        String query = "INSERT INTO CTPhieuDatHang (maPhieuDat, maSP, soLuong) VALUES (?, ?, ?)";
         try {
             tx.begin();
-            em.persist(ctpdt);
+            em.createNativeQuery(query)
+                    .setParameter(1, ctpdt.getPhieuDatHang().getMaPhieuDat())
+                    .setParameter(2, ctpdt.getSanPham().getMaSP())
+                    .setParameter(3, ctpdt.getSoLuong())
+                    .executeUpdate();
             tx.commit();
             return true;
         } catch (Exception e) {

@@ -26,4 +26,6 @@ public interface IHoaDonDao {
     public ArrayList<KhachHang> thongKeThongTinTop5KhachHangThuongXuyenMuaHang();
     public ArrayList<KhachHang> thongKeThongTinTop5KhachHangSLNhieuNhat();
     public int getSoLuongHoaDonKhachHangMua(long maKH);
+
+    public HoaDon getHoaDon();
 }
