@@ -1,6 +1,5 @@
 package testDao;
 
-import fit.iuh.dao.iTaiKhoanDao;
 import fit.iuh.dao.impl.Dao_TaiKhoan;
 import fit.iuh.entity.NhanVien;
 import fit.iuh.entity.TaiKhoan;
@@ -13,6 +12,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.rmi.RemoteException;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 
 public class testTaiKhoan {
@@ -22,22 +23,22 @@ public class testTaiKhoan {
     private Dao_TaiKhoan taiKhoanDao;
 
     @BeforeAll
-    public void setUp() {
+    public void setUp()throws RemoteException {
         taiKhoanDao = new Dao_TaiKhoan(em);
     }
 
     @Test
-    public void testGetAllTaiKhoan() {
+    public void testGetAllTaiKhoan()throws RemoteException {
         System.out.println(taiKhoanDao.getAllTaiKhoan());
     }
 
     @Test
-    public void testGetTrangThai() {
+    public void testGetTrangThai()throws RemoteException {
         System.out.println(taiKhoanDao.getAllTaiKhoanConHoatDong());
     }
 
     @Test
-    public void addTaiKhoan() {
+    public void addTaiKhoan() throws RemoteException{
         TaiKhoan taiKhoan = new TaiKhoan();
         taiKhoan.setTenTaiKhoan("NV004");
         taiKhoan.setMatKhau("2222");
@@ -54,17 +55,17 @@ public class testTaiKhoan {
     }
 
     @Test
-    public void deleteTaiKhoan() {
+    public void deleteTaiKhoan()throws RemoteException {
         boolean checked = taiKhoanDao.xoaTaiKhoan(4L);
     }
 
     @Test
-    public void updateTaiKhoan() {
+    public void updateTaiKhoan()throws RemoteException {
         boolean checked = taiKhoanDao.capNhatTaiKhoan(4L);
     }
 
     @Test
-    public void testDoiMatKhau() {
+    public void testDoiMatKhau()throws RemoteException {
         TaiKhoan tk = taiKhoanDao.getTaiKhoanNV(4L);
         tk.setMatKhau("1212");
         taiKhoanDao.doiMatKhauTaiKhoan(tk);
@@ -73,23 +74,23 @@ public class testTaiKhoan {
     }
 
     @Test
-    public void kiemTraDangNhap() {
+    public void kiemTraDangNhap()throws RemoteException {
         TaiKhoan taiKhoan = taiKhoanDao.dangNhapTaiKhoan("Admin", "admin");
         System.out.println(taiKhoan);
     }
 
     @Test
-    public void testGetMatKhau() {
+    public void testGetMatKhau()throws RemoteException {
         System.out.println(taiKhoanDao.getMatKhau("Admin"));
     }
 
     @Test
-    public void testGetTaiKhoanByMaNV() {
+    public void testGetTaiKhoanByMaNV()throws RemoteException {
         System.out.println(taiKhoanDao.getTaiKhoanNV(1L));
     }
 
     @Test
-    public void testDatLaiMatKhau() {
+    public void testDatLaiMatKhau() throws RemoteException{
         TaiKhoan tk = taiKhoanDao.getTaiKhoanNV(4L);
         taiKhoanDao.datLaiMatKhau(tk, "1121");
 

@@ -8,6 +8,8 @@ package fit.iuh.dao;
 
 import fit.iuh.entity.PhieuDatHang;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +18,11 @@ import java.util.List;
  * @author: Sinh Phan Tien
  * @date: 4/10/2024
  */
-public interface IPhieuDatHangDao {
-    public List<PhieuDatHang> getAllPhieuDatHang();
-    public boolean themPhieuDatHang(PhieuDatHang pdt);
-    public boolean xoaPhieuDatHang(long maPhieuDatHang);
-    public PhieuDatHang getPDTTheoMa(long maPDT);
-    public PhieuDatHang getPDTTheoMaKH(long maKhachHang);
+public interface IPhieuDatHangDao extends Remote {
+    public List<PhieuDatHang> getAllPhieuDatHang() throws RemoteException;
+    public boolean themPhieuDatHang(PhieuDatHang pdt) throws RemoteException;
+    public boolean xoaPhieuDatHang(long maPhieuDatHang) throws RemoteException;
+    public PhieuDatHang getPDTTheoMa(long maPDT) throws RemoteException;
+    public PhieuDatHang getPDTTheoMaKH(long maKhachHang) throws RemoteException;
 
 }

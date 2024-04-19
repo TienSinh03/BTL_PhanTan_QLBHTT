@@ -4,10 +4,13 @@
  */
 package fit.iuh.dao.impl;
 
+import fit.iuh.dao.ISendMail;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Date;
 import java.util.Properties;
 
@@ -16,11 +19,15 @@ import java.util.Properties;
  *
  * @author phant
  */
-public class Dao_SendMail {
+public class Dao_SendMail extends UnicastRemoteObject implements ISendMail {
     static final String fromEmail = "phansinh0606@gmail.com";
     static final String password = "elihvpvqateibfbe";
-    
-    public void sendEmailMa(String toEmail, String tieuDe, String noiDung) {
+
+    public Dao_SendMail() throws RemoteException {
+    }
+
+    @Override
+    public void sendEmailMa(String toEmail, String tieuDe, String noiDung) throws RemoteException{
         //Khai báo các thuộc tính
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");// thông tin đầu là gửi từ đâu -> gửi từ gmail,
@@ -71,7 +78,8 @@ public class Dao_SendMail {
      * @param tieuDe   tiêu đề gửi
      * @param noiDung    nội dung hóa đơn
      */
-    public void guiHoaDonVeEmail(String toEmail, String tieuDe, String noiDung) {
+    @Override
+    public void guiHoaDonVeEmail(String toEmail, String tieuDe, String noiDung) throws RemoteException{
         //Khai báo các thuộc tính
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");// thông tin đầu là gửi từ đâu -> gửi từ gmail,

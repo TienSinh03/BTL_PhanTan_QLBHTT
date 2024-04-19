@@ -9,23 +9,31 @@ import fit.iuh.dao.INhanVienDao;
 import fit.iuh.entity.NhanVien;
 import jakarta.persistence.*;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author phant
  */
-public class Dao_NhanVien implements INhanVienDao {
+public class Dao_NhanVien extends UnicastRemoteObject implements INhanVienDao {
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
-    EntityManager em = emf.createEntityManager();
-    EntityTransaction et = em.getTransaction();
+    private EntityManager em = null;
+    private EntityTransaction et = null;
 
-    public ArrayList<NhanVien> getAllNhanVien() {
-        return (ArrayList<NhanVien>) em.createQuery("SELECT nv FROM NhanVien nv").getResultList();
+    public Dao_NhanVien() throws RemoteException {
+        super();
+        em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
+        et = em.getTransaction();
     }
 
-    public ArrayList<NhanVien> getAllNhanVienConHoaDong() {
+    @Override
+    public ArrayList<NhanVien> getAllNhanVien() throws RemoteException{
+        return (ArrayList<NhanVien>) em.createQuery("SELECT nv FROM NhanVien nv").getResultList();
+    }
+    @Override
+    public ArrayList<NhanVien> getAllNhanVienConHoaDong() throws RemoteException{
         ArrayList<NhanVien> listNhanVien = new ArrayList<>();
         String url = "Select * from NhanVien where trangThai = 1";
 
@@ -45,7 +53,8 @@ public class Dao_NhanVien implements INhanVienDao {
      *
      * @param nv
      */
-    public void themNhanVien(NhanVien nv) {
+    @Override
+    public void themNhanVien(NhanVien nv) throws RemoteException{
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
@@ -62,7 +71,8 @@ public class Dao_NhanVien implements INhanVienDao {
      *
      * @param manv
      */
-    public void xoaNhanVien(long manv) {
+    @Override
+    public void xoaNhanVien(long manv) throws RemoteException{
         EntityTransaction et = em.getTransaction();
         String query = "update NhanVien nv set nv.trangThai = 0 where maNV = :manv";
         try {
@@ -80,7 +90,8 @@ public class Dao_NhanVien implements INhanVienDao {
      *
      * @param nv
      */
-    public void capNhatNhanVien(NhanVien nv) {
+    @Override
+    public void capNhatNhanVien(NhanVien nv) throws RemoteException{
         String url = "update NhanVien set hoTen = ?, chuVu = ?, email = ?, sdt = ?, diaChi = ?, gioiTinh = ?, trangThai = ? where maNV = ?";
         try {
             et.begin();
@@ -113,7 +124,8 @@ public class Dao_NhanVien implements INhanVienDao {
      * @param trangThai
      * @return
      */
-    public ArrayList<NhanVien> timKiemNhanVien(long maNV, String tenNV, String sdt, String email, String chucVu, String diaChi, boolean trangThai) {
+    @Override
+    public ArrayList<NhanVien> timKiemNhanVien(long maNV, String tenNV, String sdt, String email, String chucVu, String diaChi, boolean trangThai) throws RemoteException{
         List<NhanVien> listNhanVienTim = null;
 
         try {
@@ -149,13 +161,13 @@ public class Dao_NhanVien implements INhanVienDao {
         }
         return null;
     }
-
-    public static NhanVien getNhanVienTheoMa(long maNV) {
+    @Override
+    public NhanVien getNhanVienTheoMa(long maNV) throws RemoteException{
         EntityManager em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
         return em.find(NhanVien.class, maNV);
     }
-
-    public NhanVien getNhanVienTheoTen(String tenNV) {
+    @Override
+    public NhanVien getNhanVienTheoTen(String tenNV) throws RemoteException{
         String url = "Select * from NhanVien where hoTen = ?";
         try {
             et.begin();

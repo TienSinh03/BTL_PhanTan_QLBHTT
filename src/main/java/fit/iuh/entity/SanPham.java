@@ -12,7 +12,7 @@ import lombok.*;
 @Table(name = "SanPham")
 @NamedQueries({
         @NamedQuery(name = "getAllSanPham", query = "SELECT sp FROM SanPham sp"),
-        @NamedQuery(name = "getAllQuaNAo", query = "SELECT sp FROM SanPham sp where sp.phanLoai.maPhanLoai in (1,2)"),
+        @NamedQuery(name = "getAllQuaNAo", query = "SELECT sp FROM SanPham sp JOIN FETCH sp.phanLoai pl where pl.maPhanLoai in (1,2)"),
         @NamedQuery(name = "getAllPhuKien", query = "SELECT sp FROM SanPham sp where sp.phanLoai.maPhanLoai not in (1,2)"),
         @NamedQuery(name = "timKiemQuanAo",
                 query = "SELECT sp FROM SanPham sp WHERE sp.phanLoai.maPhanLoai IN (1, 2) AND (:maSPCheck = '' OR sp.maSP = :maSP) AND " +
@@ -38,6 +38,8 @@ import lombok.*;
 })
 public class SanPham implements Serializable {
     private static final long serialVersionUID = 1L;
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long maSP;
@@ -54,23 +56,23 @@ public class SanPham implements Serializable {
     @Column(nullable = false)
     private String hinhAnh;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "maChatLieu")
     private ChatLieu chatLieu;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "maKichThuoc")
     private KichThuoc kichThuoc;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "maMauSac")
     private MauSac mauSac;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "maPhanLoai")
     private PhanLoai phanLoai;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "maNhaCungCap")
     private NhaCungCap nhaCungCap;
 

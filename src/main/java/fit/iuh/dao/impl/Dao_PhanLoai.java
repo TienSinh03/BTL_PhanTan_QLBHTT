@@ -11,17 +11,25 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 /**
  *
  * @author phant
  */
-public class Dao_PhanLoai implements IPhanLoaiDao {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
-    EntityManager em = emf.createEntityManager();
-    EntityTransaction et = em.getTransaction();
-    public ArrayList<PhanLoai> getAllPhanLoai() {
+public class Dao_PhanLoai extends UnicastRemoteObject implements IPhanLoaiDao {
+    private EntityManager em = null;
+    private EntityTransaction et = null;
+
+    public Dao_PhanLoai() throws RemoteException {
+        super();
+        em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
+        et = em.getTransaction();
+    }
+    @Override
+    public ArrayList<PhanLoai> getAllPhanLoai() throws RemoteException{
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
         EntityManager em = emf.createEntityManager();
         EntityTransaction et = em.getTransaction();
@@ -39,8 +47,8 @@ public class Dao_PhanLoai implements IPhanLoaiDao {
         }
         return listPhanLoai;
     }
-
-    public ArrayList<PhanLoai> getAllPhanLoaiCuaPhuKien() {
+    @Override
+    public ArrayList<PhanLoai> getAllPhanLoaiCuaPhuKien() throws RemoteException{
         EntityManager em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
         ArrayList<PhanLoai> listPhanLoai = new ArrayList<>();
         String url = "Select * from PhanLoai WHERE maPhanLoai NOT IN ('1', '2')";
@@ -52,8 +60,8 @@ public class Dao_PhanLoai implements IPhanLoaiDao {
         }
         return listPhanLoai;
     }
-
-    public PhanLoai getDLPhanLoaiSPTheoMa(long maPL) {
+    @Override
+    public PhanLoai getDLPhanLoaiSPTheoMa(long maPL) throws RemoteException{
         return em.find(PhanLoai.class, maPL);
     }
     
@@ -62,7 +70,8 @@ public class Dao_PhanLoai implements IPhanLoaiDao {
      * @param tenPhanLoai
      * @return 
      */
-    public PhanLoai getPhanLoaiTheoTen(String tenPhanLoai){
+    @Override
+    public PhanLoai getPhanLoaiTheoTen(String tenPhanLoai)throws RemoteException{
         String sql = "select * from PhanLoai where tenPhanLoai = ?";
         try {
             et.begin();
@@ -82,7 +91,8 @@ public class Dao_PhanLoai implements IPhanLoaiDao {
      * Thêm loai sản phẩm
      * @param phanLoai 
      */
-    public void themLoaiSanPham(PhanLoai phanLoai) {
+    @Override
+    public void themLoaiSanPham(PhanLoai phanLoai) throws RemoteException{
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
@@ -98,7 +108,8 @@ public class Dao_PhanLoai implements IPhanLoaiDao {
      * Xóa dữ liệu loại sản phẩm trên database
      * @param maPhanLoai
      */
-    public void xoaPhanLoaiSanPham(long maPhanLoai) {
+    @Override
+    public void xoaPhanLoaiSanPham(long maPhanLoai) throws RemoteException{
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
@@ -118,7 +129,8 @@ public class Dao_PhanLoai implements IPhanLoaiDao {
      * Cập nhật dữ liệu phân loại trên database
      * @param phanLoai
      */
-    public void catNhatLoaiSanPham(PhanLoai phanLoai) {
+    @Override
+    public void catNhatLoaiSanPham(PhanLoai phanLoai)throws RemoteException {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();

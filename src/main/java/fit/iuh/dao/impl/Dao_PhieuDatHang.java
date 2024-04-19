@@ -12,6 +12,8 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,27 +22,19 @@ import java.util.List;
  *
  * @author phant
  */
-public class Dao_PhieuDatHang implements IPhieuDatHangDao {
+public class Dao_PhieuDatHang extends UnicastRemoteObject implements IPhieuDatHangDao {
 
     EntityManager em = null;
     EntityTransaction tx = null;
 
-//    private Dao_SanPham dao_SanPham = new Dao_SanPham();
-//    private Dao_NhanVien dao_NhanVien = new Dao_NhanVien();
-//    private Dao_KhachHang dao_KhachHang = new Dao_KhachHang();
-//    private Dao_PhanLoai dao_PhanLoai = new Dao_PhanLoai();
-//    private Dao_ChatLieu dao_ChatLieu = new Dao_ChatLieu();
-//    private Dao_KichThuoc dao_KichThuoc = new Dao_KichThuoc();
-//    private Dao_MauSac dao_MauSac = new Dao_MauSac();
-//    private Dao_NhaCungCap dao_NhaCungCap = new Dao_NhaCungCap();
-
-    public Dao_PhieuDatHang() {
+    public Dao_PhieuDatHang() throws RemoteException{
+        super();
         em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
         tx = em.getTransaction();
     }
 
     @Override
-    public List<PhieuDatHang> getAllPhieuDatHang() {
+    public List<PhieuDatHang> getAllPhieuDatHang() throws RemoteException{
         String query = "Select pdt from PhieuDatHang pdt";
         List<PhieuDatHang> list = null;
         try {
@@ -55,7 +49,7 @@ public class Dao_PhieuDatHang implements IPhieuDatHangDao {
 
     }
     @Override
-    public boolean themPhieuDatHang(PhieuDatHang pdt) {
+    public boolean themPhieuDatHang(PhieuDatHang pdt) throws RemoteException {
         String query = "INSERT INTO PhieuDatHang (maKH, maNV, ngayLap) VALUES (?, ?, ?)";
         try {
             tx.begin();
@@ -79,7 +73,7 @@ public class Dao_PhieuDatHang implements IPhieuDatHangDao {
     *@param tham số: mã phieu dat hang
     */
     @Override
-    public boolean xoaPhieuDatHang(long maPhieuDatHang) {
+    public boolean xoaPhieuDatHang(long maPhieuDatHang) throws RemoteException{
 
         String url = "DELETE FROM PhieuDatHang pd WHERE pd.maPhieuDat = :maPhieuDatHang";
         try {
@@ -100,7 +94,7 @@ public class Dao_PhieuDatHang implements IPhieuDatHangDao {
      * Lấy thông tin phiếu đặt hàng theo mã phiếu đặt hàng
      */
     @Override
-    public PhieuDatHang getPDTTheoMa(long maPDT) {
+    public PhieuDatHang getPDTTheoMa(long maPDT) throws RemoteException{
         try {
             tx.begin();
             PhieuDatHang pdt = em.find(PhieuDatHang.class, maPDT);
@@ -117,7 +111,7 @@ public class Dao_PhieuDatHang implements IPhieuDatHangDao {
      * Lấy thông tin phiếu đặt hàng theo mã khách hàng
      */
     @Override
-    public PhieuDatHang getPDTTheoMaKH(long maKhachHang) {
+    public PhieuDatHang getPDTTheoMaKH(long maKhachHang) throws RemoteException{
 
 //        String url = "Select p from PhieuDatHang p where p.khachHang.maKH = :maKHachHang";
 //        try {

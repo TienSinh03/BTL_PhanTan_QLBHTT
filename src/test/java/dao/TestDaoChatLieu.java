@@ -13,6 +13,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.rmi.RemoteException;
+
 /*
  * @description:
  * @author: Sinh Phan Tien
@@ -22,17 +24,17 @@ import org.junit.jupiter.api.TestInstance;
 public class TestDaoChatLieu {
     private Dao_ChatLieu daoChatLieu;
     @BeforeAll
-    public void init(){
+    public void init() throws RemoteException {
         daoChatLieu = new Dao_ChatLieu();
     }
 
     @Test
-    public void testGetAllChatLieu(){
+    public void testGetAllChatLieu() throws RemoteException {
         daoChatLieu.getAllChatLieu().forEach(System.out::println);
     }
 
     @Test
-    public void testThemDLChatLieu(){
+    public void testThemDLChatLieu() throws RemoteException {
         ChatLieu chatLieu = new ChatLieu();
         chatLieu.setChatLieu("NiLon");
         boolean check = daoChatLieu.themDLChatLieu(chatLieu);
@@ -40,13 +42,13 @@ public class TestDaoChatLieu {
     }
 
     @Test
-    public void testXoaDLChatLieu(){
+    public void testXoaDLChatLieu()throws RemoteException{
         boolean check = daoChatLieu.xoaDLChatLieu(6);
         Assertions.assertTrue(check);
     }
 
     @Test
-    public void testCapNhatDLChatLieu(){
+    public void testCapNhatDLChatLieu()throws RemoteException{
         ChatLieu chatLieu = daoChatLieu.getDLChatLieuTheoMa(7);
         chatLieu.setChatLieu("NiSen");
         boolean check = daoChatLieu.catNhatDLChatLieu(chatLieu);
@@ -54,13 +56,13 @@ public class TestDaoChatLieu {
     }
 
     @Test
-    public void testGetDLChatLieuTheoMa(){
+    public void testGetDLChatLieuTheoMa()throws RemoteException{
         ChatLieu chatLieu = daoChatLieu.getDLChatLieuTheoMa(1);
         System.out.println(chatLieu);
     }
 
     @Test
-    public void testGetChatLieuTheoTen(){
+    public void testGetChatLieuTheoTen()throws RemoteException{
         ChatLieu chatLieu = daoChatLieu.getChatLieuTheoTen("Da");
         System.out.println(chatLieu);
     }

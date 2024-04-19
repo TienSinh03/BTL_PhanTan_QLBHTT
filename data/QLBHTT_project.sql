@@ -536,4 +536,4 @@ select * from SanPham
 select * from HoaDon
 select * from CTHD
 
-UPDATE SanPham  SET soLuong = soLuong - 2 WHERE maSP = 9
+UPDATE SanPham SET soLuong = soLuong - 2 WHERE maSP = 9

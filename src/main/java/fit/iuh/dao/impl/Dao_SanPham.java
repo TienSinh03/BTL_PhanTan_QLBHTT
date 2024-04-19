@@ -1,44 +1,48 @@
 package fit.iuh.dao.impl;
 
-import fit.iuh.dao.iSanPhamDao;
+import fit.iuh.dao.ISanPhamDao;
 import fit.iuh.entity.PhanLoai;
 import fit.iuh.entity.SanPham;
 import jakarta.persistence.*;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
-public class Dao_SanPham implements iSanPhamDao {
+public class Dao_SanPham extends UnicastRemoteObject implements ISanPhamDao {
     private EntityManager em;
 
-    public Dao_SanPham() {
+    public Dao_SanPham() throws RemoteException {
+        super();
         em = Persistence.createEntityManagerFactory("JPADemo_SQL")
                 .createEntityManager();
     }
 
-    public Dao_SanPham(EntityManager em) {
+    public Dao_SanPham(EntityManager em) throws RemoteException {
+        super();
         this.em = em;
     }
 
     @Override
-    public ArrayList<SanPham> getAllSanPham() {
+    public ArrayList<SanPham> getAllSanPham()throws RemoteException {
         return (ArrayList<SanPham>) em.createNamedQuery("getAllSanPham", SanPham.class)
                 .getResultList();
     }
 
     @Override
-    public ArrayList<SanPham> getAllQuanAo() {
+    public ArrayList<SanPham> getAllQuanAo() throws RemoteException{
         return (ArrayList<SanPham>) em.createNamedQuery("getAllQuaNAo", SanPham.class)
                 .getResultList();
     }
 
     @Override
-    public ArrayList<SanPham> getAllPhuKien() {
+    public ArrayList<SanPham> getAllPhuKien()throws RemoteException {
         return (ArrayList<SanPham>) em.createNamedQuery("getAllPhuKien", SanPham.class)
                 .getResultList();
     }
 
     @Override
-    public boolean themSanPham(SanPham sanPham) {
+    public boolean themSanPham(SanPham sanPham) throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -64,7 +68,7 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public boolean xoaSanPham(long masp) {
+    public boolean xoaSanPham(long masp) throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -84,7 +88,7 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public boolean capNhatSanPham(SanPham sanPham) {
+    public boolean capNhatSanPham(SanPham sanPham) throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -102,7 +106,7 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public ArrayList<SanPham> timKiemQuanAo(long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc) {
+    public ArrayList<SanPham> timKiemQuanAo(long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc) throws RemoteException{
         return (ArrayList<SanPham>) em.createNamedQuery("timKiemQuanAo", SanPham.class)
                 .setParameter("maSPCheck", maSP == 0 ? "" : String.valueOf(maSP))
                 .setParameter("maSP", maSP)
@@ -116,7 +120,7 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public ArrayList<SanPham> timKiemPhuKien(long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc) {
+    public ArrayList<SanPham> timKiemPhuKien(long maSP, String tenSP, String tenPhanLoai, String tenNCC, String tenMauSac, String tenChatLieu, String tenKichThuoc) throws RemoteException{
 
         return (ArrayList<SanPham>) em.createNamedQuery("timKiemPhuKien", SanPham.class)
                 .setParameter("maSPCheck", maSP == 0 ? "" : String.valueOf(maSP))
@@ -131,14 +135,14 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public SanPham getSanPhamTheoMa(long maSP) {
+    public SanPham getSanPhamTheoMa(long maSP) throws RemoteException{
         return em.createNamedQuery("getSanPhamTheoMa", SanPham.class)
                 .setParameter("maSP", maSP)
                 .getSingleResult();
     }
 
     @Override
-    public ArrayList<SanPham> getAllSanPhamTheoTieuChi(String maPhanLoai, String maMauSac, String maKichThuoc) {
+    public ArrayList<SanPham> getAllSanPhamTheoTieuChi(String maPhanLoai, String maMauSac, String maKichThuoc) throws RemoteException{
         return (ArrayList<SanPham>) em.createNamedQuery("getAllSanPhamTheoTieuChi", SanPham.class)
                 .setParameter("maPhanLoai", "%" + maPhanLoai + "%")
                 .setParameter("mauSac", "%" + maMauSac + "%")
@@ -147,7 +151,7 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public ArrayList<SanPham> getAllSanPhamHetHang(String maPhanLoai, String maMauSac, String maKichThuoc) {
+    public ArrayList<SanPham> getAllSanPhamHetHang(String maPhanLoai, String maMauSac, String maKichThuoc) throws RemoteException{
         return (ArrayList<SanPham>) em.createNamedQuery("getAllSanPhamHetHang", SanPham.class)
                 .setParameter("maPhanLoai", "%" + maPhanLoai + "%")
                 .setParameter("mauSac", "%" + maMauSac + "%")
@@ -156,7 +160,7 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public ArrayList<SanPham> getSanPhamBanChay() {
+    public ArrayList<SanPham> getSanPhamBanChay() throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         String query = "SELECT sp.maSP,  SUM(cthd.soLuong) FROM SanPham sp JOIN  CTHD cthd ON sp.maSP = cthd.sanPham.maSP GROUP BY sp.maSP ORDER BY SUM(cthd.soLuong)  DESC";
         List<SanPham> list = new ArrayList<>();
@@ -174,7 +178,7 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public ArrayList<SanPham> getSanPhamBanCham() {
+    public ArrayList<SanPham> getSanPhamBanCham() throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         String query = "SELECT sp.maSP,  SUM(cthd.soLuong) FROM SanPham sp JOIN  CTHD cthd ON sp.maSP = cthd.sanPham.maSP GROUP BY sp.maSP ORDER BY SUM(cthd.soLuong)  ASC";
         List<SanPham> list = new ArrayList<>();
@@ -192,7 +196,7 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public ArrayList<SanPham> getSoLuongSPTheoMaPL() {
+    public ArrayList<SanPham> getSoLuongSPTheoMaPL() throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         String query = "SELECT sp.phanLoai.maPhanLoai, COUNT(sp) FROM SanPham sp GROUP BY sp.phanLoai.maPhanLoai ORDER BY sp.phanLoai.maPhanLoai";
         List<SanPham> list = new ArrayList<>();
@@ -212,7 +216,7 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public ArrayList<SanPham> getAllSanPhamTheoNgay(String tuNgay, String denNgay) {
+    public ArrayList<SanPham> getAllSanPhamTheoNgay(String tuNgay, String denNgay) throws RemoteException{
         Date ngayNhap = java.sql.Date.valueOf(tuNgay);
         Date ngayKetThuc = java.sql.Date.valueOf(denNgay);
         return (ArrayList<SanPham>) em.createNamedQuery("getAllSanPhamTheoNgay", SanPham.class)
@@ -222,8 +226,33 @@ public class Dao_SanPham implements iSanPhamDao {
     }
 
     @Override
-    public void giamSoLuongSanPham(SanPham sp) {
-        String query = "UPDATE SanPham SET soLuong = soLuong - ? WHERE maSP = ?";
+    public void giamSoLuongSanPham(SanPham sp) throws RemoteException {
+//        String query = "UPDATE SanPham SET soLuong = soLuong - ? WHERE maSP = ?";
+//        System.out.println(sp.getMaSP() + " : " + sp.getSoLuong());
+//        int updatedQuantity1 = em.find(SanPham.class, sp.getMaSP()).getSoLuong();
+//        System.out.println("Số lượng trc  khi cập nhật: " + updatedQuantity1);
+//
+//        EntityTransaction tx = em.getTransaction();
+//        try {
+//            tx.begin();
+//
+//            em.createNativeQuery(query)
+//                    .setParameter(1, sp.getSoLuong())
+//                    .setParameter(2, sp.getMaSP())
+//                    .executeUpdate();
+//
+//            tx.commit();
+//
+//            // Kiểm tra lại số lượng sau khi cập nhật
+//            int updatedQuantity = em.find(SanPham.class, sp.getMaSP()).getSoLuong();
+//            System.out.println("Số lượng sau khi cập nhật: " + updatedQuantity);
+//
+//        } catch (Exception e) {
+//            if (tx.isActive()) {
+//                tx.rollback();
+//            }
+//            e.printStackTrace();
+//        }
         System.out.println(sp.getMaSP() + " : " + sp.getSoLuong());
         int updatedQuantity1 = em.find(SanPham.class, sp.getMaSP()).getSoLuong();
         System.out.println("Số lượng trc  khi cập nhật: " + updatedQuantity1);
@@ -232,11 +261,12 @@ public class Dao_SanPham implements iSanPhamDao {
         try {
             tx.begin();
 
-            em.createNativeQuery(query)
-                    .setParameter(1, sp.getSoLuong())
-                    .setParameter(1, sp.getMaSP())
-                    .executeUpdate();
-
+           SanPham spUpdate = em.find(SanPham.class, sp.getMaSP());
+            System.out.println("sp tim update: "+ spUpdate);
+           if(spUpdate!=null) {
+                spUpdate.setSoLuong(spUpdate.getSoLuong() - sp.getSoLuong());
+                em.merge(spUpdate);
+           }
             tx.commit();
 
             // Kiểm tra lại số lượng sau khi cập nhật
@@ -253,7 +283,7 @@ public class Dao_SanPham implements iSanPhamDao {
 
 
     @Override
-    public void tangSoLuongSanPham(long maSP, int soLuong) {
+    public void tangSoLuongSanPham(long maSP, int soLuong) throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         String url = "UPDATE SanPham SET soLuong = soLuong + ? WHERE maSP = ?";
 

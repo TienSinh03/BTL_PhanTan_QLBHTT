@@ -3,7 +3,9 @@ package fit.iuh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
+
 
 @Data
 @NoArgsConstructor
@@ -11,6 +13,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "PhanLoai")
 public class PhanLoai implements Serializable {
+
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

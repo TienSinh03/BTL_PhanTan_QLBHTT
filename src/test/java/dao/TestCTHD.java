@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.rmi.RemoteException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,19 +26,19 @@ public class TestCTHD {
     EntityTransaction tx = em.getTransaction();
 
     @BeforeAll
-    public void init(){
+    public void init() throws RemoteException {
         dao_cthd = new Dao_CTHD();
         dao_hoaDon = new Dao_HoaDon();
     }
     @Test
-    public void testGetAllCTHD(){
+    public void testGetAllCTHD() throws RemoteException {
         ArrayList<CTHD> listCTHD = dao_cthd.getAllCTHD(1);
         for (CTHD cthd : listCTHD){
             System.out.println(cthd.getSanPham().getTenSP());
         }
     }
     @Test
-    public void testThemCTHD(){
+    public void testThemCTHD() throws RemoteException {
         SanPham sp = em.find(SanPham.class, 1);
         HoaDon hd = dao_hoaDon.getHoaDonTheoMa(1);
         CTHD cthd = new CTHD(sp, hd, 2);
@@ -45,22 +46,22 @@ public class TestCTHD {
         System.out.println(result);
     }
     @Test
-    public void testTinhThanhTienSanPham(){
+    public void testTinhThanhTienSanPham() throws RemoteException {
         double thanhTien = dao_cthd.tinhThanhTienSanPham(1, 1);
         System.out.println(thanhTien);
     }
     @Test
-    public void testGetTongDoanhThu(){
+    public void testGetTongDoanhThu() throws RemoteException {
         double doanhThu = dao_cthd.getTongDoanhThu(1, "10", "2023");
         System.out.println(doanhThu);
     }
     @Test
-    public void testGetSoLuongSanPhamBanDuoc(){
+    public void testGetSoLuongSanPhamBanDuoc() throws RemoteException {
         int soLuong = dao_cthd.getSoLuongSanPhamBanDuoc(1, "10", "2023");
         System.out.println(soLuong);
     }
     @Test
-    public void testGetDoanhThuSanPhamBanDuoc(){
+    public void testGetDoanhThuSanPhamBanDuoc() throws RemoteException {
         double doanhThu = dao_cthd.getDoanhThuSanPhamBanDuoc(1, "10", "2023");
         System.out.println(doanhThu);
     }

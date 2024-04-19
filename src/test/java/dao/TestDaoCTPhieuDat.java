@@ -15,6 +15,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.rmi.RemoteException;
+
 /*
  * @description:
  * @author: Sinh Phan Tien
@@ -28,18 +30,18 @@ public class TestDaoCTPhieuDat {
     EntityTransaction tx = em.getTransaction();
 
     @BeforeAll
-    public void init() {
+    public void init() throws RemoteException {
         daoCTPhieuDat = new Dao_CTPhieuDatHang();
         daoPhieuDatHang = new Dao_PhieuDatHang();
     }
 
     @Test
-    public void testGetAllCTPhieuDatHang() {
+    public void testGetAllCTPhieuDatHang()throws RemoteException {
         daoCTPhieuDat.getAllCTPhieuDatHang(1).forEach(System.out::println);
     }
 
     @Test
-    public void testThemCTPDT() {
+    public void testThemCTPDT() throws RemoteException{
 //        PhieuDatHang pdt = daoPhieuDatHang.getPDTTheoMa(2);
         KhachHang kh = em.find(KhachHang.class, 12);
         NhanVien nv = em.find(NhanVien.class, 1);
@@ -54,7 +56,7 @@ public class TestDaoCTPhieuDat {
     }
 
     @Test
-    public void testXoaCTPhieuDatHang() {
+    public void testXoaCTPhieuDatHang() throws RemoteException{
         boolean check = daoCTPhieuDat.xoaCTPhieuDatHang(2);
         Assertions.assertTrue(check);
     }

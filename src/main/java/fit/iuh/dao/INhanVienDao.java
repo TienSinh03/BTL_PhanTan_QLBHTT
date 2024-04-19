@@ -7,6 +7,8 @@ package fit.iuh.dao;
 
 import fit.iuh.entity.NhanVien;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /*
@@ -16,11 +18,13 @@ import java.util.ArrayList;
  * @date: 4/13/2024
  * @version:  1.0
  */
-public interface INhanVienDao {
-    public ArrayList<NhanVien> getAllNhanVien();
-    public void themNhanVien(NhanVien nv);
-    public void xoaNhanVien(long manv);
-    public void capNhatNhanVien(NhanVien nv);
-    public ArrayList<NhanVien> timKiemNhanVien(long maNV, String tenNV, String sdt, String email, String chucVu, String diaChi, boolean trangThai);
-    public NhanVien getNhanVienTheoTen(String tenNV);
+public interface INhanVienDao extends Remote {
+    public ArrayList<NhanVien> getAllNhanVien() throws RemoteException;
+    public void themNhanVien(NhanVien nv) throws RemoteException;
+    public void xoaNhanVien(long manv) throws RemoteException;
+    public void capNhatNhanVien(NhanVien nv) throws RemoteException;
+    public ArrayList<NhanVien> timKiemNhanVien(long maNV, String tenNV, String sdt, String email, String chucVu, String diaChi, boolean trangThai) throws RemoteException;
+    public NhanVien getNhanVienTheoTen(String tenNV) throws RemoteException;
+    public NhanVien getNhanVienTheoMa(long maNV) throws RemoteException;
+    public ArrayList<NhanVien> getAllNhanVienConHoaDong() throws RemoteException;
 }

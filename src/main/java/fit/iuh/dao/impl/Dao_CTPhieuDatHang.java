@@ -10,6 +10,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +20,15 @@ import java.util.List;
  *
  * @author phant
  */
-public class Dao_CTPhieuDatHang implements ICTPhieuDatHangDao {
+public class Dao_CTPhieuDatHang extends UnicastRemoteObject implements ICTPhieuDatHangDao {
     //    private Dao_SanPham dao_SanPham = new Dao_SanPham();
 //    private Dao_PhieuDatHang dao_PhieuDatHang = new Dao_PhieuDatHang();
 //
     EntityManager em = null;
     EntityTransaction tx = null;
 
-    public Dao_CTPhieuDatHang() {
+    public Dao_CTPhieuDatHang() throws RemoteException {
+        super();
         em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
         tx = em.getTransaction();
     }
@@ -37,7 +40,7 @@ public class Dao_CTPhieuDatHang implements ICTPhieuDatHangDao {
      * @return
      */
     @Override
-    public ArrayList<CTPhieuDatHang> getAllCTPhieuDatHang(long maPhieuDatHang) {
+    public ArrayList<CTPhieuDatHang> getAllCTPhieuDatHang(long maPhieuDatHang) throws RemoteException{
         String query = "Select ctpdt from CTPhieuDatHang ctpdt where ctpdt.phieuDatHang.maPhieuDat = :maPhieuDatHang";
         List<CTPhieuDatHang> list = null;
         try {
@@ -51,7 +54,7 @@ public class Dao_CTPhieuDatHang implements ICTPhieuDatHangDao {
         return (ArrayList<CTPhieuDatHang>) list;
     }
     @Override
-    public boolean themCTPDT(CTPhieuDatHang ctpdt) {
+    public boolean themCTPDT(CTPhieuDatHang ctpdt) throws RemoteException{
         String query = "INSERT INTO CTPhieuDatHang (maPhieuDat, maSP, soLuong) VALUES (?, ?, ?)";
         try {
             tx.begin();
@@ -70,7 +73,7 @@ public class Dao_CTPhieuDatHang implements ICTPhieuDatHangDao {
     }
 
     @Override
-    public boolean xoaCTPhieuDatHang(long maPhieuDatHang) {
+    public boolean xoaCTPhieuDatHang(long maPhieuDatHang) throws RemoteException{
         String url = "DELETE FROM CTPhieuDatHang ctpdh WHERE ctpdh.phieuDatHang.maPhieuDat = :maPhieuDatHang";
         try {
             tx.begin();

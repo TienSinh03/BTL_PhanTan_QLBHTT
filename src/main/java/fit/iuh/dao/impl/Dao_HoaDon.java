@@ -8,25 +8,26 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-public class Dao_HoaDon implements IHoaDonDao {
+public class Dao_HoaDon extends UnicastRemoteObject implements IHoaDonDao {
     private final EntityManagerFactory emf;
     private final EntityManager em;
     private final EntityTransaction et;
 
-    public Dao_HoaDon() {
+    public Dao_HoaDon() throws RemoteException{
+        super();
         emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
         em = emf.createEntityManager();
         et = em.getTransaction();
     }
 
     @Override
-    public ArrayList<HoaDon> getAllHoaDon() {
+    public ArrayList<HoaDon> getAllHoaDon() throws RemoteException{
         ArrayList<HoaDon> listHoaDon = null;
         try {
             et.begin();
@@ -41,7 +42,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public HoaDon getHoaDon() {
+    public HoaDon getHoaDon() throws RemoteException{
         try {
             et.begin();
             HoaDon hoaDon =  em.createQuery("select hd from HoaDon hd order by hd.maHoaDon desc", HoaDon.class).setMaxResults(1).getSingleResult();
@@ -54,9 +55,43 @@ public class Dao_HoaDon implements IHoaDonDao {
         return null;
     }
 
+    @Override
+    public Map<Integer, Double> thongKeDoanhThuTheoThangCuaNam(String nam) throws RemoteException {
+        String sql = "WITH AllMonths AS (\n" +
+                "    SELECT 1 AS thang\n" +
+                "    UNION SELECT 2\n" +
+                "    UNION SELECT 3\n" +
+                "    UNION SELECT 4\n" +
+                "    UNION SELECT 5\n" +
+                "    UNION SELECT 6\n" +
+                "    UNION SELECT 7\n" +
+                "    UNION SELECT 8\n" +
+                "    UNION SELECT 9\n" +
+                "    UNION SELECT 10\n" +
+                "    UNION SELECT 11\n" +
+                "    UNION SELECT 12\n" +
+                ")\n" +
+                "SELECT allM.thang, SUM(sp.giaBan*cthd.soLuong) AS doanhThu\n" +
+                "FROM AllMonths allM\n" +
+                "LEFT JOIN HoaDon hd ON MONTH(hd.ngayNhap) = allM.thang AND YEAR(hd.ngayNhap) = ?\n" +
+                "LEFT JOIN CTHD cthd ON hd.maHD = cthd.maHD\n" +
+                "LEFT JOIN SanPham sp ON cthd.maSP = sp.maSP\n" +
+                "GROUP BY allM.thang";
+        List<Object[]> list = em.createNativeQuery(sql)
+                .setParameter(1, Integer.parseInt(nam))
+                .getResultList();
+        Map<Integer, Double> thongKe = new HashMap<>();
+        list.forEach(item -> {
+            int thang = Integer.parseInt(item[0].toString());
+            double doanhThu = item[1] != null ? ((Number) item[1]).doubleValue() : 0.0;
+            thongKe.put(thang, doanhThu);
+        });
+        return thongKe;
+    }
+
 
     @Override
-    public Boolean themHoaDon(HoaDon hd) {
+    public Boolean themHoaDon(HoaDon hd) throws RemoteException{
         String query = "Insert into HoaDon (maKH, maNV, ngayNhap) values (?, ?, ?)";
         try {
             et.begin();
@@ -79,7 +114,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public double tongTienHoaDon(long maHD) {
+    public double tongTienHoaDon(long maHD) throws RemoteException{
         String url = "select hd.maHoaDon, SUM( cthd.soLuong*sp.giaBan) as tongTien " +
                 "from HoaDon hd JOIN CTHD cthd ON hd.maHoaDon = cthd.hoaDon.maHoaDon " +
                 "JOIN SanPham sp ON cthd.sanPham.maSP = sp.maSP " +
@@ -87,7 +122,7 @@ public class Dao_HoaDon implements IHoaDonDao {
                 "group by hd.maHoaDon";
         try {
             et.begin();
-            List<Object[]> list = em.createQuery(url).setParameter("maHD", maHD).getResultList();
+            List<Object[]> list = em.createQuery(url, Object[].class).setParameter("maHD", maHD).getResultList();
             et.commit();
             for (Object[] obj : list) {
                 return Double.parseDouble(obj[1].toString());
@@ -100,7 +135,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public HoaDon getHoaDonTheoMa(long maHD) {
+    public HoaDon getHoaDonTheoMa(long maHD) throws RemoteException {
         HoaDon hd = null;
         try {
             et.begin();
@@ -114,7 +149,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public ArrayList<HoaDon> getAllHoaDonTheoNgay(String tuNgay, String denNgay) throws ParseException {
+    public ArrayList<HoaDon> getAllHoaDonTheoNgay(String tuNgay, String denNgay) throws ParseException,RemoteException {
         String sql = "select hd from HoaDon hd where hd.ngayNhap >= :tuNgay and hd.ngayNhap <= :denNgay";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date tuNgayDate = dateFormat.parse(tuNgay);
@@ -135,7 +170,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public ArrayList<SanPham> thongKeTop5SPDTCN() {
+    public ArrayList<SanPham> thongKeTop5SPDTCN() throws RemoteException {
         String sql = "select sp.maSP,sum(sp.giaBan*cthd.soLuong) as DoanhThu from HoaDon hd " +
                 "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon " +
                 "join SanPham sp on cthd.sanPham.maSP=sp.maSP " +
@@ -169,7 +204,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public ArrayList<SanPham> thongKeTop5SPDTTN() {
+    public ArrayList<SanPham> thongKeTop5SPDTTN() throws RemoteException {
         String query = "select cthd.sanPham.maSP,sum(sp.giaBan*cthd.soLuong) as DoanhThu from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.sanPham.maSP\n" +
                 "join SanPham sp on cthd.sanPham.maSP=sp.maSP\n" +
                 "group by cthd.sanPham.maSP\n" +
@@ -197,7 +232,7 @@ public class Dao_HoaDon implements IHoaDonDao {
 
 
     @Override
-    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChi(String mauSac, String phanLoai, String kichThuoc) {
+    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChi(String mauSac, String phanLoai, String kichThuoc) throws RemoteException {
         String sql = "select cthd.sanPham.maSP from HoaDon hd " + "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon " + "join SanPham sp on cthd.sanPham.maSP=sp.maSP " + "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai " + "join KichThuoc kt on kt.maKichThuoc=sp.kichThuoc.maKichThuoc " + "join MauSac ms on ms.maMauSac=sp.mauSac.maMauSac " + "join ChatLieu cl on cl.maChatLieu=sp.chatLieu.maChatLieu " + "join NhaCungCap ncc on ncc.maNCC=sp.nhaCungCap.maNCC " + "where ms.mauSac like :mauSac and kt.kichThuoc like :kichThuoc and pl.loaiSanPham like :phanLoai group by cthd.sanPham.maSP";
 
         List<SanPham> listSanPham = new ArrayList<>();
@@ -225,7 +260,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChiByTime(String mauSac, String phanLoai, String kichThuoc, String tuNgay, String denNgay) throws ParseException {
+    public ArrayList<SanPham> thongKeDanhSachSanPhamVoiSoLuongBanDuocByTieuChiByTime(String mauSac, String phanLoai, String kichThuoc, String tuNgay, String denNgay) throws ParseException, RemoteException {
         String sql = "select cthd.sanPham.maSP from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon\n" +
                 "join SanPham sp on cthd.sanPham.maSP=sp.maSP\n" +
                 "join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai \n" +
@@ -266,7 +301,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public ArrayList<SanPham> thongKeDanhSachSanPhamTheoThangNam(String thangLap, String namLap) {
+    public ArrayList<SanPham> thongKeDanhSachSanPhamTheoThangNam(String thangLap, String namLap) throws RemoteException{
 //        String sql = "select sp.maSP from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon"
 //                + "						join SanPham sp on cthd.sanPham.maSP=sp.maSP"
 //                + "						join PhanLoai pl on pl.maPhanLoai=sp.phanLoai.maPhanLoai "
@@ -308,7 +343,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public ArrayList<KhachHang> thongKeThongTinKhachHangDaMuaHang() {
+    public ArrayList<KhachHang> thongKeThongTinKhachHangDaMuaHang() throws RemoteException{
         String sql = "SELECT DISTINCT hd.khachHang.maKH,kh.hoTen,kh.sdt FROM HoaDon hd" +
                 "                  JOIN KhachHang kh on hd.khachHang.maKH=kh.maKH";
         try {
@@ -330,7 +365,7 @@ public class Dao_HoaDon implements IHoaDonDao {
 
 
     @Override
-    public double getThanhTienKhachHangMua(long maKH) {
+    public double getThanhTienKhachHangMua(long maKH) throws RemoteException{
         String url = "select SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon join SanPham sp on sp.maSP=cthd.sanPham.maSP join KhachHang kh on kh.maKH=hd.khachHang.maKH where hd.khachHang.maKH = :maKH group by hd.khachHang.maKH";
         try {
             et.begin();
@@ -349,7 +384,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public int getSoLuongKhachHangMua(long maKH) {
+    public int getSoLuongKhachHangMua(long maKH) throws RemoteException{
         String url = "select SUM(cthd.soLuong) as soLuong from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon join SanPham sp on sp.maSP=cthd.sanPham.maSP join KhachHang kh on kh.maKH=hd.khachHang.maKH where hd.khachHang.maKH = :maKH group by hd.khachHang.maKH";
         try {
             et.begin();
@@ -368,7 +403,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public int getSoLuongKhachHang() {
+    public int getSoLuongKhachHang() throws RemoteException{
         String url = "select COUNT(*) as tongKH from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon ";
         try {
             et.begin();
@@ -387,7 +422,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public int getSoLuongHoaDonKhachHangMua(long maKH) {
+    public int getSoLuongHoaDonKhachHangMua(long maKH) throws RemoteException{
         String url = "select COUNT(hd.maHoaDon) as tongHD from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon join SanPham sp on sp.maSP=cthd.sanPham.maSP join KhachHang kh on kh.maKH=hd.khachHang.maKH where hd.khachHang.maKH = :maKH group by hd.khachHang.maKH";
         try {
             et.begin();
@@ -406,7 +441,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public ArrayList<KhachHang> thongKeThongTinTop5KhachHangDTCaoNhat() {
+    public ArrayList<KhachHang> thongKeThongTinTop5KhachHangDTCaoNhat() throws RemoteException {
         String query = "select hd.khachHang.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua,SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd \n" +
                 "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon\n" +
                 "join KhachHang kh on kh.maKH=hd.khachHang.maKH\n" +
@@ -435,7 +470,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public ArrayList<KhachHang> thongKeThongTinTop5KhachHangThuongXuyenMuaHang() {
+    public ArrayList<KhachHang> thongKeThongTinTop5KhachHangThuongXuyenMuaHang() throws RemoteException {
         String query = "select hd.khachHang.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua from HoaDon hd \n" +
                 "join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon\n" +
                 "join KhachHang kh on kh.maKH=hd.khachHang.maKH\n" +
@@ -462,7 +497,7 @@ public class Dao_HoaDon implements IHoaDonDao {
     }
 
     @Override
-    public ArrayList<KhachHang> thongKeThongTinTop5KhachHangSLNhieuNhat() {
+    public ArrayList<KhachHang> thongKeThongTinTop5KhachHangSLNhieuNhat() throws RemoteException {
         String query = "select hd.khachHang.maKH,kh.hoTen,kh.sdt,SUM(cthd.soLuong) as SoLuongKHDaMua,SUM(cthd.soLuong*sp.giaBan) as thanhTien from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon \n" +
                 "join KhachHang kh on kh.maKH=hd.khachHang.maKH\n" +
                 "join SanPham sp on sp.maSP=cthd.sanPham.maSP\n" +

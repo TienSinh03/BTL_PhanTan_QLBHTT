@@ -5,43 +5,45 @@
 package fit.iuh.dao.impl;
 
 
-import fit.iuh.dao.iTaiKhoanDao;
-import fit.iuh.entity.NhanVien;
+import fit.iuh.dao.ITaiKhoanDao;
 import fit.iuh.entity.TaiKhoan;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author phant
  */
-public class Dao_TaiKhoan implements iTaiKhoanDao {
+public class Dao_TaiKhoan extends UnicastRemoteObject implements ITaiKhoanDao {
     private EntityManager em;
 
-    public Dao_TaiKhoan() {
+    public Dao_TaiKhoan() throws RemoteException {
+        super();
         em = Persistence.createEntityManagerFactory("JPADemo_SQL")
                 .createEntityManager();
     }
 
-    public Dao_TaiKhoan(EntityManager em) {
+    public Dao_TaiKhoan(EntityManager em) throws RemoteException {
+        super();
         this.em = em;
     }
 
     @Override
-    public ArrayList<TaiKhoan> getAllTaiKhoan() {
+    public ArrayList<TaiKhoan> getAllTaiKhoan() throws RemoteException{
         return (ArrayList<TaiKhoan>) em.createNamedQuery("TaiKhoan.getAll", TaiKhoan.class).getResultList();
     }
 
     @Override
-    public ArrayList<TaiKhoan> getAllTaiKhoanConHoatDong() {
+    public ArrayList<TaiKhoan> getAllTaiKhoanConHoatDong() throws RemoteException{
         return (ArrayList<TaiKhoan>) em.createNamedQuery("TaiKhoan.getTrangThai", TaiKhoan.class).getResultList();
     }
 
     @Override
-    public boolean themTaiKhoan(TaiKhoan taiKhoan) {
+    public boolean themTaiKhoan(TaiKhoan taiKhoan) throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -56,7 +58,7 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public boolean xoaTaiKhoan(Long maNv) {
+    public boolean xoaTaiKhoan(Long maNv) throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -73,7 +75,7 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public boolean capNhatTaiKhoan(Long maNv) {
+    public boolean capNhatTaiKhoan(Long maNv) throws RemoteException {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
@@ -90,7 +92,7 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public void doiMatKhauTaiKhoan(TaiKhoan taiKhoan) {
+    public void doiMatKhauTaiKhoan(TaiKhoan taiKhoan) throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         String query="update TaiKhoan tk set tk.matKhau = :matKhau where tk.tenTaiKhoan = :tenTaiKhoan";
         try {
@@ -108,7 +110,7 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public TaiKhoan dangNhapTaiKhoan(String tenTaiKhoan, String matKhau) {
+    public TaiKhoan dangNhapTaiKhoan(String tenTaiKhoan, String matKhau) throws RemoteException{
         return em.createNamedQuery("TaiKhoan.kiemTraTaiKhoan", TaiKhoan.class)
                 .setParameter("tenTaiKhoan", tenTaiKhoan)
                 .setParameter("matKhau", matKhau)
@@ -116,14 +118,14 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public String getMatKhau(String tenTK) {
+    public String getMatKhau(String tenTK) throws RemoteException{
         return em.createNamedQuery("TaiKhoan.getMatKhau", String.class)
                 .setParameter("ten", tenTK)
                 .getSingleResult();
     }
 
     @Override
-    public TaiKhoan getTaiKhoanNV(Long maNV) {
+    public TaiKhoan getTaiKhoanNV(Long maNV)throws RemoteException{
         return em.createNamedQuery("TaiKhoan.getTaiKhoanByMaNV", TaiKhoan.class)
                 .setParameter("maNV", maNV)
                 .getSingleResult();
@@ -131,7 +133,7 @@ public class Dao_TaiKhoan implements iTaiKhoanDao {
     }
 
     @Override
-    public boolean datLaiMatKhau(TaiKhoan taiKhoan, String matKhau) {
+    public boolean datLaiMatKhau(TaiKhoan taiKhoan, String matKhau) throws RemoteException{
         EntityTransaction tx = em.getTransaction();
         String query = "update TaiKhoan tk set tk.matKhau = :matKhau where tk.tenTaiKhoan = :tenTaiKhoan";
         try {

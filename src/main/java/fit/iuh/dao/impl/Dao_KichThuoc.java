@@ -12,6 +12,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +22,13 @@ import java.util.List;
  * @author: Sinh Phan Tien
  * @date: 4/11/2024
  */
-public class Dao_KichThuoc implements IKichThuocDao {
+public class Dao_KichThuoc extends UnicastRemoteObject implements IKichThuocDao {
 
     private EntityManager em = null;
     private EntityTransaction tx = null;
 
-    public Dao_KichThuoc() {
+    public Dao_KichThuoc() throws RemoteException {
+        super();
         em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
         tx = em.getTransaction();
     }
@@ -36,7 +39,7 @@ public class Dao_KichThuoc implements IKichThuocDao {
      * @return
      */
     @Override
-    public ArrayList<KichThuoc> getAllKichThuoc() {
+    public ArrayList<KichThuoc> getAllKichThuoc() throws RemoteException {
         String query = "select kt from KichThuoc kt";
         List<KichThuoc> listKichThuoc = null;
         try {
@@ -57,7 +60,7 @@ public class Dao_KichThuoc implements IKichThuocDao {
      * @return
      */
     @Override
-    public KichThuoc getDLKichThuocTheoMa(long maKT) {
+    public KichThuoc getDLKichThuocTheoMa(long maKT) throws RemoteException {
         try {
             tx.begin();
             KichThuoc kichThuoc = em.find(KichThuoc.class, maKT);
@@ -76,7 +79,7 @@ public class Dao_KichThuoc implements IKichThuocDao {
      * @param tenKichThuoc
      * @return
      */
-    public KichThuoc getKichThuocTheoTen(String tenKichThuoc) {
+    public KichThuoc getKichThuocTheoTen(String tenKichThuoc) throws RemoteException {
 
         String sql = "select kt from KichThuoc kt where kt.kichThuoc = :tenKichThuoc";
         try {
@@ -98,7 +101,7 @@ public class Dao_KichThuoc implements IKichThuocDao {
      * @param kichThuoc
      */
     @Override
-    public boolean themDLKichThuoc(KichThuoc kichThuoc) {
+    public boolean themDLKichThuoc(KichThuoc kichThuoc) throws RemoteException{
         try {
             tx.begin();
             em.persist(kichThuoc);
@@ -117,7 +120,7 @@ public class Dao_KichThuoc implements IKichThuocDao {
      * @param maKichThuoc
      */
     @Override
-    public boolean xoaDLKichThuoc(long maKichThuoc) {
+    public boolean xoaDLKichThuoc(long maKichThuoc) throws RemoteException{
 
         String query = "delete from KichThuoc where maKichThuoc = :maKichThuoc";
         try {
@@ -138,7 +141,7 @@ public class Dao_KichThuoc implements IKichThuocDao {
      * @param kichThuoc
      */
     @Override
-    public boolean capNhatDLKichThuoc(KichThuoc kichThuoc) {
+    public boolean capNhatDLKichThuoc(KichThuoc kichThuoc) throws RemoteException{
         try {
             tx.begin();
             em.merge(kichThuoc);

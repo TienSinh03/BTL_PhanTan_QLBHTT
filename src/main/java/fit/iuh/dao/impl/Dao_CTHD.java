@@ -8,23 +8,26 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Dao_CTHD implements ICTHDDao {
+public class Dao_CTHD extends UnicastRemoteObject implements ICTHDDao {
     private final EntityManagerFactory emf;
     private final EntityManager em;
     private final EntityTransaction et;
 
-    public Dao_CTHD() {
+    public Dao_CTHD() throws RemoteException {
+        super();
         emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
         em = emf.createEntityManager();
         et = em.getTransaction();
     }
 
     @Override
-    public ArrayList<CTHD> getAllCTHD(long maHD) {
+    public ArrayList<CTHD> getAllCTHD(long maHD) throws RemoteException{
         ArrayList<CTHD> listCTHD = new ArrayList<>();
         String sql = "select cthd from CTHD cthd where cthd.hoaDon.maHoaDon = :maHD";
         try {
@@ -39,7 +42,7 @@ public class Dao_CTHD implements ICTHDDao {
     }
 
     @Override
-    public Boolean themCTHD(CTHD cthd) {
+    public Boolean themCTHD(CTHD cthd) throws RemoteException{
         String query = "Insert into CTHD (maHD, maSP, soLuong) values (?, ?, ?)";
         try {
             et.begin();
@@ -58,7 +61,7 @@ public class Dao_CTHD implements ICTHDDao {
     }
 
     @Override
-    public double tinhThanhTienSanPham(long maHD, long maSP) {
+    public double tinhThanhTienSanPham(long maHD, long maSP) throws RemoteException{
         String url = "select hd.maHoaDon, cthd.soLuong*sp.giaBan as thanhTien from HoaDon hd JOIN CTHD cthd ON hd.maHoaDon = cthd.hoaDon.maHoaDon JOIN SanPham sp ON cthd.sanPham.maSP = sp.maSP where hd.maHoaDon = :maHD and cthd.sanPham.maSP = :maSP";
         try {
             et.begin();
@@ -75,7 +78,7 @@ public class Dao_CTHD implements ICTHDDao {
     }
 
     @Override
-    public double getTongDoanhThu(long maSP, String thangLap, String namLap) {
+    public double getTongDoanhThu(long maSP, String thangLap, String namLap) throws RemoteException{
 //        String url = "SELECT SUM(cthd.soLuong * sp.giaBan) AS DoanhThu FROM CTHD cthd JOIN SanPham sp on cthd.sanPham.maSP=sp.maSP JOIN HoaDon hd on cthd.hoaDon.maHoaDon=hd.maHoaDon WHERE sp.maSP = :maSP and month(hd.ngayNhap) like :thangLap and year(hd.ngayNhap) like :namLap";
         String url = "select SUM(cthd.soLuong*sp.giaBan) as DoanhThu from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD\n"
                 + "						join SanPham sp on cthd.maSP=sp.maSP\n"
@@ -108,7 +111,7 @@ public class Dao_CTHD implements ICTHDDao {
     }
 
     @Override
-    public int getSoLuongSanPhamBanDuoc(long maSP, String thangLap, String namLap) {
+    public int getSoLuongSanPhamBanDuoc(long maSP, String thangLap, String namLap) throws RemoteException{
 //        String url = "SELECT sp.maSP, SUM(cthd.soLuong) as tongSoLuongBan from SanPham sp JOIN CTHD cthd ON sp.maSP = cthd.sanPham.maSP JOIN HoaDon hd ON cthd.hoaDon.maHoaDon = hd.maHoaDon WHERE sp.maSP = :maSP and month(hd.ngayNhap) = :thangLap and year(hd.ngayNhap) = :namLap group by sp.maSP";
         String sql = "select sp.maSP, SUM(cthd.soLuong) as tongSoLuongBan from SanPham sp \n"
                 + "                                     JOIN CTHD cthd ON sp.maSP = cthd.maSP\n"
@@ -139,7 +142,7 @@ public class Dao_CTHD implements ICTHDDao {
     }
 
     @Override
-    public double getDoanhThuSanPhamBanDuoc(long maSP, String thangLap, String namLap) {
+    public double getDoanhThuSanPhamBanDuoc(long maSP, String thangLap, String namLap) throws RemoteException{
 //        String url = "SELECT sum(cthd.soLuong*sp.giaBan) as doanhThu from HoaDon hd join CTHD cthd on hd.maHoaDon=cthd.hoaDon.maHoaDon join SanPham sp on cthd.sanPham.maSP=sp.maSP WHERE sp.maSP = :maSP and month(hd.ngayNhap) = :thangLap and year(hd.ngayNhap) = :namLap group by sp.maSP";
         String sql = "select sum(cthd.soLuong*sp.giaBan) as doanhThu from HoaDon hd join CTHD cthd on hd.maHD=cthd.maHD\n"
                 + "						join SanPham sp on cthd.maSP=sp.maSP\n"

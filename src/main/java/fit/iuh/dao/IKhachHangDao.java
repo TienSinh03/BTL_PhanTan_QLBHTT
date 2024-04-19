@@ -7,6 +7,8 @@ package fit.iuh.dao;
 
 import fit.iuh.entity.KhachHang;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /*
@@ -16,10 +18,10 @@ import java.util.ArrayList;
  * @date: 4/13/2024
  * @version:  1.0
  */
-public interface IKhachHangDao {
-    public ArrayList<KhachHang> getAllKhachHang();
-    public void themKhachHang(KhachHang kh);
-    public void capNhatKhachHang(KhachHang kh);
-    public ArrayList<KhachHang> timKiemKhachHang(long maKhachHang,String tenKhachHang,String soDienThoai, String email);
-    public KhachHang getKhachHangTheoMa(long maKH);
+public interface IKhachHangDao extends Remote {
+    public ArrayList<KhachHang> getAllKhachHang() throws RemoteException;
+    public void themKhachHang(KhachHang kh) throws RemoteException;
+    public void capNhatKhachHang(KhachHang kh) throws RemoteException;
+    public ArrayList<KhachHang> timKiemKhachHang(long maKhachHang,String tenKhachHang,String soDienThoai, String email) throws RemoteException;
+    public KhachHang getKhachHangTheoMa(long maKH) throws RemoteException;
 }

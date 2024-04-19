@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -24,30 +25,30 @@ public class testSanPhamDao {
     private Dao_SanPham daoSanPham;
 
     @BeforeAll
-    public void setUp() {
+    public void setUp()throws RemoteException {
         daoSanPham = new Dao_SanPham(em);
     }
 
     @Test
-    public void testGetAllSanPham() {
+    public void testGetAllSanPham() throws RemoteException{
 
         System.out.println(daoSanPham.getAllSanPham());
     }
 
     @Test
-    public void testGetAllQuanAo() {
+    public void testGetAllQuanAo()throws RemoteException {
 
         System.out.println(daoSanPham.getAllQuanAo());
     }
 
     @Test
-    public void testGetAllPhuKien() {
+    public void testGetAllPhuKien()throws RemoteException {
 
         System.out.println(daoSanPham.getAllPhuKien());
     }
 
     @Test
-    public void testAddSanPham() {
+    public void testAddSanPham()throws RemoteException {
 //       insert into dbo.sanPham (maSP,tenSP,soLuong,giaBan,giaNhap, ngayNhap, hinhAnh, maChatLieu, maKichThuoc, maMauSac, maPhanLoai, maNhaCungCap) values (2,N'Nón xoè teelab', 30, 150000,120000,'2023-10-16','SP0002.jpg',2,5,4,3,1);
         SanPham sanPham = new SanPham();
         sanPham.setTenSP("Nón");
@@ -79,14 +80,14 @@ public class testSanPhamDao {
     }
 
     @Test
-    public void testDeleteSanPham() {
+    public void testDeleteSanPham()throws RemoteException {
         boolean checked = daoSanPham.xoaSanPham(2);
         System.out.println(checked);
     }
 
     @Test
 //    updateSanPham
-    public void testGiamSL(){
+    public void testGiamSL()throws RemoteException{
         SanPham sanPham = new SanPham();
         sanPham.setMaSP(13L);
         sanPham.setSoLuong(10);
@@ -94,7 +95,7 @@ public class testSanPhamDao {
         daoSanPham.giamSoLuongSanPham(sanPham);
     }
     @Test
-    public void testTangSL(){
+    public void testTangSL()throws RemoteException{
 //        SanPham sanPham = new SanPham();
 //        sanPham.setMaSP(1L);
 //        sanPham.setSoLuong(10);
@@ -102,51 +103,51 @@ public class testSanPhamDao {
         daoSanPham.tangSoLuongSanPham(1, 10);
     }
     @Test
-    public void testFindQuanAo(){
+    public void testFindQuanAo()throws RemoteException{
         System.out.println(daoSanPham.timKiemQuanAo(0,"","","A","Trắng","Vải","M"));
     }
 
     @Test
-    public void testFindPhuKien(){
+    public void testFindPhuKien()throws RemoteException{
         System.out.println(daoSanPham.timKiemPhuKien(11,"","","","Đen","","L"));
     }
 
     @Test
-    public void testGetSanPhamTheoMa(){
+    public void testGetSanPhamTheoMa()throws RemoteException{
         System.out.println(daoSanPham.getSanPhamTheoMa(1L));
     }
 
     @Test
-    public void testGetAllSanPhamTheoTieuChi(){
+    public void testGetAllSanPhamTheoTieuChi()throws RemoteException{
         System.out.println(daoSanPham.getAllSanPhamTheoTieuChi("Áo","Đen","XL"));
     }
 
     @Test
-    public void testGetAllSanPhamHetHang(){
+    public void testGetAllSanPhamHetHang()throws RemoteException{
         System.out.println(daoSanPham.getAllSanPhamHetHang("","",""));
     }
 
     @Test
-    public void testGetSanPhamBanChay(){
+    public void testGetSanPhamBanChay()throws RemoteException{
         ArrayList<SanPham> sanPhams = daoSanPham.getSanPhamBanChay();
         System.out.println(sanPhams);
     }
 
     @Test
-    public void testGetSanPhamBanCham(){
+    public void testGetSanPhamBanCham()throws RemoteException{
         ArrayList<SanPham> sanPhams = daoSanPham.getSanPhamBanCham();
         System.out.println(sanPhams);
     }
 
     @Test
-    public void testGetSoLuongSPTheoMaPL(){
+    public void testGetSoLuongSPTheoMaPL()throws RemoteException{
         ArrayList<SanPham> sanPhams = daoSanPham.getSoLuongSPTheoMaPL();
         sanPhams.forEach(sanPham -> {
             System.out.println(sanPham.getPhanLoai().getMaPhanLoai() + " - " + sanPham.getPhanLoai().getLoaiSanPham() + " - " + sanPham.getSoLuong());
         });
     }
     @Test
-    public void testGetAllSanPhamTheoNgay(){
+    public void testGetAllSanPhamTheoNgay()throws RemoteException{
         System.out.println(daoSanPham.getAllSanPhamTheoNgay("2023-10-16","2023-10-26"));
     }
     @AfterAll

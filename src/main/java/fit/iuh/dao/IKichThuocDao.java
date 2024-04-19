@@ -8,6 +8,8 @@ package fit.iuh.dao;
 
 import fit.iuh.entity.KichThuoc;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 /*
@@ -15,11 +17,11 @@ import java.util.ArrayList;
  * @author: Sinh Phan Tien
  * @date: 4/11/2024
  */
-public interface IKichThuocDao {
-    public ArrayList<KichThuoc> getAllKichThuoc();
-    public KichThuoc getDLKichThuocTheoMa(long maKT);
-    public KichThuoc getKichThuocTheoTen(String tenKichThuoc);
-    public boolean themDLKichThuoc(KichThuoc kichThuoc);
-    public boolean xoaDLKichThuoc(long maKichThuoc);
-    public boolean capNhatDLKichThuoc(KichThuoc kichThuoc);
+public interface IKichThuocDao extends Remote {
+    public ArrayList<KichThuoc> getAllKichThuoc() throws RemoteException;
+    public KichThuoc getDLKichThuocTheoMa(long maKT) throws RemoteException;
+    public KichThuoc getKichThuocTheoTen(String tenKichThuoc) throws RemoteException;
+    public boolean themDLKichThuoc(KichThuoc kichThuoc) throws RemoteException;
+    public boolean xoaDLKichThuoc(long maKichThuoc) throws RemoteException;
+    public boolean capNhatDLKichThuoc(KichThuoc kichThuoc) throws RemoteException;
 }

@@ -10,18 +10,21 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author phant
  */
-public class Dao_ChatLieu implements IChatLieuDao {
+public class Dao_ChatLieu extends UnicastRemoteObject implements IChatLieuDao {
 
     private EntityManager em = null;
     private EntityTransaction tx = null;
 
-    public Dao_ChatLieu() {
+    public Dao_ChatLieu() throws RemoteException {
+        super();
         em = Persistence.createEntityManagerFactory("JPADemo_SQL").createEntityManager();
         tx = em.getTransaction();
     }
@@ -32,7 +35,7 @@ public class Dao_ChatLieu implements IChatLieuDao {
      * @return
      */
     @Override
-    public ArrayList<ChatLieu> getAllChatLieu() {
+    public ArrayList<ChatLieu> getAllChatLieu() throws RemoteException {
         String query = "select cl from ChatLieu cl";
         List<ChatLieu> list = null;
         try {
@@ -53,7 +56,7 @@ public class Dao_ChatLieu implements IChatLieuDao {
      * @param chatLieu
      */
     @Override
-    public boolean themDLChatLieu(ChatLieu chatLieu) {
+    public boolean themDLChatLieu(ChatLieu chatLieu) throws RemoteException{
         try {
             tx.begin();
             em.persist(chatLieu);
@@ -72,7 +75,7 @@ public class Dao_ChatLieu implements IChatLieuDao {
      * @param maChatLieu
      */
     @Override
-    public boolean xoaDLChatLieu(long maChatLieu) {
+    public boolean xoaDLChatLieu(long maChatLieu)throws RemoteException {
         try {
             tx.begin();
             ChatLieu cl = em.find(ChatLieu.class, maChatLieu);
@@ -93,7 +96,7 @@ public class Dao_ChatLieu implements IChatLieuDao {
      * @param chatLieu
      */
     @Override
-    public boolean catNhatDLChatLieu(ChatLieu chatLieu) {
+    public boolean catNhatDLChatLieu(ChatLieu chatLieu) throws RemoteException{
         try {
             tx.begin();
             em.merge(chatLieu);
@@ -112,7 +115,7 @@ public class Dao_ChatLieu implements IChatLieuDao {
      * @param id
      */
     @Override
-    public ChatLieu getDLChatLieuTheoMa(long id) {
+    public ChatLieu getDLChatLieuTheoMa(long id) throws RemoteException {
         try {
             tx.begin();
             ChatLieu cl = em.find(ChatLieu.class, id);
@@ -132,7 +135,7 @@ public class Dao_ChatLieu implements IChatLieuDao {
      * @return
      */
     @Override
-    public ChatLieu getChatLieuTheoTen(String tenChatLieu) {
+    public ChatLieu getChatLieuTheoTen(String tenChatLieu) throws RemoteException{
 
         String sql = "select cl from ChatLieu cl where cl.chatLieu = :tenChatLieu";
         try {

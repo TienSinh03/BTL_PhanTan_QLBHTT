@@ -18,6 +18,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.rmi.RemoteException;
+
 /*
  * @description:
  * @author: Sinh Phan Tien
@@ -30,17 +32,17 @@ public class TestDaoPhieuDatHang {
     private Dao_PhieuDatHang daoPhieuDatHang;
 
     @BeforeAll
-    public void init() {
+    public void init()throws RemoteException {
         daoPhieuDatHang = new Dao_PhieuDatHang();
     }
 
     @Test
-    public void testGetAllPhieuDatHang() {
+    public void testGetAllPhieuDatHang()throws RemoteException {
         daoPhieuDatHang.getAllPhieuDatHang().forEach(System.out::println);
     }
 
     @Test
-    public void testThemPhieuDatHang() {
+    public void testThemPhieuDatHang() throws RemoteException{
         KhachHang kh = em.find(KhachHang.class, 4);
         NhanVien nv = em.find(NhanVien.class, 1);
 
@@ -53,19 +55,19 @@ public class TestDaoPhieuDatHang {
     }
 
     @Test
-    public void testXoaPhieuDatHang() {
+    public void testXoaPhieuDatHang() throws RemoteException{
         boolean result = daoPhieuDatHang.xoaPhieuDatHang(4);
         Assertions.assertTrue(result);
     }
 
     @Test
-    public void testGetPDTTheoMa() {
+    public void testGetPDTTheoMa() throws RemoteException{
         PhieuDatHang pdt = daoPhieuDatHang.getPDTTheoMa(1);
         System.out.println(pdt);
     }
 
     @Test
-    public void testGetPDTTheoMaKH() {
+    public void testGetPDTTheoMaKH()throws RemoteException {
         PhieuDatHang pdt = daoPhieuDatHang.getPDTTheoMaKH(3);
         System.out.println(pdt);
     }

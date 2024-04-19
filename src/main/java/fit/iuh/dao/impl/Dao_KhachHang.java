@@ -11,23 +11,33 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
 
-
 /**
- *
  * @author ACER
  */
-public class Dao_KhachHang implements IKhachHangDao {
+public class Dao_KhachHang extends UnicastRemoteObject implements IKhachHangDao {
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
-    EntityManager em = emf.createEntityManager();
-    EntityTransaction et = em.getTransaction();
-    public ArrayList<KhachHang> getAllKhachHang(){
+    private final EntityManagerFactory emf;
+    private final EntityManager em;
+    private final EntityTransaction et;
+
+    public Dao_KhachHang() throws RemoteException {
+        super();
+        emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
+        em = emf.createEntityManager();
+        et = em.getTransaction();
+    }
+
+    @Override
+    public ArrayList<KhachHang> getAllKhachHang() throws RemoteException {
         return (ArrayList<KhachHang>) em.createQuery("SELECT kh FROM KhachHang kh").getResultList();
     }
-   public void themKhachHang(KhachHang kh){
+
+    public void themKhachHang(KhachHang kh) throws RemoteException {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
@@ -37,13 +47,15 @@ public class Dao_KhachHang implements IKhachHangDao {
             et.rollback();
             e.printStackTrace();
         }
-   }
-   public void capNhatKhachHang(KhachHang kh){
+    }
+
+    @Override
+    public void capNhatKhachHang(KhachHang kh) throws RemoteException {
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
             KhachHang khInDBS = em.find(KhachHang.class, kh.getMaKH());
-            if(khInDBS == null){
+            if (khInDBS == null) {
                 return;
             }
             khInDBS = em.merge(kh);
@@ -52,20 +64,21 @@ public class Dao_KhachHang implements IKhachHangDao {
             et.rollback();
             e.printStackTrace();
         }
-   }
-   
-     public ArrayList<KhachHang> timKiemKhachHang(long maKhachHang,String tenKhachHang,String soDienThoai, String email){
+    }
+
+    @Override
+    public ArrayList<KhachHang> timKiemKhachHang(long maKhachHang, String tenKhachHang, String soDienThoai, String email) throws RemoteException {
         EntityTransaction et = em.getTransaction();
-        ArrayList<KhachHang> listKhachHang =new ArrayList<>();
+        ArrayList<KhachHang> listKhachHang = new ArrayList<>();
         String sql = "select kh from KhachHang kh where (:maKHCheck = '' or kh.maKH = :maKH) and kh.hoTen like :hoTen and kh.sdt like :sdt and kh.email like :email";
         try {
             et.begin();
             listKhachHang = (ArrayList<KhachHang>) em.createQuery(sql, KhachHang.class)
-                    .setParameter("maKHCheck", maKhachHang==0 ? "":String.valueOf(maKhachHang))
+                    .setParameter("maKHCheck", maKhachHang == 0 ? "" : String.valueOf(maKhachHang))
                     .setParameter("maKH", maKhachHang)
-                    .setParameter("hoTen", "%"+tenKhachHang+"%")
-                    .setParameter("sdt", "%"+soDienThoai+"%")
-                    .setParameter("email", "%"+email+"%")
+                    .setParameter("hoTen", "%" + tenKhachHang + "%")
+                    .setParameter("sdt", "%" + soDienThoai + "%")
+                    .setParameter("email", "%" + email + "%")
                     .getResultList();
             et.commit();
         } catch (Exception e) {
@@ -73,20 +86,22 @@ public class Dao_KhachHang implements IKhachHangDao {
             e.printStackTrace();
         }
         return listKhachHang;
-   }
-     
-     /**
-      * Lấy thông tin khách hàng theo mã
-      * @param maKH
-      * @return 
-      */
-    public KhachHang getKhachHangTheoMa(long maKH) {
-       return em.find(KhachHang.class, maKH);
     }
-    
+
+    /**
+     * Lấy thông tin khách hàng theo mã
+     *
+     * @param maKH
+     * @return
+     */
+    @Override
+    public KhachHang getKhachHangTheoMa(long maKH) throws RemoteException {
+        return em.find(KhachHang.class, maKH);
+    }
+
     /**
      * Tạo tự động mã
-     * @return 
+     * @return
      */
 //    public String taoMaKhachHang() {
 //        Connection con = Connect.getInstance().getConnection();

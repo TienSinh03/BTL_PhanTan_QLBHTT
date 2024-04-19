@@ -9,22 +9,25 @@ import fit.iuh.entity.MauSac;
 import fit.iuh.entity.SanPham;
 import jakarta.persistence.*;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-public class Dao_MauSac implements IMauSacDao {
+public class Dao_MauSac extends UnicastRemoteObject implements IMauSacDao {
 
     private final EntityManagerFactory emf;
     private final EntityManager em;
     private final EntityTransaction et;
 
-    public Dao_MauSac() {
+    public Dao_MauSac() throws RemoteException {
+        super();
         emf = Persistence.createEntityManagerFactory("JPADemo_SQL");
         em = emf.createEntityManager();
         et = em.getTransaction();
     }
 
     @Override
-    public ArrayList<MauSac> getAllMauSac() {
+    public ArrayList<MauSac> getAllMauSac() throws RemoteException{
         ArrayList<MauSac> listMauSac = new ArrayList<>();
         String  sql = "select ms from MauSac ms";
         try {
@@ -38,7 +41,7 @@ public class Dao_MauSac implements IMauSacDao {
         return listMauSac;
     }
     @Override
-    public MauSac getDLMauSacTheoMa(long maMS) {
+    public MauSac getDLMauSacTheoMa(long maMS) throws RemoteException{
         MauSac mauSac = null;
         try {
             et.begin();
@@ -52,7 +55,7 @@ public class Dao_MauSac implements IMauSacDao {
     }
 
     @Override
-    public MauSac getMauSacTheoTen(String mauSac) {
+    public MauSac getMauSacTheoTen(String mauSac) throws RemoteException{
         MauSac mauSac1 = null;
         try {
             et.begin();
@@ -67,7 +70,7 @@ public class Dao_MauSac implements IMauSacDao {
     }
 
     @Override
-    public boolean themDLMauSac(MauSac mauSac) {
+    public boolean themDLMauSac(MauSac mauSac) throws RemoteException{
         try {
             et.begin();
             em.persist(mauSac);
@@ -81,7 +84,7 @@ public class Dao_MauSac implements IMauSacDao {
     }
 
     @Override
-    public boolean capNhatDLMauSac(MauSac mauSac) {
+    public boolean capNhatDLMauSac(MauSac mauSac) throws RemoteException{
         try {
             et.begin();
             em.merge(mauSac);
@@ -95,7 +98,7 @@ public class Dao_MauSac implements IMauSacDao {
     }
 
     @Override
-    public boolean xoaDLMauSac(long maMauSac) {
+    public boolean xoaDLMauSac(long maMauSac) throws RemoteException{
         String sql = "delete from MauSac ms where ms.maMauSac = :maMauSac";
         try {
             et.begin();

@@ -14,12 +14,12 @@ import lombok.*;
 public class CTPhieuDatHang implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "maPhieuDat")
 	@Id
 	private PhieuDatHang phieuDatHang;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "maSP")
 	@Id
 	private SanPham sanPham;
