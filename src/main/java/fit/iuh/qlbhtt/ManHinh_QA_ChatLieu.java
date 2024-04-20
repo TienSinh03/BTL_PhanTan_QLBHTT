@@ -81,6 +81,7 @@ public class ManHinh_QA_ChatLieu extends javax.swing.JPanel {
      */
     public void docDuLieuLenBang() throws RemoteException {
         modelChatLieu = (DefaultTableModel) tbl_ChatLieu.getModel();
+        modelChatLieu.setRowCount(0);
         for (ChatLieu chatLieu : dao_ChatLieu.getAllChatLieu()) {
             Object[] o = new Object[2];
             o[0] = chatLieu.getMaChatLieu();
@@ -102,8 +103,8 @@ public class ManHinh_QA_ChatLieu extends javax.swing.JPanel {
         Object[] object = new Object[2];
         object[0] = chatLieu.getMaChatLieu();
         object[1] = chatLieu.getChatLieu();
-
         modelChatLieu.addRow(object);
+        docDuLieuLenBang();
         xoaTrang();
         JOptionPane.showMessageDialog(this, "Thêm thành công");
     }
@@ -176,7 +177,34 @@ public class ManHinh_QA_ChatLieu extends javax.swing.JPanel {
         }
 
         modelChatLieu = (DefaultTableModel) tbl_ChatLieu.getModel();
-        if (tuKhoaTenChatLieu.equals("")) {
+        modelChatLieu.setRowCount(0);
+        if(maCLString != null) {
+            if (tuKhoaTenChatLieu.equals("")) {
+                ChatLieu chatLieu = dao_ChatLieu.getDLChatLieuTheoMa(tuKhoaMaChatLieu);
+                if (chatLieu != null) {
+                    modelChatLieu.setRowCount(0);
+                    Object[] object = new Object[2];
+                    object[0] = chatLieu.getMaChatLieu();
+                    object[1] = chatLieu.getChatLieu();
+                    modelChatLieu.addRow(object);
+                    xoaTrang();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy dữ liệu");
+                }
+            } else if (maCLString.equals("")) {
+                ChatLieu chatLieu = dao_ChatLieu.getChatLieuTheoTen(tuKhoaTenChatLieu);
+                if (chatLieu != null) {
+                    modelChatLieu.setRowCount(0);
+                    Object[] object = new Object[2];
+                    object[0] = chatLieu.getMaChatLieu();
+                    object[1] = chatLieu.getChatLieu();
+                    modelChatLieu.addRow(object);
+                    xoaTrang();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy dữ liệu");
+                }
+            }
+        } else {
             ChatLieu chatLieu = dao_ChatLieu.getDLChatLieuTheoMa(tuKhoaMaChatLieu);
             if (chatLieu != null) {
                 modelChatLieu.setRowCount(0);
@@ -185,16 +213,8 @@ public class ManHinh_QA_ChatLieu extends javax.swing.JPanel {
                 object[1] = chatLieu.getChatLieu();
                 modelChatLieu.addRow(object);
                 xoaTrang();
-            }
-        } else if (maCLString.equals("")) {
-            ChatLieu chatLieu = dao_ChatLieu.getChatLieuTheoTen(tuKhoaTenChatLieu);
-            if (chatLieu != null) {
-                modelChatLieu.setRowCount(0);
-                Object[] object = new Object[2];
-                object[0] = chatLieu.getMaChatLieu();
-                object[1] = chatLieu.getChatLieu();
-                modelChatLieu.addRow(object);
-                xoaTrang();
+            } else {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy dữ liệu");
             }
         }
     }

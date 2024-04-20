@@ -291,7 +291,11 @@ public class ManHinh_NCC_QuanLy extends javax.swing.JPanel {
         });
         btn_XoaTrang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_XoaTrangActionPerformed(evt);
+                try {
+                    btn_XoaTrangActionPerformed(evt);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -368,8 +372,9 @@ public class ManHinh_NCC_QuanLy extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_LuuActionPerformed
 
-    private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XoaTrangActionPerformed
+    private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XoaTrangActionPerformed
         xoaTrangTxt();
+        docDuLieuNhaCungCap();
     }//GEN-LAST:event_btn_XoaTrangActionPerformed
 
     private void btn_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemActionPerformed
@@ -490,8 +495,6 @@ public class ManHinh_NCC_QuanLy extends javax.swing.JPanel {
         txt_Email.setText("");
         txt_MaNCC.setText("");
         tbl_NhaCungCap.clearSelection();
-        modelNhaCungCap = (DefaultTableModel) tbl_NhaCungCap.getModel();
-        modelNhaCungCap.setRowCount(0);
     }
     
     /**

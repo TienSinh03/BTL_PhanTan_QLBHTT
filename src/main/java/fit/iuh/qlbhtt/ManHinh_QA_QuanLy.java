@@ -715,8 +715,8 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Phải chọn ảnh cho sản phẩm"); 
                 return false; 
             }
-        } 
-        if (!(tenSP.length() > 0 && removeAccent(tenSP).matches("^[A-Z][A-Za-z]*((\\s)[A-Za-z]*)*$"))) { 
+        }
+        if (!(tenSP.length() > 0 && tenSP.matches("[\\p{L}\\s']+"))) {
             // Chu cai dau phai viet hoa va khong duoc rong 
             JOptionPane.showMessageDialog(this, "Tên sản phẩm không hợp lệ"); 
             txt_TenQA.requestFocus(); 

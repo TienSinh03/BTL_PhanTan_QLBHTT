@@ -545,8 +545,7 @@ public class ManHinh_KH_QuanLy extends javax.swing.JPanel {
         rad_Nam.setSelected(false);
         rad_Nu.setSelected(false);
         tbl_KhachHang.clearSelection();
-        modelKhachHang = (DefaultTableModel) tbl_KhachHang.getModel();
-        modelKhachHang.setRowCount(0);
+
     }
 
     public void docDuLieuKhachHang() throws RemoteException {
@@ -605,7 +604,6 @@ public class ManHinh_KH_QuanLy extends javax.swing.JPanel {
             return;
         }
         String gt = "";
-        String maKH = txt_MaKH.getText();
         String tenKhachHang = txt_TenKH.getText();
         if (rad_Nam.isSelected()) {
             gt = rad_Nam.getText();
@@ -615,6 +613,12 @@ public class ManHinh_KH_QuanLy extends javax.swing.JPanel {
         }
         String email = txt_Email.getText();
         String sdt = txt_SoDienThoai.getText();
+
+        // Kiểm tra xem khách hàng đã tồn tại trong CSDL chưa
+        if (dao_KhachHang.kiemTraKhachHangDaTonTai(email, sdt)) {
+            JOptionPane.showMessageDialog(this, "Email hoặc Sdt của khách hàng đã có.");
+            return; // Ngăn không thêm khách hàng mới
+        }
 
         KhachHang kh = new KhachHang(tenKhachHang,sdt, email,  gt);
         dao_KhachHang.themKhachHang(kh);
@@ -634,10 +638,9 @@ public class ManHinh_KH_QuanLy extends javax.swing.JPanel {
     }
     public void xuLyThemKHNgauNhien() throws RemoteException {
         String gt = "";
-        String maKH = "KH0000";
-        String tenKhachHang = "Người mua";
-        String email = "muahang@gmail.com";
-        String sdt = "0712345689";
+        String tenKhachHang = "Khách vãng lai";
+        String email = null;
+        String sdt = null;
         KhachHang kh = new KhachHang(tenKhachHang,sdt, email,  gt);
         dao_KhachHang.themKhachHang(kh);
 
@@ -650,6 +653,7 @@ public class ManHinh_KH_QuanLy extends javax.swing.JPanel {
         object[4] = kh.getSdt();
         
         modelKhachHang.addRow(object);
+        docDuLieuKhachHang();
         xoaTrang();
         JOptionPane.showMessageDialog(this, "Thêm thành công");
     }

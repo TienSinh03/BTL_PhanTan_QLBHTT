@@ -402,7 +402,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
         pnl_NutChucNang.setBackground(new java.awt.Color(199, 210, 213));
 
         btn_TimKiem.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-//        btn_TimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("src/main/java/fit/iuh/imageGD/icons8-search-30.png"))); // NOI18N
+        btn_TimKiem.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-search-30.png")); // NOI18N
         btn_TimKiem.setText("Tìm kiếm");
         btn_TimKiem.setBorder(null);
         btn_TimKiem.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -424,7 +424,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
         });
 
         btn_XoaTrang.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-//        btn_XoaTrang.setIcon(new javax.swing.ImageIcon(getClass().getResource("src/main/java/fit/iuh/imageGD/icons8-delete-30.png"))); // NOI18N
+        btn_XoaTrang.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-delete-30.png")); // NOI18N
         btn_XoaTrang.setText("Xóa trắng");
         btn_XoaTrang.setBorder(null);
         btn_XoaTrang.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -446,7 +446,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
         });
 
         btn_CapNhat.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
-//        btn_CapNhat.setIcon(new javax.swing.ImageIcon(getClass().getResource("src/main/java/fit/iuh/imageGD/icons8-reset-30.png"))); // NOI18N
+        btn_CapNhat.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-reset-30.png")); // NOI18N
         btn_CapNhat.setText("Thay đổi trạng thái");
         btn_CapNhat.setBorder(null);
         btn_CapNhat.addMouseListener(new java.awt.event.MouseAdapter() {

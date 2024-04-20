@@ -356,7 +356,6 @@ public class ManHinh_NCC_TimKiem extends javax.swing.JPanel {
         txt_SoDienThoai.setText("");
         txt_Email.setText("");
         txt_MaNCC.setText("");
-        xoaDongBang();
     }
 
     /**

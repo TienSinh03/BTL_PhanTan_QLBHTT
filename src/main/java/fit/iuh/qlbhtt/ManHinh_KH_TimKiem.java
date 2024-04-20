@@ -295,7 +295,11 @@ public class ManHinh_KH_TimKiem extends javax.swing.JPanel {
         });
         btn_XoaTrang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_XoaTrangActionPerformed(evt);
+                try {
+                    btn_XoaTrangActionPerformed(evt);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -366,8 +370,9 @@ public class ManHinh_KH_TimKiem extends javax.swing.JPanel {
         xuLyTiemKiemKhachHang();
     }//GEN-LAST:event_btn_TimKiemActionPerformed
 
-    private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XoaTrangActionPerformed
+    private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XoaTrangActionPerformed
         xoaTrang();
+        docDuLieuKhachHang();
     }//GEN-LAST:event_btn_XoaTrangActionPerformed
 
     private void btn_TimKiemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TimKiemMouseEntered
@@ -413,7 +418,6 @@ public class ManHinh_KH_TimKiem extends javax.swing.JPanel {
     }
 
     public void xoaTrang() {
-        clearTable();
         txt_MaKH.setText("");
         txt_TenKH.setText("");
         txt_Email.setText("");
@@ -425,6 +429,7 @@ public class ManHinh_KH_TimKiem extends javax.swing.JPanel {
     public void docDuLieuKhachHang() throws RemoteException {
         clearTable();
         modelKhachHang = (DefaultTableModel) tbl_KhachHang.getModel();
+        modelKhachHang.setRowCount(0);
         for (KhachHang kh : dao_KhachHang.getAllKhachHang()) {
             Object[] object = new Object[5];
             object[0] = kh.getMaKH();

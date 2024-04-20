@@ -205,6 +205,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         NhanVien nv = new NhanVien(tenNV, chucVu, email, sdt, diaChi, gioiTinh, trangThai);
 
         daoNhanVien.themNhanVien(nv);
+        nv = daoNhanVien.getNhanVienTheoEmail(email);
 
         modelNhanVien = (DefaultTableModel) tbl_NhanVien.getModel();
         Object[] object = new Object[8];
@@ -240,15 +241,6 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
             }
             String tenTaiKhoan = "NV"+tenTKMoi;
 
-//            String maKH = rs.getString(1);
-//                int so = Integer.parseInt(maKH.substring(4));
-//                so++;
-//                String maKHMoi = so + "";
-//                while(maKHMoi.length() < 4) {
-//                    maKHMoi = "0" +maKHMoi;
-//
-//                }
-//                return "KH" + maKHMoi;
             taiKhoan = new TaiKhoan(tenTaiKhoan, matKhau, chucVu, nv, trangThai);
         }
         daoTaiKhoan.themTaiKhoan(taiKhoan);

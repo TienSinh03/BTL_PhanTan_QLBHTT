@@ -532,7 +532,11 @@ public class ManHinh_PK_QuanLy extends javax.swing.JPanel {
         });
         btn_XoaTrang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_XoaTrangActionPerformed(evt);
+                try {
+                    btn_XoaTrangActionPerformed(evt);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -705,8 +709,8 @@ public class ManHinh_PK_QuanLy extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Phải chọn ảnh cho sản phẩm"); 
                 return false; 
             }
-        } 
-        if (!(tenSP.length() > 0 && removeAccent(tenSP).matches("^[A-Z][A-Za-z]*((\\s)[A-Za-z]*)*$"))) { 
+        }
+        if (!(tenSP.length() > 0 && tenSP.matches("[\\p{L}\\s']+"))) {
             // Chu cai dau phai viet hoa va khong duoc rong 
             JOptionPane.showMessageDialog(this, "Tên sản phẩm không hợp lệ"); 
             txt_TenPK.requestFocus(); 
@@ -997,8 +1001,9 @@ public class ManHinh_PK_QuanLy extends javax.swing.JPanel {
        }
     }//GEN-LAST:event_tbl_PhuKienMouseClicked
 
-    private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XoaTrangActionPerformed
+    private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XoaTrangActionPerformed
         xoaTrang();
+        docDuLieuPhuKien();
     }//GEN-LAST:event_btn_XoaTrangActionPerformed
 
     private void btn_XoaTrangMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseExited
@@ -1058,6 +1063,7 @@ public class ManHinh_PK_QuanLy extends javax.swing.JPanel {
             object[9] = sanPham.getNhaCungCap().getTenNCC();
             object[10] = sanPham.getSoLuong();
         modelSanPham.addRow(object);
+        docDuLieuPhuKien();
     }
     
     private void xuLyCapNhatSanPham() throws ParseException, RemoteException {
@@ -1135,6 +1141,7 @@ public class ManHinh_PK_QuanLy extends javax.swing.JPanel {
     public void docDuLieuPhuKien() throws RemoteException {
         
         modelSanPham = (DefaultTableModel) tbl_PhuKien.getModel();
+        modelSanPham.setRowCount(0);
         for(SanPham pk: dao_SanPham.getAllPhuKien()) {
             Object[] object = new Object[11];
             object[0] = pk.getMaSP();
