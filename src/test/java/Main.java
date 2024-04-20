@@ -25,6 +25,12 @@ public class Main {
             tr.rollback();
             e.printStackTrace();
         }
+//        String tenSP = "Phan Tiên Sỉn";
+//        if (!(tenSP.length() > 0 && tenSP.matches("[\\p{L}\\s']+"))) {
+//            System.out.println("Tên sản phẩm không hợp lệ");
+//        } else {
+//            System.out.println("Tên sản phẩm hợp lệ");
+//        }
     }
 
 }

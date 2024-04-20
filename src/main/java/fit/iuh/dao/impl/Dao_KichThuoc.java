@@ -84,7 +84,8 @@ public class Dao_KichThuoc extends UnicastRemoteObject implements IKichThuocDao 
         String sql = "select kt from KichThuoc kt where kt.kichThuoc = :tenKichThuoc";
         try {
             tx.begin();
-            KichThuoc kichThuoc = em.createQuery(sql, KichThuoc.class).setParameter("tenKichThuoc", tenKichThuoc).getSingleResult();
+            KichThuoc kichThuoc = em.createQuery(sql, KichThuoc.class).setParameter("tenKichThuoc", tenKichThuoc)
+                    .getResultList().stream().findFirst().orElse(null);
             tx.commit();
             return kichThuoc;
         } catch (Exception e) {

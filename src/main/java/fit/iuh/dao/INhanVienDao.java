@@ -27,4 +27,5 @@ public interface INhanVienDao extends Remote {
     public NhanVien getNhanVienTheoTen(String tenNV) throws RemoteException;
     public NhanVien getNhanVienTheoMa(long maNV) throws RemoteException;
     public ArrayList<NhanVien> getAllNhanVienConHoaDong() throws RemoteException;
+    public NhanVien getNhanVienTheoEmail(String email) throws RemoteException;
 }

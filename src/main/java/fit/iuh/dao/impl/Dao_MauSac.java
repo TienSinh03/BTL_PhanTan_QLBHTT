@@ -60,7 +60,7 @@ public class Dao_MauSac extends UnicastRemoteObject implements IMauSacDao {
         try {
             et.begin();
             mauSac1 = em.createQuery("select ms from MauSac ms where ms.mauSac = :mauSac", MauSac.class)
-                    .setParameter("mauSac", mauSac).getSingleResult();
+                    .setParameter("mauSac", mauSac).getResultList().stream().findFirst().orElse(null);
             et.commit();
         } catch (Exception e) {
             et.rollback();

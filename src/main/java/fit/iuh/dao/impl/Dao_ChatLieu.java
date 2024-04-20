@@ -140,7 +140,7 @@ public class Dao_ChatLieu extends UnicastRemoteObject implements IChatLieuDao {
         String sql = "select cl from ChatLieu cl where cl.chatLieu = :tenChatLieu";
         try {
             tx.begin();
-            ChatLieu cl = em.createQuery(sql, ChatLieu.class).setParameter("tenChatLieu", tenChatLieu).getSingleResult();
+            ChatLieu cl = em.createQuery(sql, ChatLieu.class).setParameter("tenChatLieu", tenChatLieu).getResultList().stream().findFirst().orElse(null);;
             tx.commit();
             return cl;
         } catch (Exception e) {

@@ -24,4 +24,5 @@ public interface IKhachHangDao extends Remote {
     public void capNhatKhachHang(KhachHang kh) throws RemoteException;
     public ArrayList<KhachHang> timKiemKhachHang(long maKhachHang,String tenKhachHang,String soDienThoai, String email) throws RemoteException;
     public KhachHang getKhachHangTheoMa(long maKH) throws RemoteException;
+    public boolean kiemTraKhachHangDaTonTai(String email, String sdt) throws RemoteException;
 }

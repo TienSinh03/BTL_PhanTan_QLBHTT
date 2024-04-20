@@ -72,12 +72,12 @@ public class Dao_PhanLoai extends UnicastRemoteObject implements IPhanLoaiDao {
      */
     @Override
     public PhanLoai getPhanLoaiTheoTen(String tenPhanLoai)throws RemoteException{
-        String sql = "select * from PhanLoai where tenPhanLoai = ?";
+        String sql = "select pl from PhanLoai pl where pl.loaiSanPham = :tenPhanLoai";
         try {
             et.begin();
-            PhanLoai phanLoai = (PhanLoai) em.createNativeQuery(sql, PhanLoai.class)
-                    .setParameter(1, tenPhanLoai)
-                    .getSingleResult();
+            PhanLoai phanLoai = em.createQuery(sql, PhanLoai.class)
+                    .setParameter("tenPhanLoai", tenPhanLoai)
+                    .getResultList().stream().findFirst().orElse(null);
             et.commit();
             return phanLoai;
         } catch (Exception e) {
@@ -141,34 +141,5 @@ public class Dao_PhanLoai extends UnicastRemoteObject implements IPhanLoaiDao {
             e.printStackTrace();
         }
     }
-    
-//    /**
-//     * Tạo tự động mã
-//     * @return
-//     */
-//    public String taoMaPhanLoai() {
-//        Connection con = Connect.getInstance().getConnection();
-//        String url = "select top 1 maPhanLoai from PhanLoai order by maPhanLoai desc";
-//
-//        try {
-//            Statement stmt = con.createStatement();
-//            ResultSet rs = stmt.executeQuery(url);
-//            if(rs.next()) {
-//                String maPhanLoai = rs.getString(1);
-//                int so = Integer.parseInt(maPhanLoai.substring(4));
-//                so++;
-//                String maPhanLoaiMoi = so + "";
-//                while(maPhanLoaiMoi.length() < 4) {
-//                    maPhanLoaiMoi = "0" +maPhanLoaiMoi;
-//
-//                }
-//                return "PL" + maPhanLoaiMoi;
-//            } else {
-//                return "PL0001";
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+
 }

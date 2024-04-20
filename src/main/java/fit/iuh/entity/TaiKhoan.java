@@ -3,6 +3,7 @@ package fit.iuh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
@@ -20,6 +21,7 @@ import java.io.Serializable;
 
 })
 public class TaiKhoan implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Column(columnDefinition = "nvarchar(100)")

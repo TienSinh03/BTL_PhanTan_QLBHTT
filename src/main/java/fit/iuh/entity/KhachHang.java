@@ -4,6 +4,7 @@ package fit.iuh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
@@ -12,15 +13,16 @@ import java.io.Serializable;
 @Entity
 @Table(name = "KhachHang")
 public class KhachHang implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long maKH;
 	@Column(columnDefinition = "nvarchar(100)", nullable = false)
 	private String hoTen;
-	@Column(columnDefinition = "nvarchar(100)", nullable = false, unique = true)
+	@Column(columnDefinition = "nvarchar(100)", unique = true)
 	private String sdt;
-	@Column(columnDefinition = "nvarchar(100)", nullable = false, unique = true)
+	@Column(columnDefinition = "nvarchar(100)", unique = true)
 	private String email;
 	@Column(columnDefinition = "nvarchar(100)", nullable = false)
 	private String gioiTinh;

@@ -140,29 +140,5 @@ public class Dao_PhieuDatHang extends UnicastRemoteObject implements IPhieuDatHa
                 return resultList.get(0); // Trả về phần tử đầu tiên trong danh sách kết quả
             }
     }
-   
-//    public String taoMaPhieuDatHang() {
-//        Connection con = Connect.getInstance().getConnection();
-//        String url = "select top 1 maPhieuDatHang from PhieuDatHang order by maPhieuDatHang desc";
-//
-//        try {
-//            Statement stmt = con.createStatement();
-//            ResultSet rs = stmt.executeQuery(url);
-//            if (rs.next()) {
-//                String maPDT = rs.getString(1);
-//                int so = Integer.parseInt(maPDT.substring(4));
-//                so++;
-//                String maPDTMoi = so + "";
-//                while (maPDTMoi.length() < 4) {
-//                    maPDTMoi = "0" + maPDTMoi;
-//                }
-//                return "PDT" + maPDTMoi;
-//            } else {
-//                return "PDT0001";
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+
 }

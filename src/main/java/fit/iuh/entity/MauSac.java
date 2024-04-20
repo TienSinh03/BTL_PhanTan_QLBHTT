@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "MauSac")
 public class MauSac implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

@@ -1,6 +1,7 @@
 package fit.iuh.entity;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,6 +14,7 @@ import lombok.*;
 @Entity
 @Table(name = "HoaDon")
 public class HoaDon implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@Id

@@ -1,5 +1,6 @@
 package fit.iuh.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -37,6 +38,7 @@ import lombok.*;
 
 })
 public class SanPham implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
 

@@ -45,13 +45,22 @@ public class Dao_TaiKhoan extends UnicastRemoteObject implements ITaiKhoanDao {
     @Override
     public boolean themTaiKhoan(TaiKhoan taiKhoan) throws RemoteException{
         EntityTransaction tx = em.getTransaction();
+        String query = "insert into TaiKhoan(tenTaiKhoan, matKhau, phanQuyen, maNV, trangThai) values(?, ?, ?, ?, ?)";
         try {
             tx.begin();
-            em.persist(taiKhoan);
+            em.createNativeQuery(query)
+                    .setParameter(1, taiKhoan.getTenTaiKhoan())
+                    .setParameter(2, taiKhoan.getMatKhau())
+                    .setParameter(3, taiKhoan.getPhanQuyen())
+                    .setParameter(4, taiKhoan.getNhanVien().getMaNV())
+                    .setParameter(5, taiKhoan.isTrangThai())
+                    .executeUpdate();
             tx.commit();
             return true;
         } catch (Exception e) {
-            tx.rollback();
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
             e.printStackTrace();
         }
         return false;
@@ -114,21 +123,21 @@ public class Dao_TaiKhoan extends UnicastRemoteObject implements ITaiKhoanDao {
         return em.createNamedQuery("TaiKhoan.kiemTraTaiKhoan", TaiKhoan.class)
                 .setParameter("tenTaiKhoan", tenTaiKhoan)
                 .setParameter("matKhau", matKhau)
-                .getSingleResult();
+                .getResultList().stream().findFirst().orElse(null);
     }
 
     @Override
     public String getMatKhau(String tenTK) throws RemoteException{
         return em.createNamedQuery("TaiKhoan.getMatKhau", String.class)
                 .setParameter("ten", tenTK)
-                .getSingleResult();
+                .getResultList().stream().findFirst().orElse(null);
     }
 
     @Override
     public TaiKhoan getTaiKhoanNV(Long maNV)throws RemoteException{
         return em.createNamedQuery("TaiKhoan.getTaiKhoanByMaNV", TaiKhoan.class)
                 .setParameter("maNV", maNV)
-                .getSingleResult();
+                .getResultList().stream().findFirst().orElse(null);
 
     }
 

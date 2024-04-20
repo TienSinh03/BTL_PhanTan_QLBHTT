@@ -3,6 +3,7 @@ package fit.iuh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @Table(name = "ChatLieu")
 public class ChatLieu implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id

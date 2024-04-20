@@ -64,5 +64,9 @@ public class KhachHangImpl_Test {
         System.out.println(khachHang);
     }
 
-
+    @Test
+    public void testKiemTraTonTai() throws RemoteException {
+        boolean check = khachHangDao.kiemTraKhachHangDaTonTai("a@gmail.com", "0123453");
+        System.out.println(check);
+    }
 }

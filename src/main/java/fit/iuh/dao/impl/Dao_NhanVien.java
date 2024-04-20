@@ -48,6 +48,22 @@ public class Dao_NhanVien extends UnicastRemoteObject implements INhanVienDao {
         return listNhanVien;
     }
 
+    @Override
+    public NhanVien getNhanVienTheoEmail(String email) throws RemoteException {
+        String url = "Select nv from NhanVien nv where nv.email = :email";
+        try {
+            et.begin();
+            NhanVien nv = em.createQuery(url, NhanVien.class).setParameter("email", email.trim())
+                    .getResultList().stream().findFirst().orElse(null);
+            et.commit();
+            return nv;
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * Thêm dữ liệu Nhân Viên vào database
      *
@@ -168,10 +184,11 @@ public class Dao_NhanVien extends UnicastRemoteObject implements INhanVienDao {
     }
     @Override
     public NhanVien getNhanVienTheoTen(String tenNV) throws RemoteException{
-        String url = "Select * from NhanVien where hoTen = ?";
+        String url = "Select nv from NhanVien nv where nv.hoTen = :hoTen";
         try {
             et.begin();
-            NhanVien nv = (NhanVien) em.createNativeQuery(url, NhanVien.class).setParameter(1, tenNV).getSingleResult();
+            NhanVien nv = em.createQuery(url, NhanVien.class).setParameter("hoTen", tenNV)
+                    .getResultList().stream().findFirst().orElse(null);
             et.commit();
             return nv;
         } catch (Exception e) {
@@ -181,34 +198,5 @@ public class Dao_NhanVien extends UnicastRemoteObject implements INhanVienDao {
         return null;
     }
 
-    /**
-     * Tạo tự động mã
-     *
-     * @return
-     */
-//    public String taoMaNhanVien() {
-//        Connection con = Connect.getInstance().getConnection();
-//        String url = "select top 1 maNV from NhanVien order by maNV desc";
-//
-//        try {
-//            Statement stmt = con.createStatement();
-//            ResultSet rs = stmt.executeQuery(url);
-//            if (rs.next()) {
-//                String maNV = rs.getString(1);
-//                int so = Integer.parseInt(maNV.substring(3));
-//                so++;
-//                String maNVMoi = so + "";
-//                while (maNVMoi.length() < 3) {
-//                    maNVMoi = "0" + maNVMoi;
-//
-//                }
-//                return "NV" + maNVMoi;
-//            } else {
-//                return "NV001";
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+
 }

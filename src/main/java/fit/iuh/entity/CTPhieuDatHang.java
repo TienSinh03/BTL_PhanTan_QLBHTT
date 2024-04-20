@@ -1,6 +1,7 @@
 package fit.iuh.entity;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import jakarta.persistence.*;
@@ -12,6 +13,7 @@ import lombok.*;
 @Entity
 @Table(name = "CTPhieuDatHang")
 public class CTPhieuDatHang implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne(fetch = FetchType.EAGER)

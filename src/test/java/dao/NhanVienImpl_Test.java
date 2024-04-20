@@ -67,4 +67,6 @@ public class NhanVienImpl_Test {
     public void testDeleteNhanVien() throws RemoteException {
         nhanVienImpl.xoaNhanVien(4);
     }
+
+
 }

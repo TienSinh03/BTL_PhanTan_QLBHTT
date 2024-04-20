@@ -4,6 +4,7 @@ package fit.iuh.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
@@ -19,6 +20,7 @@ import java.io.Serializable;
 
 })
 public class NhaCungCap implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

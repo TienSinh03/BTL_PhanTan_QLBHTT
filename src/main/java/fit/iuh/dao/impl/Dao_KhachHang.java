@@ -99,6 +99,25 @@ public class Dao_KhachHang extends UnicastRemoteObject implements IKhachHangDao 
         return em.find(KhachHang.class, maKH);
     }
 
+    @Override
+    public boolean kiemTraKhachHangDaTonTai(String email, String sdt) throws RemoteException {
+        EntityTransaction et = em.getTransaction();
+        String sql = "select kh from KhachHang kh where kh.email = :email or kh.sdt = :sdt";
+        try {
+            et.begin();
+            ArrayList<KhachHang> listKhachHang = (ArrayList<KhachHang>) em.createQuery(sql, KhachHang.class)
+                    .setParameter("email", email)
+                    .setParameter("sdt", sdt)
+                    .getResultList();
+            et.commit();
+            return listKhachHang.size() > 0;
+        } catch (Exception e) {
+            et.rollback();
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     /**
      * Tạo tự động mã
      * @return
