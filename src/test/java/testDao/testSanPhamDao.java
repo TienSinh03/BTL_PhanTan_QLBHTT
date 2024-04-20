@@ -88,11 +88,10 @@ public class testSanPhamDao {
     @Test
 //    updateSanPham
     public void testGiamSL()throws RemoteException{
-        SanPham sanPham = new SanPham();
-        sanPham.setMaSP(13L);
-        sanPham.setSoLuong(10);
-
+        SanPham sanPham = em.find(SanPham.class, 13);
+        sanPham.setSoLuong(2);
         daoSanPham.giamSoLuongSanPham(sanPham);
+        System.out.println(em.find(SanPham.class, 13));
     }
     @Test
     public void testTangSL()throws RemoteException{

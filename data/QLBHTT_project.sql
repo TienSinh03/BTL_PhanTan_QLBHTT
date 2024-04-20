@@ -478,7 +478,7 @@ WITH AllMonths AS (
 )
 SELECT allM.thang, SUM(sp.giaBan*cthd.soLuong) AS doanhThu
 FROM AllMonths allM
-LEFT JOIN HoaDon hd ON MONTH(hd.ngayLap) = allM.thang
+LEFT JOIN HoaDon hd ON MONTH(hd.ngayNhap) = allM.thang AND YEAR(hd.ngayNhap) = 2024
 LEFT JOIN CTHD cthd ON hd.maHD = cthd.maHD
 LEFT JOIN SanPham sp ON cthd.maSP = sp.maSP
 GROUP BY allM.thang

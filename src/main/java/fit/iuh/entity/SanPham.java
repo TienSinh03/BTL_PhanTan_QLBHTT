@@ -123,6 +123,12 @@ public class SanPham implements Serializable {
         this.nhaCungCap = nhaCungCap;
     }
 
+    public SanPham(long maSP, String tenSP, int soLuong) {
+        this.maSP = maSP;
+        this.tenSP = tenSP;
+        this.soLuong = soLuong;
+    }
+
     //    public String getMaSP() {
 //        return maSP;
 //    }
