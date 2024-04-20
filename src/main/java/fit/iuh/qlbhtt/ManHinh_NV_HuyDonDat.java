@@ -425,8 +425,8 @@ public class ManHinh_NV_HuyDonDat extends javax.swing.JPanel {
                 object[0] = cTPhieuDatHang.getPhieuDatHang().getMaPhieuDat();
                 object[1] = cTPhieuDatHang.getSanPham().getMaSP();
                 object[2] = cTPhieuDatHang.getSanPham().getTenSP();
-                object[3] = cTPhieuDatHang.getSanPham().getSoLuong();
-                object[4] = cTPhieuDatHang.getSanPham().getGiaBan() * cTPhieuDatHang.getSanPham().getSoLuong();
+                object[3] = cTPhieuDatHang.getSoLuong();
+                object[4] = cTPhieuDatHang.getSanPham().getGiaBan() * cTPhieuDatHang.getSoLuong();
                 modelCTPDH.addRow(object);
            }
        }
@@ -457,6 +457,8 @@ public class ManHinh_NV_HuyDonDat extends javax.swing.JPanel {
     public void xoaTrangTxt() {
         txt_NgayLap.setText("");
         txt_MaKH.setText("");
+        txt_TenKH.setText("");
+        txt_SDTKH.setText("");
         txt_MaNV.setText("");
         txt_TenNV.setText("");
         txt_MaPDT.setText("");

@@ -1234,8 +1234,11 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
             maPDH = pdh.getMaPhieuDat();
             ArrayList<CTPhieuDatHang> ctpdh = dao_CTPhieuDatHang.getAllCTPhieuDatHang(pdh.getMaPhieuDat());
             for (CTPhieuDatHang cTPhieuDatHang : ctpdh) {
+                SanPham sanPhamAddGioHang = cTPhieuDatHang.getSanPham();
+                sanPhamAddGioHang.setSoLuong(cTPhieuDatHang.getSoLuong());
                 //Them vao gio hang
-                gioHang.add(cTPhieuDatHang.getSanPham());
+                gioHang.add(sanPhamAddGioHang);
+                System.out.println("sp trong chtd: " + sanPhamAddGioHang);
                 //Them vao model gio hang
                 modelGioHang = (DefaultTableModel) tbl_GioHang.getModel();
                 Object[] object = new Object[9];
@@ -1326,11 +1329,14 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
         if (maPDH != 0) {
             long maKH = khachHang.getMaKH();
-            maPDH = dao_PhieuDatHang.getPDTTheoMaKH(maKH).getMaPhieuDat();
-            //Xoa CTPhieuDatHang
-            dao_CTPhieuDatHang.xoaCTPhieuDatHang(maPDH);
-            //Xóa PhieuDatHang
-            dao_PhieuDatHang.xoaPhieuDatHang(maPDH);
+            PhieuDatHang maPDH_KH = dao_PhieuDatHang.getPDTTheoMaKH(maKH);
+            if(maPDH_KH != null){
+                maPDH = maPDH_KH.getMaPhieuDat();
+                //Xoa CTPhieuDatHang
+                dao_CTPhieuDatHang.xoaCTPhieuDatHang(maPDH);
+                //Xóa PhieuDatHang
+                dao_PhieuDatHang.xoaPhieuDatHang(maPDH);
+            }
         }
         resetPanel();
 //        xuatHoaDon(hd);
