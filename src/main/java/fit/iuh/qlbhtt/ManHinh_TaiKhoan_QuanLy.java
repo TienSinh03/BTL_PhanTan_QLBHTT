@@ -80,10 +80,13 @@ public class ManHinh_TaiKhoan_QuanLy extends javax.swing.JPanel {
     public void docDuLieuLenBang() throws RemoteException {
         modelTaiKhoan = (DefaultTableModel) tbl_TaiKhoan.getModel();
         for (TaiKhoan taiKhoan : daoTaiKhoan.getAllTaiKhoanConHoatDong()) {
+
+            NhanVien nhanVien = daoNhanVien.getNhanVienTheoMa(taiKhoan.getNhanVien().getMaNV());
+
             Object[] o = new Object[4];
             o[0] = taiKhoan.getTenTaiKhoan();
             o[1] = maHoaMatKhau(taiKhoan.getMatKhau());
-            o[2] = taiKhoan.getNhanVien().getHoTen();
+            o[2] = nhanVien.getHoTen();
             o[3] = taiKhoan.getPhanQuyen();
             modelTaiKhoan.addRow(o);
         }

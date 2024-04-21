@@ -29,8 +29,6 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
      */
     public ManHinh_DatLaiMatKhau() throws SQLException {
         dao_TaiKhoan = RMIClientUtil.getTaiKhoanDao();
-//        connect = new Connect();
-//        connect.connect();
         initComponents();
         setLocationRelativeTo(null);
         if (!ngonNgu) {

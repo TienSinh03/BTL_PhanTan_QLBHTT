@@ -4,8 +4,7 @@
  */
 package fit.iuh.qlbhtt;
 
-import fit.iuh.dao.ICTHDDao;
-import fit.iuh.dao.IHoaDonDao;
+import fit.iuh.dao.*;
 import fit.iuh.entity.*;
 import fit.iuh.util.RMIClientUtil;
 
@@ -29,6 +28,9 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
 
     private IHoaDonDao daoHoaDon;
     private ICTHDDao daoCTHD;
+    private IKhachHangDao daoKhachHang;
+    private ISanPhamDao daoSanPham;
+    private INhanVienDao daoNhanVien;
     private DefaultTableModel modelHoaDon;
     private DefaultTableModel modelCTHD;
 
@@ -38,6 +40,9 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
     public ManHinh_NV_XemDSHoaDon() throws SQLException, RemoteException {
         daoHoaDon = RMIClientUtil.getHoaDonDao();
         daoCTHD = RMIClientUtil.getCtHoaDonDao();
+        daoKhachHang = RMIClientUtil.getKhachHangDao();
+        daoSanPham = RMIClientUtil.getSanPhamDao();
+        daoNhanVien = RMIClientUtil.getNhanVienDao();
         initComponents();
 
         modelHoaDon = (DefaultTableModel) tbl_HoaDon.getModel();
@@ -106,14 +111,18 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
         for (HoaDon hd : daoHoaDon.getAllHoaDon()) {
             Double tongTien = daoHoaDon.tongTienHoaDon(hd.getMaHoaDon());
             String ngayLap = formatter.format(hd.getNgayNhap());
+
+            KhachHang kh = daoKhachHang.getKhachHangTheoMa(hd.getKhachHang().getMaKH());
+            NhanVien nv = daoNhanVien.getNhanVienTheoMa(hd.getNhanVien().getMaNV());
+
             Object o[] = new Object[5];
             o[0] = hd.getMaHoaDon();
             try {
-                o[1] = hd.getKhachHang().getHoTen();
+                o[1] = kh.getHoTen();
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
-            o[2] = hd.getNhanVien().getHoTen();
+            o[2] = nv.getHoTen();
 
             o[3] = ngayLap;
             o[4] = NumberFormat.getInstance().format(tongTien);
@@ -127,10 +136,14 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
     public void docDuLieuLenBangCTHD(long maHD) throws RemoteException {
         modelCTHD.setRowCount(0);
         for (CTHD cthd : daoCTHD.getAllCTHD(maHD)) {
-            Double thanhTien = daoCTHD.tinhThanhTienSanPham(cthd.getHoaDon().getMaHoaDon(), cthd.getSanPham().getMaSP());
+
+            HoaDon hd = daoHoaDon.getHoaDonTheoMa(cthd.getHoaDon().getMaHoaDon());
+            SanPham sp = daoSanPham.getSanPhamTheoMa(cthd.getSanPham().getMaSP());
+
+            Double thanhTien = daoCTHD.tinhThanhTienSanPham(hd.getMaHoaDon(), sp.getMaSP());
             Object[] o = new Object[4];
-            o[0] = cthd.getSanPham().getMaSP();
-            o[1] = cthd.getSanPham().getTenSP();
+            o[0] = sp.getMaSP();
+            o[1] = sp.getTenSP();
             o[2] = cthd.getSoLuong();
             o[3] = NumberFormat.getInstance().format(thanhTien);
             modelCTHD.addRow(o);
@@ -149,10 +162,14 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
         for (HoaDon hd : daoHoaDon.getAllHoaDonTheoNgay(tuNgay, denNgay)) {
             Double tongTien = daoHoaDon.tongTienHoaDon(hd.getMaHoaDon());
             String ngayLap = formatter.format(hd.getNgayNhap());
+
+            KhachHang kh = daoKhachHang.getKhachHangTheoMa(hd.getKhachHang().getMaKH());
+            NhanVien nv = daoNhanVien.getNhanVienTheoMa(hd.getNhanVien().getMaNV());
+
             Object o[] = new Object[5];
             o[0] = hd.getMaHoaDon();
-            o[1] = hd.getKhachHang().getHoTen();
-            o[2] = hd.getNhanVien().getHoTen();
+            o[1] = kh.getHoTen();
+            o[2] = nv.getHoTen();
             o[3] = ngayLap;
             o[4] = NumberFormat.getInstance().format(tongTien);
             modelHoaDon.addRow(o);

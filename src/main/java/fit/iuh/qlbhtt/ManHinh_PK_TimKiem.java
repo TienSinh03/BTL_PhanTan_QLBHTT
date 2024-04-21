@@ -61,16 +61,14 @@ public class ManHinh_PK_TimKiem extends javax.swing.JPanel {
         dao_PhanLoai = RMIClientUtil.getPhanLoaiDao();
         dao_NhaCungCap = RMIClientUtil.getNhaCungCapDao();
 
-//        connect = new Connect();
-//        connect.connect();
         initComponents();
         if(!ngonNgu) {
             chuyenDoiNgonNgu();
         }
         tbl_PhuKien.setDefaultEditor(Object.class, null); //Không cho chỉnh sửa cột
         tbl_PhuKien.getTableHeader().setReorderingAllowed(false); //Không cho di chuyển cột
-        
-        docDuLieuQuanAo();
+
+        docDuLieuPhuKien();
         docDuLieuCMB();
     }
     
@@ -645,7 +643,7 @@ public class ManHinh_PK_TimKiem extends javax.swing.JPanel {
     private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XoaTrangActionPerformed
         // TODO add your handling code here:
         xoaTrang();
-        docDuLieuQuanAo();
+        docDuLieuPhuKien();
     }//GEN-LAST:event_btn_XoaTrangActionPerformed
 
     public ImageIcon ResizeImage(String imgPath, String desc) {
@@ -693,41 +691,55 @@ public class ManHinh_PK_TimKiem extends javax.swing.JPanel {
         if (listSanPham != null) {
             model.setRowCount(0);
             for (SanPham qa : listSanPham) {
+
+                PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(qa.getPhanLoai().getMaPhanLoai());
+                KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(qa.getKichThuoc().getMaKichThuoc());
+                MauSac ms = dao_MauSac.getDLMauSacTheoMa(qa.getMauSac().getMaMauSac());
+                ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(qa.getChatLieu().getMaChatLieu());
+                NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(qa.getNhaCungCap().getMaNCC());
+
                 Object[] object = new Object[11];
                 object[0] = qa.getMaSP();
                 object[1] = qa.getTenSP();
-                object[2] = qa.getPhanLoai().getLoaiSanPham();
+                object[2] = pl.getLoaiSanPham();
                 object[3] = NumberFormat.getInstance().format(qa.getGiaBan());
                 object[4] = NumberFormat.getInstance().format(qa.getGiaNhap());
                 object[5] = qa.getNgayNhap();
-                object[6] = qa.getKichThuoc().getKichThuoc();
-                object[7] = qa.getMauSac().getMauSac();
-                object[8] = qa.getChatLieu().getChatLieu();
-                object[9] = qa.getNhaCungCap().getTenNCC();
+                object[6] = kt.getKichThuoc();
+                object[7] = ms.getMauSac();
+                object[8] = cl.getChatLieu();
+                object[9] = ncc.getTenNCC();
                 object[10] = qa.getSoLuong();
                 model.addRow(object);
             }
         } else {
-            docDuLieuQuanAo();
+            docDuLieuPhuKien();
         }
 
         xoaTrang();
     }
 
-    public void docDuLieuQuanAo() throws RemoteException {
+    public void docDuLieuPhuKien() throws RemoteException {
         modelSanPham = (DefaultTableModel) tbl_PhuKien.getModel();
         for (SanPham pk : dao_SanPham.getAllPhuKien()) {
+
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(pk.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(pk.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(pk.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(pk.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(pk.getNhaCungCap().getMaNCC());
+
             Object[] object = new Object[11];
             object[0] = pk.getMaSP();
             object[1] = pk.getTenSP();
-            object[2] = pk.getPhanLoai().getLoaiSanPham();
+            object[2] = pl.getLoaiSanPham();
             object[3] = NumberFormat.getInstance().format(pk.getGiaBan());
             object[4] = NumberFormat.getInstance().format(pk.getGiaNhap());
             object[5] = pk.getNgayNhap();
-            object[6] = pk.getKichThuoc().getKichThuoc();
-            object[7] = pk.getMauSac().getMauSac();
-            object[8] = pk.getChatLieu().getChatLieu();
-            object[9] = pk.getNhaCungCap().getTenNCC();
+            object[6] = kt.getKichThuoc();
+            object[7] = ms.getMauSac();
+            object[8] = cl.getChatLieu();
+            object[9] = ncc.getTenNCC();
             object[10] = pk.getSoLuong();
             modelSanPham.addRow(object);
         }

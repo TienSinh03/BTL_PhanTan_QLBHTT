@@ -50,8 +50,6 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
 
     private IHoaDonDao dao_HoaDon = RMIClientUtil.getHoaDonDao();
     private DefaultTableModel dtm;
-    private KhachHang kh = new KhachHang();
-
     private boolean activeTatCa = false;
     private boolean activeTop5KhachHangChiTieuCao = false;
     private boolean activeTop5KhachHangThuongXuyen = false;

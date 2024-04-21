@@ -160,19 +160,26 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
     public void docDuLieuSanPham() throws RemoteException {
 
         for (SanPham sp : daoSanPham.getAllSanPham()) {
+
+            PhanLoai pl = daoPhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = daoKichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = daoMauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = daoChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = daoNhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             String ngayNhapForMat = formatter.format(sp.getNgayNhap());
             Object[] o = new Object[11];
             o[0] = sp.getMaSP();
             o[1] = sp.getTenSP();
-            o[2] = sp.getPhanLoai().getLoaiSanPham();
+            o[2] = pl.getLoaiSanPham();
             o[3] = NumberFormat.getInstance().format(sp.getGiaBan());
             o[4] = NumberFormat.getInstance().format(sp.getGiaNhap());
             o[5] = ngayNhapForMat;
-            o[6] = sp.getKichThuoc().getKichThuoc();
-            o[7] = sp.getMauSac().getMauSac();
-            o[8] = sp.getChatLieu().getChatLieu();
-            o[9] = sp.getNhaCungCap().getTenNCC();
+            o[6] = kt.getKichThuoc();
+            o[7] = ms.getMauSac();
+            o[8] = cl.getChatLieu();
+            o[9] = ncc.getTenNCC();
             o[10] = sp.getSoLuong();
             model_SP.addRow(o);
 
@@ -214,19 +221,26 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
 
         ArrayList<SanPham> listSanPham = daoSanPham.getAllSanPhamHetHang(phanLoai, mauSac, kichThuoc);
         for (SanPham sp : listSanPham) {
+
+            PhanLoai pl = daoPhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = daoKichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = daoMauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = daoChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = daoNhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             String ngayNhapForMat = formatter.format(sp.getNgayNhap());
             Object[] o = new Object[11];
             o[0] = sp.getMaSP();
             o[1] = sp.getTenSP();
-            o[2] = sp.getPhanLoai().getLoaiSanPham();
+            o[2] = pl.getLoaiSanPham();
             o[3] = NumberFormat.getInstance().format(sp.getGiaBan());
             o[4] = NumberFormat.getInstance().format(sp.getGiaNhap());
             o[5] = ngayNhapForMat;
-            o[6] = sp.getKichThuoc().getKichThuoc();
-            o[7] = sp.getMauSac().getMauSac();
-            o[8] = sp.getChatLieu().getChatLieu();
-            o[9] = sp.getNhaCungCap().getTenNCC();
+            o[6] = kt.getKichThuoc();
+            o[7] = ms.getMauSac();
+            o[8] = cl.getChatLieu();
+            o[9] = ncc.getTenNCC();
             o[10] = sp.getSoLuong();
             model_SP.addRow(o);
         }
@@ -261,19 +275,26 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
 
         ArrayList<SanPham> listSanPham = daoSanPham.getAllSanPhamTheoTieuChi(phanLoai, mauSac, kichThuoc);
         for (SanPham sp : listSanPham) {
+
+            PhanLoai pl = daoPhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = daoKichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = daoMauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = daoChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = daoNhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             String ngayNhapForMat = formatter.format(sp.getNgayNhap());
             Object[] o = new Object[11];
             o[0] = sp.getMaSP();
             o[1] = sp.getTenSP();
-            o[2] = sp.getPhanLoai().getLoaiSanPham();
+            o[2] = pl.getLoaiSanPham();
             o[3] = NumberFormat.getInstance().format(sp.getGiaBan());
             o[4] = NumberFormat.getInstance().format(sp.getGiaNhap());
             o[5] = ngayNhapForMat;
-            o[6] = sp.getKichThuoc().getKichThuoc();
-            o[7] = sp.getMauSac().getMauSac();
-            o[8] = sp.getChatLieu().getChatLieu();
-            o[9] = sp.getNhaCungCap().getTenNCC();
+            o[6] = kt.getKichThuoc();
+            o[7] = ms.getMauSac();
+            o[8] = cl.getChatLieu();
+            o[9] = ncc.getTenNCC();
             o[10] = sp.getSoLuong();
             model_SP.addRow(o);
 
@@ -317,6 +338,13 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
         int count = 0;
         ArrayList<SanPham> listSanPham = daoSanPham.getAllSanPhamTheoTieuChi(phanLoai, mauSac, kichThuoc);
         for (SanPham sp : listSanPham) {
+
+            PhanLoai pl = daoPhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = daoKichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = daoMauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = daoChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = daoNhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             Date ngayNhap = sp.getNgayNhap();
 
             if (ngayNhap.before(ngayHienTai) && ngayNhap.after(ngayTruoc1Ngay)) {
@@ -325,14 +353,14 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
                 Object[] o = new Object[11];
                 o[0] = sp.getMaSP();
                 o[1] = sp.getTenSP();
-                o[2] = sp.getPhanLoai().getLoaiSanPham();
+                o[2] = pl.getLoaiSanPham();
                 o[3] = NumberFormat.getInstance().format(sp.getGiaBan());
                 o[4] = NumberFormat.getInstance().format(sp.getGiaNhap());
                 o[5] = ngayNhapFormat;
-                o[6] = sp.getKichThuoc().getKichThuoc();
-                o[7] = sp.getMauSac().getMauSac();
-                o[8] = sp.getChatLieu().getChatLieu();
-                o[9] = sp.getNhaCungCap().getTenNCC();
+                o[6] = kt.getKichThuoc();
+                o[7] = ms.getMauSac();
+                o[8] = cl.getChatLieu();
+                o[9] = ncc.getTenNCC();
                 o[10] = sp.getSoLuong();
                 model_SP.addRow(o);
                 count++;
@@ -349,19 +377,26 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
     public void thongKeSanPhamBanChay() throws RemoteException {
         model_SP.setRowCount(0);
         for (SanPham sp : daoSanPham.getSanPhamBanChay()) {
+
+            PhanLoai pl = daoPhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = daoKichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = daoMauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = daoChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = daoNhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             String ngayNhapForMat = formatter.format(sp.getNgayNhap());
             Object[] o = new Object[11];
             o[0] = sp.getMaSP();
             o[1] = sp.getTenSP();
-            o[2] = sp.getPhanLoai().getLoaiSanPham();
+            o[2] = pl.getLoaiSanPham();
             o[3] = NumberFormat.getInstance().format(sp.getGiaBan());
             o[4] = NumberFormat.getInstance().format(sp.getGiaNhap());
             o[5] = ngayNhapForMat;
-            o[6] = sp.getKichThuoc().getKichThuoc();
-            o[7] = sp.getMauSac().getMauSac();
-            o[8] = sp.getChatLieu().getChatLieu();
-            o[9] = sp.getNhaCungCap().getTenNCC();
+            o[6] = kt.getKichThuoc();
+            o[7] = ms.getMauSac();
+            o[8] = cl.getChatLieu();
+            o[9] = ncc.getTenNCC();
             o[10] = sp.getSoLuong();
             model_SP.addRow(o);
 
@@ -377,19 +412,26 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
     public void thongKeSanPhamBanCham() throws RemoteException {
         model_SP.setRowCount(0);
         for (SanPham sp : daoSanPham.getSanPhamBanCham()) {
+
+            PhanLoai pl = daoPhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = daoKichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = daoMauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = daoChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = daoNhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             String ngayNhapForMat = formatter.format(sp.getNgayNhap());
             Object[] o = new Object[11];
             o[0] = sp.getMaSP();
             o[1] = sp.getTenSP();
-            o[2] = sp.getPhanLoai().getLoaiSanPham();
+            o[2] = pl.getLoaiSanPham();
             o[3] = NumberFormat.getInstance().format(sp.getGiaBan());
             o[4] = NumberFormat.getInstance().format(sp.getGiaNhap());
             o[5] = ngayNhapForMat;
-            o[6] = sp.getKichThuoc().getKichThuoc();
-            o[7] = sp.getMauSac().getMauSac();
-            o[8] = sp.getChatLieu().getChatLieu();
-            o[9] = sp.getNhaCungCap().getTenNCC();
+            o[6] = kt.getKichThuoc();
+            o[7] = ms.getMauSac();
+            o[8] = cl.getChatLieu();
+            o[9] = ncc.getTenNCC();
             o[10] = sp.getSoLuong();
             model_SP.addRow(o);
 
@@ -410,19 +452,26 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
         String denNgay = formatter.format(dch_DenNgay.getDate());
         int count = 0;
         for (SanPham sp : daoSanPham.getAllSanPhamTheoNgay(tuNgay, denNgay)) {
+
+            PhanLoai pl = daoPhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = daoKichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = daoMauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = daoChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = daoNhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             SimpleDateFormat formatter_load = new SimpleDateFormat("dd-MM-yyyy");
             String ngayNhapFormat = formatter_load.format(sp.getNgayNhap());
             Object[] o = new Object[11];
             o[0] = sp.getMaSP();
             o[1] = sp.getTenSP();
-            o[2] = sp.getPhanLoai().getLoaiSanPham();
+            o[2] = pl.getLoaiSanPham();
             o[3] = NumberFormat.getInstance().format(sp.getGiaBan());
             o[4] = NumberFormat.getInstance().format(sp.getGiaNhap());
             o[5] = ngayNhapFormat;
-            o[6] = sp.getKichThuoc().getKichThuoc();
-            o[7] = sp.getMauSac().getMauSac();
-            o[8] = sp.getChatLieu().getChatLieu();
-            o[9] = sp.getNhaCungCap().getTenNCC();
+            o[6] = kt.getKichThuoc();
+            o[7] = ms.getMauSac();
+            o[8] = cl.getChatLieu();
+            o[9] = ncc.getTenNCC();
             o[10] = sp.getSoLuong();
             model_SP.addRow(o);
             count++;
@@ -663,6 +712,13 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
 
             //Thong tin san pham
             for (SanPham sp : listSP) {
+
+                PhanLoai pl = daoPhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+                KichThuoc kt = daoKichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+                MauSac ms = daoMauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+                ChatLieu cl = daoChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+                NhaCungCap ncc = daoNhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
                 //Mã sản phẩm
                 PdfPCell cellTblSP_maSP_giaTri = new PdfPCell(new Paragraph(String.valueOf(sp.getMaSP()), fontMain));
                 cellTblSP_maSP_giaTri.setBorderColor(BaseColor.BLACK);
@@ -676,7 +732,7 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
                 tableDsSP.addCell(cellTblSP_tenSP_giaTri);
 
                 //Phân loại
-                PdfPCell cellTblSP_PL_giaTri = new PdfPCell(new Paragraph(sp.getPhanLoai().getLoaiSanPham(), fontMain));
+                PdfPCell cellTblSP_PL_giaTri = new PdfPCell(new Paragraph(pl.getLoaiSanPham(), fontMain));
                 cellTblSP_PL_giaTri.setBorderColor(BaseColor.BLACK);
                 cellTblSP_PL_giaTri.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cellTblSP_PL_giaTri.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -704,28 +760,28 @@ public class ManHinh_NV_ThongKeSanPham extends javax.swing.JPanel {
                 tableDsSP.addCell(cellTblSP_ngayNhap_giaTri);
 
                 //Kích thước
-                PdfPCell cellTblSP_KT_giaTri = new PdfPCell(new Paragraph(sp.getKichThuoc().getKichThuoc(), fontMain));
+                PdfPCell cellTblSP_KT_giaTri = new PdfPCell(new Paragraph(kt.getKichThuoc(), fontMain));
                 cellTblSP_KT_giaTri.setBorderColor(BaseColor.BLACK);
                 cellTblSP_KT_giaTri.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cellTblSP_KT_giaTri.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableDsSP.addCell(cellTblSP_KT_giaTri);
 
                 //Màu sắc
-                PdfPCell cellTblSP_MS_giaTri = new PdfPCell(new Paragraph(sp.getMauSac().getMauSac(), fontMain));
+                PdfPCell cellTblSP_MS_giaTri = new PdfPCell(new Paragraph(ms.getMauSac(), fontMain));
                 cellTblSP_MS_giaTri.setBorderColor(BaseColor.BLACK);
                 cellTblSP_MS_giaTri.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cellTblSP_MS_giaTri.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableDsSP.addCell(cellTblSP_MS_giaTri);
 
                 //Chất liệu
-                PdfPCell cellTblSP_CL_giaTri = new PdfPCell(new Paragraph(sp.getChatLieu().getChatLieu(), fontMain));
+                PdfPCell cellTblSP_CL_giaTri = new PdfPCell(new Paragraph(cl.getChatLieu(), fontMain));
                 cellTblSP_CL_giaTri.setBorderColor(BaseColor.BLACK);
                 cellTblSP_CL_giaTri.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cellTblSP_CL_giaTri.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableDsSP.addCell(cellTblSP_CL_giaTri);
 
                 // Nhà cung cấp
-                PdfPCell cellTblSP_NCC_giaTri = new PdfPCell(new Paragraph(sp.getNhaCungCap().getTenNCC(), fontMain));
+                PdfPCell cellTblSP_NCC_giaTri = new PdfPCell(new Paragraph(ncc.getTenNCC(), fontMain));
                 cellTblSP_NCC_giaTri.setBorderColor(BaseColor.BLACK);
                 cellTblSP_NCC_giaTri.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 tableDsSP.addCell(cellTblSP_NCC_giaTri);

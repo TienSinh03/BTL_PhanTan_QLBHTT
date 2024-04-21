@@ -55,10 +55,12 @@ public class RMIClientUtil {
     }
 
     public static void main(String[] args) throws RemoteException {
-        IHoaDonDao daoHoaDon = getHoaDonDao();
-        daoHoaDon.getAllHoaDon().forEach(System.out::println);
+//        IHoaDonDao daoHoaDon = getHoaDonDao();
+//        daoHoaDon.getAllHoaDon().forEach(System.out::println);
 //        ISanPhamDao daoSanPham = getSanPhamDao();
 //        daoSanPham.getAllSanPham().forEach(System.out::println);
+        INhanVienDao daoNhanVien = getNhanVienDao();
+        daoNhanVien.getAllNhanVien().forEach(System.out::println);
     }
 
     public static IChatLieuDao getChatLieuDao() {

@@ -213,12 +213,18 @@ public class ManHinh_NV_ThongKeDoanhThu extends javax.swing.JPanel {
         tongSoSanPhamBanDuoc = listSanPham.size();
         double tongDoanhThu = 0;
         for (SanPham sp : listSanPham) {
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             int soLuongBanDuoc = dao_CTHD.getSoLuongSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
             double doanhThu = dao_CTHD.getDoanhThuSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
             tongDoanhThu += dao_CTHD.getTongDoanhThu(sp.getMaSP(), thangLap, namLap);
             double tiLeDoanhThu = (sp.getGiaBan() / tongDoanhThu) * 100;
-            Object[] rowData = {sp.getMaSP(), sp.getTenSP(), sp.getPhanLoai().getLoaiSanPham(), NumberFormat.getInstance().format(sp.getGiaBan()), NumberFormat.getInstance().format(sp.getGiaNhap()), sp.getKichThuoc().getKichThuoc(),
-                sp.getMauSac().getMauSac(), sp.getChatLieu().getChatLieu(), sp.getNhaCungCap().getTenNCC(), soLuongBanDuoc, NumberFormat.getInstance().format(doanhThu), String.format("%.2f", tiLeDoanhThu)};
+            Object[] rowData = {sp.getMaSP(), sp.getTenSP(), pl.getLoaiSanPham(), NumberFormat.getInstance().format(sp.getGiaBan()), NumberFormat.getInstance().format(sp.getGiaNhap()), kt.getKichThuoc(),
+                ms.getMauSac(), cl.getChatLieu(), ncc.getTenNCC(), soLuongBanDuoc, NumberFormat.getInstance().format(doanhThu), String.format("%.2f", tiLeDoanhThu)};
             dtm.addRow(rowData);
         }
 
@@ -265,12 +271,19 @@ public class ManHinh_NV_ThongKeDoanhThu extends javax.swing.JPanel {
         tongSoSanPhamBanDuoc = listSanPham.size();
         tongDoanhThu = 0;
         for (SanPham sp : listSanPham) {
+
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             int soLuongBanDuoc = dao_CTHD.getSoLuongSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
             double doanhThu = dao_CTHD.getDoanhThuSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
             tongDoanhThu += dao_CTHD.getTongDoanhThu(sp.getMaSP(), thangLap, namLap);
             double tiLeDoanhThu = (sp.getGiaBan() / tongDoanhThu) * 100;
-            Object[] rowData = {sp.getMaSP(), sp.getTenSP(), sp.getPhanLoai().getLoaiSanPham(), NumberFormat.getInstance().format(sp.getGiaBan()), NumberFormat.getInstance().format(sp.getGiaNhap()), sp.getKichThuoc().getKichThuoc(),
-                sp.getMauSac().getMauSac(), sp.getChatLieu().getChatLieu(), sp.getNhaCungCap().getTenNCC(), soLuongBanDuoc, NumberFormat.getInstance().format(doanhThu), String.format("%.2f", tiLeDoanhThu)};
+            Object[] rowData = {sp.getMaSP(), sp.getTenSP(), pl.getLoaiSanPham(), NumberFormat.getInstance().format(sp.getGiaBan()), NumberFormat.getInstance().format(sp.getGiaNhap()), kt.getKichThuoc(),
+                    ms.getMauSac(), cl.getChatLieu(), ncc.getTenNCC(), soLuongBanDuoc, NumberFormat.getInstance().format(doanhThu), String.format("%.2f", tiLeDoanhThu)};
             dtm.addRow(rowData);
         }
 
@@ -295,20 +308,29 @@ public class ManHinh_NV_ThongKeDoanhThu extends javax.swing.JPanel {
 
         ArrayList<SanPham> listSanPham = dao_HoaDon.thongKeDanhSachSanPhamTheoThangNam(thangLap, namLap);
         DefaultTableModel dtm = (DefaultTableModel) tbl_SanPham.getModel();
-        tongSoSanPhamBanDuoc = listSanPham.size();
-        tongDoanhThu = 0;
-        for (SanPham sp : listSanPham) {
-            int soLuongBanDuoc = dao_CTHD.getSoLuongSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
-            double doanhThu = dao_CTHD.getDoanhThuSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
-            tongDoanhThu += dao_CTHD.getTongDoanhThu(sp.getMaSP(), thangLap, namLap);
-            double tiLeDoanhThu = (sp.getGiaBan() / tongDoanhThu) * 100;
-            Object[] rowData = {sp.getMaSP(), sp.getTenSP(), sp.getPhanLoai().getLoaiSanPham(), NumberFormat.getInstance().format(sp.getGiaBan()), NumberFormat.getInstance().format(sp.getGiaNhap()), sp.getKichThuoc().getKichThuoc(),
-                sp.getMauSac().getMauSac(), sp.getChatLieu().getChatLieu(), sp.getNhaCungCap().getTenNCC(), soLuongBanDuoc, NumberFormat.getInstance().format(doanhThu), String.format("%.2f", tiLeDoanhThu)};
-            dtm.addRow(rowData);
+        if(listSanPham != null) {
+            tongSoSanPhamBanDuoc = listSanPham.size();
+            tongDoanhThu = 0;
+            for (SanPham sp : listSanPham) {
+                PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+                KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+                MauSac ms = dao_MauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+                ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+                NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
+                int soLuongBanDuoc = dao_CTHD.getSoLuongSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
+                double doanhThu = dao_CTHD.getDoanhThuSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
+                tongDoanhThu += dao_CTHD.getTongDoanhThu(sp.getMaSP(), thangLap, namLap);
+                double tiLeDoanhThu = (sp.getGiaBan() / tongDoanhThu) * 100;
+                Object[] rowData = {sp.getMaSP(), sp.getTenSP(), pl.getLoaiSanPham(), NumberFormat.getInstance().format(sp.getGiaBan()), NumberFormat.getInstance().format(sp.getGiaNhap()), kt.getKichThuoc(),
+                        ms.getMauSac(), cl.getChatLieu(), ncc.getTenNCC(), soLuongBanDuoc, NumberFormat.getInstance().format(doanhThu), String.format("%.2f", tiLeDoanhThu)};
+                dtm.addRow(rowData);
+            }
+
+            txt_TongSanPhamBan.setText(tongSoSanPhamBanDuoc + "");
+            txt_TongDoanhThu.setText(NumberFormat.getInstance().format(tongDoanhThu));
         }
 
-        txt_TongSanPhamBan.setText(tongSoSanPhamBanDuoc + "");
-        txt_TongDoanhThu.setText(NumberFormat.getInstance().format(tongDoanhThu));
     }
 
     private void tblTop5SanPhamDoanhThuCaoNhat() throws RemoteException {
@@ -331,12 +353,19 @@ public class ManHinh_NV_ThongKeDoanhThu extends javax.swing.JPanel {
         tongSoSanPhamBanDuoc = listSanPham.size();
         double tongDoanhThu = 0;
         for (SanPham sp : listSanPham) {
+
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             int soLuongBanDuoc = dao_CTHD.getSoLuongSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
             double doanhThu = dao_CTHD.getDoanhThuSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
             tongDoanhThu += dao_CTHD.getTongDoanhThu(sp.getMaSP(), thangLap, namLap);
             double tiLeDoanhThu = (sp.getGiaBan() / tongDoanhThu) * 100;
-            Object[] rowData = {sp.getMaSP(), sp.getTenSP(), sp.getPhanLoai().getLoaiSanPham(), NumberFormat.getInstance().format(sp.getGiaBan()), NumberFormat.getInstance().format(sp.getGiaNhap()), sp.getKichThuoc().getKichThuoc(),
-                sp.getMauSac().getMauSac(), sp.getChatLieu().getChatLieu(), sp.getNhaCungCap().getTenNCC(), soLuongBanDuoc, NumberFormat.getInstance().format(doanhThu), String.format("%.2f", tiLeDoanhThu)};
+            Object[] rowData = {sp.getMaSP(), sp.getTenSP(), pl.getLoaiSanPham(), NumberFormat.getInstance().format(sp.getGiaBan()), NumberFormat.getInstance().format(sp.getGiaNhap()), kt.getKichThuoc(),
+                    ms.getMauSac(), cl.getChatLieu(), ncc.getTenNCC(), soLuongBanDuoc, NumberFormat.getInstance().format(doanhThu), String.format("%.2f", tiLeDoanhThu)};
             dtm.addRow(rowData);
         }
 
@@ -364,12 +393,19 @@ public class ManHinh_NV_ThongKeDoanhThu extends javax.swing.JPanel {
         tongSoSanPhamBanDuoc = listSanPham.size();
         double tongDoanhThu = 0;
         for (SanPham sp : listSanPham) {
+
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
             int soLuongBanDuoc = dao_CTHD.getSoLuongSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
             double doanhThu = dao_CTHD.getDoanhThuSanPhamBanDuoc(sp.getMaSP(), thangLap, namLap);
             tongDoanhThu += dao_CTHD.getTongDoanhThu(sp.getMaSP(), thangLap, namLap);
             double tiLeDoanhThu = (sp.getGiaBan() / tongDoanhThu) * 100;
-            Object[] rowData = {sp.getMaSP(), sp.getTenSP(), sp.getPhanLoai().getLoaiSanPham(), NumberFormat.getInstance().format(sp.getGiaBan()), NumberFormat.getInstance().format(sp.getGiaNhap()), sp.getKichThuoc().getKichThuoc(),
-                sp.getMauSac().getMauSac(), sp.getChatLieu().getChatLieu(), sp.getNhaCungCap().getTenNCC(), soLuongBanDuoc, NumberFormat.getInstance().format(doanhThu), String.format("%.2f", tiLeDoanhThu)};
+            Object[] rowData = {sp.getMaSP(), sp.getTenSP(), pl.getLoaiSanPham(), NumberFormat.getInstance().format(sp.getGiaBan()), NumberFormat.getInstance().format(sp.getGiaNhap()), kt.getKichThuoc(),
+                    ms.getMauSac(), cl.getChatLieu(), ncc.getTenNCC(), soLuongBanDuoc, NumberFormat.getInstance().format(doanhThu), String.format("%.2f", tiLeDoanhThu)};
             dtm.addRow(rowData);
         }
 
@@ -626,6 +662,13 @@ public class ManHinh_NV_ThongKeDoanhThu extends javax.swing.JPanel {
 
             //Thong tin san pham
             for (SanPham sp : listSP) {
+
+                PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+                KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+                MauSac ms = dao_MauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+                ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+                NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+
                 //Mã sản phẩm
                 PdfPCell cellTblSP_maSP_giaTri = new PdfPCell(new Paragraph(String.valueOf(sp.getMaSP()), fontMain));
                 cellTblSP_maSP_giaTri.setBorderColor(BaseColor.BLACK);
@@ -639,7 +682,7 @@ public class ManHinh_NV_ThongKeDoanhThu extends javax.swing.JPanel {
                 tableDsSP.addCell(cellTblSP_tenSP_giaTri);
 
                 //Phân loại
-                PdfPCell cellTblSP_PL_giaTri = new PdfPCell(new Paragraph(sp.getPhanLoai().getLoaiSanPham(), fontMain));
+                PdfPCell cellTblSP_PL_giaTri = new PdfPCell(new Paragraph(pl.getLoaiSanPham(), fontMain));
                 cellTblSP_PL_giaTri.setBorderColor(BaseColor.BLACK);
                 cellTblSP_PL_giaTri.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cellTblSP_PL_giaTri.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -660,28 +703,28 @@ public class ManHinh_NV_ThongKeDoanhThu extends javax.swing.JPanel {
                 tableDsSP.addCell(cellTblSP_giaNhap_giaTri);
 
                 //Kích thước
-                PdfPCell cellTblSP_KT_giaTri = new PdfPCell(new Paragraph(sp.getKichThuoc().getKichThuoc(), fontMain));
+                PdfPCell cellTblSP_KT_giaTri = new PdfPCell(new Paragraph(kt.getKichThuoc(), fontMain));
                 cellTblSP_KT_giaTri.setBorderColor(BaseColor.BLACK);
                 cellTblSP_KT_giaTri.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cellTblSP_KT_giaTri.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableDsSP.addCell(cellTblSP_KT_giaTri);
 
                 //Màu sắc
-                PdfPCell cellTblSP_MS_giaTri = new PdfPCell(new Paragraph(sp.getMauSac().getMauSac(), fontMain));
+                PdfPCell cellTblSP_MS_giaTri = new PdfPCell(new Paragraph(ms.getMauSac(), fontMain));
                 cellTblSP_MS_giaTri.setBorderColor(BaseColor.BLACK);
                 cellTblSP_MS_giaTri.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cellTblSP_MS_giaTri.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableDsSP.addCell(cellTblSP_MS_giaTri);
 
                 //Chất liệu
-                PdfPCell cellTblSP_CL_giaTri = new PdfPCell(new Paragraph(sp.getChatLieu().getChatLieu(), fontMain));
+                PdfPCell cellTblSP_CL_giaTri = new PdfPCell(new Paragraph(cl.getChatLieu(), fontMain));
                 cellTblSP_CL_giaTri.setBorderColor(BaseColor.BLACK);
                 cellTblSP_CL_giaTri.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 cellTblSP_CL_giaTri.setHorizontalAlignment(Element.ALIGN_CENTER);
                 tableDsSP.addCell(cellTblSP_CL_giaTri);
 
                 // Nhà cung cấp
-                PdfPCell cellTblSP_NCC_giaTri = new PdfPCell(new Paragraph(sp.getNhaCungCap().getTenNCC(), fontMain));
+                PdfPCell cellTblSP_NCC_giaTri = new PdfPCell(new Paragraph(ncc.getTenNCC(), fontMain));
                 cellTblSP_NCC_giaTri.setBorderColor(BaseColor.BLACK);
                 cellTblSP_NCC_giaTri.setVerticalAlignment(Element.ALIGN_MIDDLE);
                 tableDsSP.addCell(cellTblSP_NCC_giaTri);

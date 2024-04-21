@@ -35,8 +35,6 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
      */
     public ManHinh_NV_TimKiem() throws SQLException, RemoteException {
         daoNhanVien = RMIClientUtil.getNhanVienDao();
-//        connect = new Connect();
-//        connect.connect();
         initComponents();
         activeThayDoiTT = false;
         tbl_NhanVien.setDefaultEditor(Object.class, null); //Không cho chỉnh sửa cột
@@ -44,17 +42,17 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
 
         docDuLieuNhanVien();
         loadDuLieuChucVu();
-//        setRole();
+        setRole();
     }
 
     /**
      * Cài đặt role khi nhân viên đăng nhập
      */
-//    public void setRole() {
-//        if (nhanVien_Login.getChuVu().equalsIgnoreCase("Nhân Viên")) {
-//            btn_CapNhat.setEnabled(false);
-//        }
-//    }
+    public void setRole() {
+        if (nhanVien_Login.getChuVu().equalsIgnoreCase("Nhân Viên")) {
+            btn_CapNhat.setEnabled(false);
+        }
+    }
 
     /**
      * Load dữ liệu comboBox chức vụ
@@ -107,6 +105,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
             object[5] = nv.getSdt();
             object[6] = nv.getEmail();
             object[7] = nv.isTrangThai() ? "Đang làm" : "Nghỉ làm";
+            System.out.println("nv " + nv.toString());
             modelNhanVien.addRow(object);
         }
     }

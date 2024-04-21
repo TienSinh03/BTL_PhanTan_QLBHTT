@@ -59,9 +59,7 @@ public class ManHinh_PK_QuanLy extends javax.swing.JPanel {
         dao_MauSac = RMIClientUtil.getMauSacDao();
         dao_PhanLoai = RMIClientUtil.getPhanLoaiDao();
         dao_NhaCungCap = RMIClientUtil.getNhaCungCapDao();
-        
-//        connect = new Connect();
-//        connect.connect();
+
         initComponents();
         if(!ngonNgu) {
             chuyenDoiNgonNgu();
@@ -1053,14 +1051,14 @@ public class ManHinh_PK_QuanLy extends javax.swing.JPanel {
         Object[] object = new Object[11];
             object[0] = sanPham.getMaSP();
             object[1] = sanPham.getTenSP();
-            object[2] = sanPham.getPhanLoai().getLoaiSanPham();
+            object[2] = phanLoai.getLoaiSanPham();
             object[3] = NumberFormat.getInstance().format( sanPham.getGiaBan());
             object[4] = NumberFormat.getInstance().format( sanPham.getGiaNhap());
             object[5] = ngayNhapString;
-            object[6] = sanPham.getKichThuoc().getKichThuoc();
-            object[7] = sanPham.getMauSac().getMauSac();
-            object[8] = sanPham.getChatLieu().getChatLieu();
-            object[9] = sanPham.getNhaCungCap().getTenNCC();
+            object[6] = kichThuoc.getKichThuoc();
+            object[7] = mauSac.getMauSac();
+            object[8] = chatLieu.getChatLieu();
+            object[9] = nhaCungCap.getTenNCC();
             object[10] = sanPham.getSoLuong();
         modelSanPham.addRow(object);
         docDuLieuPhuKien();
@@ -1143,17 +1141,24 @@ public class ManHinh_PK_QuanLy extends javax.swing.JPanel {
         modelSanPham = (DefaultTableModel) tbl_PhuKien.getModel();
         modelSanPham.setRowCount(0);
         for(SanPham pk: dao_SanPham.getAllPhuKien()) {
+
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(pk.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(pk.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(pk.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(pk.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(pk.getNhaCungCap().getMaNCC());
+
             Object[] object = new Object[11];
             object[0] = pk.getMaSP();
             object[1] = pk.getTenSP();
-            object[2] = pk.getPhanLoai().getLoaiSanPham();
+            object[2] = pl.getLoaiSanPham();
             object[3] = NumberFormat.getInstance().format( pk.getGiaBan());
             object[4] = NumberFormat.getInstance().format( pk.getGiaNhap());
             object[5] = pk.getNgayNhap();
-            object[6] = pk.getKichThuoc().getKichThuoc();
-            object[7] = pk.getMauSac().getMauSac();
-            object[8] = pk.getChatLieu().getChatLieu();
-            object[9] = pk.getNhaCungCap().getTenNCC();
+            object[6] = kt.getKichThuoc();
+            object[7] = ms.getMauSac();
+            object[8] = cl.getChatLieu();
+            object[9] = ncc.getTenNCC();
             object[10] = pk.getSoLuong();
             modelSanPham.addRow(object);
         }

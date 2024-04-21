@@ -20,6 +20,7 @@ import fit.iuh.dao.*;
 import fit.iuh.entity.*;
 import fit.iuh.util.RMIClientUtil;
 
+import java.awt.event.ItemEvent;
 import java.io.File;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
@@ -31,6 +32,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -62,6 +64,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
     private IPhanLoaiDao dao_PhanLoai;
     private INhaCungCapDao dao_NhaCungCap;
     private IKhachHangDao dao_KhachHang;
+    private INhanVienDao dao_NhanVien;
     private IPhieuDatHangDao dao_PhieuDatHang;
     private ICTPhieuDatHangDao dao_CTPhieuDatHang;
     private IHoaDonDao dao_HoaDon;
@@ -91,6 +94,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         dao_sendEmail = RMIClientUtil.getSendMailDao();
         dao_HoaDon = RMIClientUtil.getHoaDonDao();
         dao_CTHD = RMIClientUtil.getCtHoaDonDao();
+        dao_NhanVien = RMIClientUtil.getNhanVienDao();
         gioHang = new ArrayList<>();
 
 //        connect = new Connect();
@@ -542,11 +546,33 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
         cmb_PhanLoai.setEditable(true);
         cmb_PhanLoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cmb_PhanLoai.setEnabled(false);
+        cmb_PhanLoai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
+//        cmb_PhanLoai.setEnabled(false);
+        cmb_PhanLoai.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                try {
+                    cmb_PhanLoaiItemStateChanged(evt);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
         cmb_KichThuoc.setEditable(true);
         cmb_KichThuoc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cmb_KichThuoc.setEnabled(false);
+        cmb_KichThuoc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
+//        cmb_KichThuoc.setEnabled(false);
+        cmb_KichThuoc.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                try {
+                    cmb_KichThuocItemStateChanged(evt);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+
 
         lbl_MauSac.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_MauSac.setText("Màu sắc");
@@ -556,7 +582,17 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
         cmb_MauSac.setEditable(true);
         cmb_MauSac.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cmb_MauSac.setEnabled(false);
+        cmb_MauSac.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
+        cmb_MauSac.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                try {
+                    cmb_MauSacItemStateChanged(evt);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+//        cmb_MauSac.setEnabled(false);
 
         txt_GiaBan.setEditable(false);
         txt_GiaBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -995,10 +1031,10 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
             txt_MaSP.setText(tbl_SanPham.getValueAt(row, 0).toString());
             txt_TenSP.setText(tbl_SanPham.getValueAt(row, 1).toString());
-            cmb_PhanLoai.setSelectedItem(tbl_SanPham.getValueAt(row, 2).toString());
+//            cmb_PhanLoai.setSelectedItem(tbl_SanPham.getValueAt(row, 2).toString());
             txt_GiaBan.setText(tbl_SanPham.getValueAt(row, 3).toString());
-            cmb_KichThuoc.setSelectedItem(tbl_SanPham.getValueAt(row, 4).toString());
-            cmb_MauSac.setSelectedItem(tbl_SanPham.getValueAt(row, 5).toString());
+//            cmb_KichThuoc.setSelectedItem(tbl_SanPham.getValueAt(row, 4).toString());
+//            cmb_MauSac.setSelectedItem(tbl_SanPham.getValueAt(row, 5).toString());
             //Load hinh anh
             File file = new File("");
             String path = file.getAbsolutePath();
@@ -1030,10 +1066,10 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
             txt_MaSP.setText(tbl_GioHang.getValueAt(row, 0).toString());
             txt_TenSP.setText(tbl_GioHang.getValueAt(row, 1).toString());
-            cmb_PhanLoai.setSelectedItem(tbl_GioHang.getValueAt(row, 2).toString());
+//            cmb_PhanLoai.setSelectedItem(tbl_GioHang.getValueAt(row, 2).toString());
             txt_GiaBan.setText(tbl_GioHang.getValueAt(row, 3).toString());
-            cmb_KichThuoc.setSelectedItem(tbl_GioHang.getValueAt(row, 4).toString());
-            cmb_MauSac.setSelectedItem(tbl_GioHang.getValueAt(row, 5).toString());
+//            cmb_KichThuoc.setSelectedItem(tbl_GioHang.getValueAt(row, 4).toString());
+//            cmb_MauSac.setSelectedItem(tbl_GioHang.getValueAt(row, 5).toString());
             //Load hinh anh
             File file = new File("");
             String path = file.getAbsolutePath();
@@ -1076,6 +1112,66 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
     }//GEN-LAST:event_txt_TienKHDuaKeyReleased
 
+    private void cmb_PhanLoaiItemStateChanged(ItemEvent evt) throws RemoteException {
+        thongKeDsSanPhamTheoTieuChi();
+    }
+
+    private void cmb_MauSacItemStateChanged(ItemEvent evt) throws RemoteException {
+        thongKeDsSanPhamTheoTieuChi();
+    }
+
+    private void cmb_KichThuocItemStateChanged(ItemEvent evt) throws RemoteException {
+        thongKeDsSanPhamTheoTieuChi();
+    }
+
+
+    /**
+     * Thông kê danh sách sản phẩm theo các tiêu chí
+     */
+    public void thongKeDsSanPhamTheoTieuChi() throws RemoteException {
+        modelSanPham = (DefaultTableModel) tbl_SanPham.getModel();
+        modelSanPham.setRowCount(0);
+
+        String phanLoai = Objects.requireNonNull(cmb_PhanLoai.getSelectedItem()).toString();
+        String ktPhanLoai = cmb_PhanLoai.getSelectedItem().toString();
+        if (ktPhanLoai.equalsIgnoreCase("Tất cả")) {
+            phanLoai = "";
+        }
+
+        String mauSac = Objects.requireNonNull(cmb_MauSac.getSelectedItem()).toString();
+        String ktMauSac = cmb_MauSac.getSelectedItem().toString();
+        if (ktMauSac.equalsIgnoreCase("Tất cả")) {
+            mauSac = "";
+        }
+
+        String kichThuoc = Objects.requireNonNull(cmb_KichThuoc.getSelectedItem()).toString();
+        String ktKichThuoc = cmb_KichThuoc.getSelectedItem().toString();
+        if (ktKichThuoc.equalsIgnoreCase("Tất cả")) {
+            kichThuoc = "";
+        }
+
+        ArrayList<SanPham> listSanPham = dao_SanPham.getAllSanPhamTheoTieuChi(phanLoai, mauSac, kichThuoc);
+        for (SanPham sp : listSanPham) {
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+            Object[] o = new Object[9];
+            o[0] = sp.getMaSP();
+            o[1] = sp.getTenSP();
+            o[2] = pl.getLoaiSanPham();
+            o[3] = NumberFormat.getInstance().format(sp.getGiaBan());
+            o[4] = kt.getKichThuoc();
+            o[5] = ms.getMauSac();
+            o[6] = cl.getChatLieu();
+            o[7] = ncc.getTenNCC();
+            o[8] = sp.getSoLuong();
+            modelSanPham.addRow(o);
+
+        }
+    }
+
     public void xuLyThemVaoGioHang() {
         int row = tbl_SanPham.getSelectedRow();
         if (row != -1) {
@@ -1095,7 +1191,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                         int truongHop = 2;
                         int index = 0;
                         for (SanPham sp : gioHang) {
-                            System.out.println("sp" + sp);
+//                            System.out.println("sp" + sp);
                             if (sp.getMaSP() == sanPham.getMaSP()) {
                                 truongHop = 1;
                                 //Kiểm tra số lượng mua so với số lượng tồn
@@ -1125,24 +1221,29 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                                 tbl_SanPham.clearSelection();
                                 //Hợp lệ, tiến hành thêm
                                 sanPham.setSoLuong(soLuongMua);
-                                System.out.println("sl mua1 " + soLuongMua);
-                                System.out.println("sl mua2 " + sanPham.getSoLuong());
+//                                System.out.println("sl mua1 " + soLuongMua);
+//                                System.out.println("sl mua2 " + sanPham.getSoLuong());
                                 //Them vao danh sach gio hang
                                 gioHang.add(sanPham);
 
                                 //Them vao model gio hang
                                 modelGioHang = (DefaultTableModel) tbl_GioHang.getModel();
-                                Object[] object = new Object[9];
-                                object[0] = sanPham.getMaSP();
-                                object[1] = sanPham.getTenSP();
-                                object[2] = sanPham.getPhanLoai().getLoaiSanPham();
-                                object[3] = NumberFormat.getInstance().format(sanPham.getGiaBan());
-                                object[4] = sanPham.getKichThuoc().getKichThuoc();
-                                object[5] = sanPham.getMauSac().getMauSac();
-                                object[6] = sanPham.getChatLieu().getChatLieu();
-                                object[7] = sanPham.getNhaCungCap().getTenNCC();
-                                object[8] = sanPham.getSoLuong();
-                                modelGioHang.addRow(object);
+                                PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sanPham.getPhanLoai().getMaPhanLoai());
+                                KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sanPham.getKichThuoc().getMaKichThuoc());
+                                MauSac ms = dao_MauSac.getDLMauSacTheoMa(sanPham.getMauSac().getMaMauSac());
+                                ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sanPham.getChatLieu().getMaChatLieu());
+                                NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sanPham.getNhaCungCap().getMaNCC());
+                                Object[] o = new Object[9];
+                                o[0] = sanPham.getMaSP();
+                                o[1] = sanPham.getTenSP();
+                                o[2] = pl.getLoaiSanPham();
+                                o[3] = NumberFormat.getInstance().format(sanPham.getGiaBan());
+                                o[4] = kt.getKichThuoc();
+                                o[5] = ms.getMauSac();
+                                o[6] = cl.getChatLieu();
+                                o[7] = ncc.getTenNCC();
+                                o[8] = sanPham.getSoLuong();
+                                modelGioHang.addRow(o);
 
                                 //Xoa trang txt_SoLuongNhap
                                 txt_SoLuongNhap.setText("");
@@ -1234,22 +1335,30 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
             maPDH = pdh.getMaPhieuDat();
             ArrayList<CTPhieuDatHang> ctpdh = dao_CTPhieuDatHang.getAllCTPhieuDatHang(pdh.getMaPhieuDat());
             for (CTPhieuDatHang cTPhieuDatHang : ctpdh) {
-                SanPham sanPhamAddGioHang = cTPhieuDatHang.getSanPham();
+                SanPham sanPhamAddGioHang = dao_SanPham.getSanPhamTheoMa(cTPhieuDatHang.getSanPham().getMaSP());
                 sanPhamAddGioHang.setSoLuong(cTPhieuDatHang.getSoLuong());
                 //Them vao gio hang
                 gioHang.add(sanPhamAddGioHang);
-                System.out.println("sp trong chtd: " + sanPhamAddGioHang);
+//                System.out.println("sp trong chtd: " + sanPhamAddGioHang);
                 //Them vao model gio hang
                 modelGioHang = (DefaultTableModel) tbl_GioHang.getModel();
+                SanPham sanPham = dao_SanPham.getSanPhamTheoMa(cTPhieuDatHang.getSanPham().getMaSP());
+
+                PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sanPham.getPhanLoai().getMaPhanLoai());
+                KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sanPham.getKichThuoc().getMaKichThuoc());
+                MauSac ms = dao_MauSac.getDLMauSacTheoMa(sanPham.getMauSac().getMaMauSac());
+                ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sanPham.getChatLieu().getMaChatLieu());
+                NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sanPham.getNhaCungCap().getMaNCC());
+
                 Object[] object = new Object[9];
-                object[0] = cTPhieuDatHang.getSanPham().getMaSP();
-                object[1] = cTPhieuDatHang.getSanPham().getTenSP();
-                object[2] = cTPhieuDatHang.getSanPham().getPhanLoai().getLoaiSanPham();
-                object[3] = NumberFormat.getInstance().format(cTPhieuDatHang.getSanPham().getGiaBan());
-                object[4] = cTPhieuDatHang.getSanPham().getKichThuoc().getKichThuoc();
-                object[5] = cTPhieuDatHang.getSanPham().getMauSac().getMauSac();
-                object[6] = cTPhieuDatHang.getSanPham().getChatLieu().getChatLieu();
-                object[7] = cTPhieuDatHang.getSanPham().getNhaCungCap().getTenNCC();
+                object[0] = sanPham.getMaSP();
+                object[1] = sanPham.getTenSP();
+                object[2] = pl.getLoaiSanPham();
+                object[3] = NumberFormat.getInstance().format(sanPham.getGiaBan());
+                object[4] = kt.getKichThuoc();
+                object[5] = ms.getMauSac();
+                object[6] = cl.getChatLieu();
+                object[7] = ncc.getTenNCC();
                 object[8] = cTPhieuDatHang.getSoLuong();
                 modelGioHang.addRow(object);
 
@@ -1304,7 +1413,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
     public void xuLyGiamSLSanPhamTrongKho() throws RemoteException {
         for (SanPham sanPham : gioHang) {
-            System.out.println("sp" + sanPham);
+//            System.out.println("sp" + sanPham);
             dao_SanPham.giamSoLuongSanPham(sanPham);
         }
     }
@@ -1318,7 +1427,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         System.out.println("Ma hoa don: " + hd.getMaHoaDon());
         //Them vao csdl CTHD
         for (SanPham sanPham : gioHang) {
-            System.out.println("sp1:" + sanPham);
+//            System.out.println("sp1:" + sanPham);
             CTHD cthd = new CTHD(sanPham, hd, sanPham.getSoLuong());
             dao_CTHD.themCTHD(cthd);
         }
@@ -1405,12 +1514,15 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
             tableMuc.addCell(cellNgayIn);
 
             //Mục ten nhan vien
-            PdfPCell cellTenNV = new PdfPCell(new Paragraph("Tên Nhân viên: " + Login.nhanVien.getHoTen(), fontMain));
+
+            NhanVien nv = dao_NhanVien.getNhanVienTheoMa(Login.nhanVien.getMaNV());
+
+            PdfPCell cellTenNV = new PdfPCell(new Paragraph("Tên Nhân viên: " + nv.getHoTen(), fontMain));
             cellTenNV.setBorderColor(BaseColor.WHITE);
             tableMuc.addCell(cellTenNV);
 
             //Mục chức vụ
-            PdfPCell cellChucVu = new PdfPCell(new Paragraph("Chức vụ: " + Login.nhanVien.getChuVu(), fontMain));
+            PdfPCell cellChucVu = new PdfPCell(new Paragraph("Chức vụ: " + nv.getChuVu(), fontMain));
             cellChucVu.setBorderColor(BaseColor.WHITE);
             tableMuc.addCell(cellChucVu);
 
@@ -1425,7 +1537,8 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
             tableKH.setWidths(chieuRongCot_KH);
 
             //Mục khách hàng
-            PdfPCell celltenKH = new PdfPCell(new Paragraph("Tên khách hàng: " + hd.getKhachHang().getHoTen(), fontMain));
+            KhachHang kh = dao_KhachHang.getKhachHangTheoMa(hd.getKhachHang().getMaKH());
+            PdfPCell celltenKH = new PdfPCell(new Paragraph("Tên khách hàng: " + kh.getHoTen(), fontMain));
             celltenKH.setBorderColor(BaseColor.WHITE);
             tableKH.addCell(celltenKH);
 
@@ -1479,7 +1592,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
             int stt = 1;
             //Thong tin san pham
             for (SanPham sp : gioHang) {
-                System.out.println("sp xhoa don: " + sp);
+//                System.out.println("sp xhoa don: " + sp);
                 //STT
                 PdfPCell cellTblSP_STT_giaTri = new PdfPCell(new Paragraph(stt + "", fontMain));
                 cellTblSP_STT_giaTri.setBorderColor(BaseColor.BLACK);
@@ -1687,15 +1800,21 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
     public void docDuLieuSanPham() throws RemoteException {
         modelSanPham = (DefaultTableModel) tbl_SanPham.getModel();
         for (SanPham qa : dao_SanPham.getAllSanPham()) {
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(qa.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(qa.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(qa.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(qa.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(qa.getNhaCungCap().getMaNCC());
+
             Object[] object = new Object[9];
             object[0] = qa.getMaSP();
             object[1] = qa.getTenSP();
-            object[2] = qa.getPhanLoai().getLoaiSanPham();
+            object[2] = pl.getLoaiSanPham();
             object[3] = NumberFormat.getInstance().format(qa.getGiaBan());
-            object[4] = qa.getKichThuoc().getKichThuoc();
-            object[5] = qa.getMauSac().getMauSac();
-            object[6] = qa.getChatLieu().getChatLieu();
-            object[7] = qa.getNhaCungCap().getTenNCC();
+            object[4] = kt.getKichThuoc();
+            object[5] = ms.getMauSac();
+            object[6] = cl.getChatLieu();
+            object[7] = ncc.getTenNCC();
             object[8] = qa.getSoLuong();
             modelSanPham.addRow(object);
         }
@@ -1714,7 +1833,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         ArrayList<KichThuoc> ds_KichThuoc = new ArrayList<>();
         ds_KichThuoc = dao_KichThuoc.getAllKichThuoc();
 
-        cmb_KichThuoc.removeAllItems();
+//        cmb_KichThuoc.removeAllItems();
         for (KichThuoc kichThuoc : ds_KichThuoc) {
             cmb_KichThuoc.addItem(kichThuoc.getKichThuoc());
         }
@@ -1723,7 +1842,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         ArrayList<MauSac> ds_MauSac = new ArrayList<>();
         ds_MauSac = dao_MauSac.getAllMauSac();
 
-        cmb_MauSac.removeAllItems();
+//        cmb_MauSac.removeAllItems();
         for (MauSac mauSac : ds_MauSac) {
             cmb_MauSac.addItem(mauSac.getMauSac());
         }
@@ -1732,7 +1851,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         ArrayList<PhanLoai> ds_PhanLoai = new ArrayList<>();
         ds_PhanLoai = dao_PhanLoai.getAllPhanLoai();
 
-        cmb_PhanLoai.removeAllItems();
+//        cmb_PhanLoai.removeAllItems();
         for (PhanLoai phanLoai : ds_PhanLoai) {
             cmb_PhanLoai.addItem(phanLoai.getLoaiSanPham());
         }
@@ -1800,7 +1919,8 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
     }
 
     public void guiHoaDonVeEmail(HoaDon hd) throws RemoteException {
-        String emailKhachHang = hd.getKhachHang().getEmail();
+        KhachHang kh = dao_KhachHang.getKhachHangTheoMa(hd.getKhachHang().getMaKH());
+        String emailKhachHang = kh.getEmail();
         SimpleDateFormat fomtter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         String noiDungHeader = "<!DOCTYPE html>\n"
                 + "<html>\n"
@@ -1814,7 +1934,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                 + "</style> "
                 + "</head>"
                 + "<body>\n"
-                + "    <p>Clothing, xin chào <strong>" + hd.getKhachHang().getHoTen() + "</strong></p>\n"
+                + "    <p>Clothing, xin chào <strong>" + kh.getHoTen() + "</strong></p>\n"
                 + "    <p>Cảm ơn Quý khách đã mua hàng tại của hàng chúng tôi. Cửa hàng xin thông báo hóa đơn của Quý khách như sau:</p>\n"
                 + "    <p>Ngày mua: " + fomtter.format(hd.getNgayNhap()) + " </p>\n"
                 + "    <table>\n"
@@ -1828,10 +1948,14 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                 + "        <tbody>\n";
         String noiDungSP = "";
         for (CTHD sp : dao_CTHD.getAllCTHD(hd.getMaHoaDon())) {
-            double thanhTien = dao_CTHD.tinhThanhTienSanPham(sp.getHoaDon().getMaHoaDon(), sp.getSanPham().getMaSP());
+
+            HoaDon hoaDon = dao_HoaDon.getHoaDonTheoMa(sp.getHoaDon().getMaHoaDon());
+            SanPham sanPham = dao_SanPham.getSanPhamTheoMa(sp.getSanPham().getMaSP());
+
+            double thanhTien = dao_CTHD.tinhThanhTienSanPham(hoaDon.getMaHoaDon(), sanPham.getMaSP());
 
             noiDungSP = noiDungSP + "            <tr>"
-                    + "               <th>" + sp.getSanPham().getTenSP() + "</th>\n"
+                    + "               <th>" + sanPham.getTenSP() + "</th>\n"
                     + "               <th>" + sp.getSoLuong() + "</th>\n"
                     + "               <th>" + NumberFormat.getInstance().format(thanhTien) + "</th>\n"
                     + "            </tr>\n";

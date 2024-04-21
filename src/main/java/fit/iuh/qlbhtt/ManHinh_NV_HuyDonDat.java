@@ -4,9 +4,7 @@
  */
 package fit.iuh.qlbhtt;
 
-import fit.iuh.dao.ICTPhieuDatHangDao;
-import fit.iuh.dao.IPhieuDatHangDao;
-import fit.iuh.dao.ISanPhamDao;
+import fit.iuh.dao.*;
 import fit.iuh.entity.*;
 import fit.iuh.util.RMIClientUtil;
 
@@ -27,6 +25,8 @@ public class ManHinh_NV_HuyDonDat extends javax.swing.JPanel {
     private DefaultTableModel modelCTPhieuDatHang;
     private IPhieuDatHangDao dao_PhieuDatHang;
     private ICTPhieuDatHangDao dao_CTPhieuDatHang;
+    private INhanVienDao dao_NhanVien;
+    private IKhachHangDao dao_KhachHang;
     private ISanPhamDao dao_SanPham;
     /**
      * Creates new form quanly
@@ -35,6 +35,8 @@ public class ManHinh_NV_HuyDonDat extends javax.swing.JPanel {
         dao_SanPham = RMIClientUtil.getSanPhamDao();
         dao_PhieuDatHang = RMIClientUtil.getPhieuDatHangDao();
         dao_CTPhieuDatHang = RMIClientUtil.getCtPhieuDatHangDao();
+        dao_NhanVien = RMIClientUtil.getNhanVienDao();
+        dao_KhachHang = RMIClientUtil.getKhachHangDao();
         initComponents();
         
         modelCTPhieuDatHang = (DefaultTableModel) tbl_CTPhieuDatHang.getModel();
@@ -421,12 +423,15 @@ public class ManHinh_NV_HuyDonDat extends javax.swing.JPanel {
            modelCTPDH.setRowCount(0);
            ArrayList<CTPhieuDatHang> listCTPDH = dao_CTPhieuDatHang.getAllCTPhieuDatHang(Long.parseLong(tbl_PhieuDatHang.getValueAt(row, 0).toString()));
            for (CTPhieuDatHang cTPhieuDatHang : listCTPDH) {
+
+               SanPham sp = dao_SanPham.getSanPhamTheoMa(cTPhieuDatHang.getSanPham().getMaSP());
+               PhieuDatHang pdh = dao_PhieuDatHang.getPDTTheoMa(cTPhieuDatHang.getPhieuDatHang().getMaPhieuDat());
                Object[] object = new Object[5];
-                object[0] = cTPhieuDatHang.getPhieuDatHang().getMaPhieuDat();
-                object[1] = cTPhieuDatHang.getSanPham().getMaSP();
-                object[2] = cTPhieuDatHang.getSanPham().getTenSP();
+                object[0] = pdh.getMaPhieuDat();
+                object[1] = sp.getMaSP();
+                object[2] = sp.getTenSP();
                 object[3] = cTPhieuDatHang.getSoLuong();
-                object[4] = cTPhieuDatHang.getSanPham().getGiaBan() * cTPhieuDatHang.getSoLuong();
+                object[4] = sp.getGiaBan() * cTPhieuDatHang.getSoLuong();
                 modelCTPDH.addRow(object);
            }
        }
@@ -470,13 +475,17 @@ public class ManHinh_NV_HuyDonDat extends javax.swing.JPanel {
      public void docDuLieuPhieuDatHang() throws RemoteException {
         modelPhieuDatHang = (DefaultTableModel) tbl_PhieuDatHang.getModel();
         for(PhieuDatHang pdt: dao_PhieuDatHang.getAllPhieuDatHang()) {
+
+            NhanVien nv = dao_NhanVien.getNhanVienTheoMa(pdt.getNhanVien().getMaNV());
+            KhachHang kh = dao_KhachHang.getKhachHangTheoMa(pdt.getKhachHang().getMaKH());
+
             Object[] object = new Object[7];
             object[0] = pdt.getMaPhieuDat();
-            object[1] = pdt.getNhanVien().getMaNV();
-            object[2] = pdt.getNhanVien().getHoTen();
-            object[3] = pdt.getKhachHang().getMaKH();
-            object[4] = pdt.getKhachHang().getHoTen();
-            object[5] = pdt.getKhachHang().getSdt();
+            object[1] = nv.getMaNV();
+            object[2] = nv.getHoTen();
+            object[3] = kh.getMaKH();
+            object[4] = kh.getHoTen();
+            object[5] = kh.getSdt();
             object[6] = pdt.getNgayLap().toString();
             modelPhieuDatHang.addRow(object);
         }

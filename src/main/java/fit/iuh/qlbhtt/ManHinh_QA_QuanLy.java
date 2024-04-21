@@ -1149,17 +1149,24 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         modelSanPham.setRowCount(0);
 
         for(SanPham qa: dao_SanPham.getAllQuanAo()) {
+
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(qa.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(qa.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(qa.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(qa.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(qa.getNhaCungCap().getMaNCC());
+
             Object[] object = new Object[11];
             object[0] = qa.getMaSP();
             object[1] = qa.getTenSP();
-            object[2] = qa.getPhanLoai().getLoaiSanPham();
+            object[2] = pl.getLoaiSanPham();
             object[3] = NumberFormat.getInstance().format( qa.getGiaBan());
             object[4] = NumberFormat.getInstance().format( qa.getGiaNhap());
             object[5] = qa.getNgayNhap();
-            object[6] = qa.getKichThuoc().getKichThuoc();
-            object[7] = qa.getMauSac().getMauSac();
-            object[8] = qa.getChatLieu().getChatLieu();
-            object[9] = qa.getNhaCungCap().getTenNCC();
+            object[6] = kt.getKichThuoc();
+            object[7] = ms.getMauSac();
+            object[8] = cl.getChatLieu();
+            object[9] = ncc.getTenNCC();
             object[10] = qa.getSoLuong();
             modelSanPham.addRow(object);
         }

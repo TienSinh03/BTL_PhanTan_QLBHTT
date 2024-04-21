@@ -5,9 +5,12 @@
 package fit.iuh.qlbhtt;
 
 
+import java.awt.event.ItemEvent;
 import java.io.File;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.awt.Image;
 import javax.swing.ImageIcon;
@@ -16,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -50,6 +54,7 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
     private IKhachHangDao dao_KhachHang;
     private IPhieuDatHangDao dao_PhieuDatHang;
     private ICTPhieuDatHangDao dao_CTPDT;
+    private DefaultTableModel modelSP;
     private File file = null;
     KhachHang khachHang = null;
     ArrayList<SanPham> gioHang;
@@ -72,8 +77,7 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
         dao_CTPDT = RMIClientUtil.getCtPhieuDatHangDao();
         gioHang = new ArrayList<>();
 
-//        connect = new Connect();
-//        connect.connect();
+        modelSanPham = new DefaultTableModel();
         initComponents();
         if(!ngonNgu) {
             chuyenDoiNgonNgu();
@@ -493,13 +497,31 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
 
         cmb_PhanLoai.setEditable(true);
         cmb_PhanLoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cmb_PhanLoai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
-        cmb_PhanLoai.setEnabled(false);
+//        cmb_PhanLoai.setEnabled(false);
+        cmb_PhanLoai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
+        cmb_PhanLoai.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                try {
+                    cmb_PhanLoaiItemStateChanged(evt);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
         cmb_KichThuoc.setEditable(true);
         cmb_KichThuoc.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cmb_KichThuoc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
-        cmb_KichThuoc.setEnabled(false);
+        cmb_KichThuoc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
+//        cmb_KichThuoc.setEnabled(false);
+        cmb_KichThuoc.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                try {
+                    cmb_KichThuocItemStateChanged(evt);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
         lbl_MauSac.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_MauSac.setText("Màu sắc");
@@ -509,8 +531,17 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
 
         cmb_MauSac.setEditable(true);
         cmb_MauSac.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        cmb_MauSac.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
-        cmb_MauSac.setEnabled(false);
+        cmb_MauSac.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
+//        cmb_MauSac.setEnabled(false);
+        cmb_MauSac.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                try {
+                    cmb_MauSacItemStateChanged(evt);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
         txt_GiaBan.setEditable(false);
         txt_GiaBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -762,6 +793,18 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
         getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cmb_PhanLoaiItemStateChanged(ItemEvent evt) throws RemoteException {
+        thongKeDsSanPhamTheoTieuChi();
+    }
+
+    private void cmb_MauSacItemStateChanged(ItemEvent evt) throws RemoteException {
+        thongKeDsSanPhamTheoTieuChi();
+    }
+
+    private void cmb_KichThuocItemStateChanged(ItemEvent evt) throws RemoteException {
+        thongKeDsSanPhamTheoTieuChi();
+    }
+
     private void txt_TenSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TenSPActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_TenSPActionPerformed
@@ -881,10 +924,10 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
 
             txt_MaSP.setText(tbl_SanPham.getValueAt(row, 0).toString());
             txt_TenSP.setText(tbl_SanPham.getValueAt(row, 1).toString());
-            cmb_PhanLoai.setSelectedItem(tbl_SanPham.getValueAt(row, 2).toString());
+//            cmb_PhanLoai.setSelectedItem(tbl_SanPham.getValueAt(row, 2).toString());
             txt_GiaBan.setText(tbl_SanPham.getValueAt(row, 3).toString());
-            cmb_KichThuoc.setSelectedItem(tbl_SanPham.getValueAt(row, 4).toString());
-            cmb_MauSac.setSelectedItem(tbl_SanPham.getValueAt(row, 5).toString());
+//            cmb_KichThuoc.setSelectedItem(tbl_SanPham.getValueAt(row, 4).toString());
+//            cmb_MauSac.setSelectedItem(tbl_SanPham.getValueAt(row, 5).toString());
             //Load hinh anh       
             File file = new File("");
             String path = file.getAbsolutePath();
@@ -908,10 +951,10 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
 
             txt_MaSP.setText(tbl_GioHang.getValueAt(row, 0).toString());
             txt_TenSP.setText(tbl_GioHang.getValueAt(row, 1).toString());
-            cmb_PhanLoai.setSelectedItem(tbl_GioHang.getValueAt(row, 2).toString());
+//            cmb_PhanLoai.setSelectedItem(tbl_GioHang.getValueAt(row, 2).toString());
             txt_GiaBan.setText(tbl_GioHang.getValueAt(row, 3).toString());
-            cmb_KichThuoc.setSelectedItem(tbl_GioHang.getValueAt(row, 4).toString());
-            cmb_MauSac.setSelectedItem(tbl_GioHang.getValueAt(row, 5).toString());
+//            cmb_KichThuoc.setSelectedItem(tbl_GioHang.getValueAt(row, 4).toString());
+//            cmb_MauSac.setSelectedItem(tbl_GioHang.getValueAt(row, 5).toString());
             //Load hinh anh
             File file = new File("");
             String path = file.getAbsolutePath();
@@ -1007,17 +1050,22 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
 
                                 //Them vao model gio hang
                                 modelGioHang = (DefaultTableModel) tbl_GioHang.getModel();
-                                Object[] object = new Object[9];
-                                object[0] = sanPham.getMaSP();
-                                object[1] = sanPham.getTenSP();
-                                object[2] = sanPham.getPhanLoai().getLoaiSanPham();
-                                object[3] = NumberFormat.getInstance().format(sanPham.getGiaBan());
-                                object[4] = sanPham.getKichThuoc().getKichThuoc();
-                                object[5] = sanPham.getMauSac().getMauSac();
-                                object[6] = sanPham.getChatLieu().getChatLieu();
-                                object[7] = sanPham.getNhaCungCap().getTenNCC();
-                                object[8] = sanPham.getSoLuong();
-                                modelGioHang.addRow(object);
+                                PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sanPham.getPhanLoai().getMaPhanLoai());
+                                KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sanPham.getKichThuoc().getMaKichThuoc());
+                                MauSac ms = dao_MauSac.getDLMauSacTheoMa(sanPham.getMauSac().getMaMauSac());
+                                ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sanPham.getChatLieu().getMaChatLieu());
+                                NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sanPham.getNhaCungCap().getMaNCC());
+                                Object[] o = new Object[9];
+                                o[0] = sanPham.getMaSP();
+                                o[1] = sanPham.getTenSP();
+                                o[2] = pl.getLoaiSanPham();
+                                o[3] = NumberFormat.getInstance().format(sanPham.getGiaBan());
+                                o[4] = kt.getKichThuoc();
+                                o[5] = ms.getMauSac();
+                                o[6] = cl.getChatLieu();
+                                o[7] = ncc.getTenNCC();
+                                o[8] = sanPham.getSoLuong();
+                                modelGioHang.addRow(o);
 
                                 //Xoa trang txt_SoLuongNhap
                                 txt_SoLuongNhap.setText("");
@@ -1098,6 +1146,53 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
             }
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm trong danh sách giỏ hàng!");
+        }
+    }
+
+    /**
+     * Thông kê danh sách sản phẩm theo các tiêu chí
+     */
+    public void thongKeDsSanPhamTheoTieuChi() throws RemoteException {
+        modelSP = (DefaultTableModel) tbl_SanPham.getModel();
+        modelSP.setRowCount(0);
+
+        String phanLoai = Objects.requireNonNull(cmb_PhanLoai.getSelectedItem()).toString();
+        String ktPhanLoai = cmb_PhanLoai.getSelectedItem().toString();
+        if (ktPhanLoai.equalsIgnoreCase("Tất cả")) {
+            phanLoai = "";
+        }
+
+        String mauSac = Objects.requireNonNull(cmb_MauSac.getSelectedItem()).toString();
+        String ktMauSac = cmb_MauSac.getSelectedItem().toString();
+        if (ktMauSac.equalsIgnoreCase("Tất cả")) {
+            mauSac = "";
+        }
+
+        String kichThuoc = Objects.requireNonNull(cmb_KichThuoc.getSelectedItem()).toString();
+        String ktKichThuoc = cmb_KichThuoc.getSelectedItem().toString();
+        if (ktKichThuoc.equalsIgnoreCase("Tất cả")) {
+            kichThuoc = "";
+        }
+
+        ArrayList<SanPham> listSanPham = dao_SanPham.getAllSanPhamTheoTieuChi(phanLoai, mauSac, kichThuoc);
+        for (SanPham sp : listSanPham) {
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sp.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(sp.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sp.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sp.getNhaCungCap().getMaNCC());
+            Object[] o = new Object[9];
+            o[0] = sp.getMaSP();
+            o[1] = sp.getTenSP();
+            o[2] = pl.getLoaiSanPham();
+            o[3] = NumberFormat.getInstance().format(sp.getGiaBan());
+            o[4] = kt.getKichThuoc();
+            o[5] = ms.getMauSac();
+            o[6] = cl.getChatLieu();
+            o[7] = ncc.getTenNCC();
+            o[8] = sp.getSoLuong();
+            modelSP.addRow(o);
+
         }
     }
 
@@ -1223,15 +1318,24 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
                 gioHang.add(cTPhieuDatHang.getSanPham());
                 //Them vao model gio hang
                 modelGioHang = (DefaultTableModel) tbl_GioHang.getModel();
+
+                SanPham sanPham = dao_SanPham.getSanPhamTheoMa(cTPhieuDatHang.getSanPham().getMaSP());
+
+                PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sanPham.getPhanLoai().getMaPhanLoai());
+                KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(sanPham.getKichThuoc().getMaKichThuoc());
+                MauSac ms = dao_MauSac.getDLMauSacTheoMa(sanPham.getMauSac().getMaMauSac());
+                ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(sanPham.getChatLieu().getMaChatLieu());
+                NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(sanPham.getNhaCungCap().getMaNCC());
+
                 Object[] object = new Object[9];
-                object[0] = cTPhieuDatHang.getSanPham().getMaSP();
-                object[1] = cTPhieuDatHang.getSanPham().getTenSP();
-                object[2] = cTPhieuDatHang.getSanPham().getPhanLoai().getLoaiSanPham();
-                object[3] = NumberFormat.getInstance().format(cTPhieuDatHang.getSanPham().getGiaBan());
-                object[4] = cTPhieuDatHang.getSanPham().getKichThuoc().getKichThuoc();
-                object[5] = cTPhieuDatHang.getSanPham().getMauSac().getMauSac();
-                object[6] = cTPhieuDatHang.getSanPham().getChatLieu().getChatLieu();
-                object[7] = cTPhieuDatHang.getSanPham().getNhaCungCap().getTenNCC();
+                object[0] = sanPham.getMaSP();
+                object[1] = sanPham.getTenSP();
+                object[2] = pl.getLoaiSanPham();
+                object[3] = NumberFormat.getInstance().format(sanPham.getGiaBan());
+                object[4] = kt.getKichThuoc();
+                object[5] = ms.getMauSac();
+                object[6] = cl.getChatLieu();
+                object[7] = ncc.getTenNCC();
                 object[8] = cTPhieuDatHang.getSoLuong();
                 modelGioHang.addRow(object);
 
@@ -1254,15 +1358,22 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
     public void docDuLieuSanPham() throws RemoteException {
         modelSanPham = (DefaultTableModel) tbl_SanPham.getModel();
         for (SanPham qa : dao_SanPham.getAllSanPham()) {
+
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(qa.getPhanLoai().getMaPhanLoai());
+            KichThuoc kt = dao_KichThuoc.getDLKichThuocTheoMa(qa.getKichThuoc().getMaKichThuoc());
+            MauSac ms = dao_MauSac.getDLMauSacTheoMa(qa.getMauSac().getMaMauSac());
+            ChatLieu cl = dao_ChatLieu.getDLChatLieuTheoMa(qa.getChatLieu().getMaChatLieu());
+            NhaCungCap ncc = dao_NhaCungCap.getNhaCungCapTheoMa(qa.getNhaCungCap().getMaNCC());
+
             Object[] object = new Object[9];
             object[0] = qa.getMaSP();
             object[1] = qa.getTenSP();
-            object[2] = qa.getPhanLoai().getLoaiSanPham();
+            object[2] = pl.getLoaiSanPham();
             object[3] = NumberFormat.getInstance().format(qa.getGiaBan());
-            object[4] = qa.getKichThuoc().getKichThuoc();
-            object[5] = qa.getMauSac().getMauSac();
-            object[6] = qa.getChatLieu().getChatLieu();
-            object[7] = qa.getNhaCungCap().getTenNCC();
+            object[4] = kt.getKichThuoc();
+            object[5] = ms.getMauSac();
+            object[6] = cl.getChatLieu();
+            object[7] = ncc.getTenNCC();
             object[8] = qa.getSoLuong();
             modelSanPham.addRow(object);
         }
@@ -1281,7 +1392,7 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
         ArrayList<KichThuoc> ds_KichThuoc = new ArrayList<>();
         ds_KichThuoc = dao_KichThuoc.getAllKichThuoc();
 
-        cmb_KichThuoc.removeAllItems();
+//        cmb_KichThuoc.removeAllItems();
         for (KichThuoc kichThuoc : ds_KichThuoc) {
             cmb_KichThuoc.addItem(kichThuoc.getKichThuoc());
         }
@@ -1290,7 +1401,7 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
         ArrayList<MauSac> ds_MauSac = new ArrayList<>();
         ds_MauSac = dao_MauSac.getAllMauSac();
 
-        cmb_MauSac.removeAllItems();
+//        cmb_MauSac.removeAllItems();
         for (MauSac mauSac : ds_MauSac) {
             cmb_MauSac.addItem(mauSac.getMauSac());
         }
@@ -1299,7 +1410,7 @@ public class ManHinh_NV_DatHang extends javax.swing.JPanel implements XyLyCloseF
         ArrayList<PhanLoai> ds_PhanLoai = new ArrayList<>();
         ds_PhanLoai = dao_PhanLoai.getAllPhanLoai();
 
-        cmb_PhanLoai.removeAllItems();
+//        cmb_PhanLoai.removeAllItems();
         for (PhanLoai phanLoai : ds_PhanLoai) {
             cmb_PhanLoai.addItem(phanLoai.getLoaiSanPham());
         }

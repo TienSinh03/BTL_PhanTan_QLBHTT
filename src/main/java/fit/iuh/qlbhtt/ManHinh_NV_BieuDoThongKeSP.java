@@ -12,7 +12,9 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import fit.iuh.dao.IPhanLoaiDao;
 import fit.iuh.dao.ISanPhamDao;
+import fit.iuh.entity.PhanLoai;
 import fit.iuh.entity.SanPham;
 import fit.iuh.util.RMIClientUtil;
 import org.jfree.chart.ChartFactory;
@@ -30,11 +32,13 @@ import org.jfree.data.category.DefaultCategoryDataset;
  */
 public class ManHinh_NV_BieuDoThongKeSP extends javax.swing.JFrame {
     private ISanPhamDao dao_SanPham;
+    private IPhanLoaiDao dao_PhanLoai;
     /**
      * Creates new form ManHinh_NV_BieuDoThongKeSP
      */
     public ManHinh_NV_BieuDoThongKeSP() throws SQLException, RemoteException {
         dao_SanPham = RMIClientUtil.getSanPhamDao();
+        dao_PhanLoai = RMIClientUtil.getPhanLoaiDao();
         initComponents();
         setLocationRelativeTo(null);
 
@@ -45,7 +49,8 @@ public class ManHinh_NV_BieuDoThongKeSP extends javax.swing.JFrame {
         DefaultCategoryDataset dateSet = new DefaultCategoryDataset(); //Khởi tạo để chứa dữ liệu cột
         
         for(SanPham sp: dao_SanPham.getSoLuongSPTheoMaPL()) {
-            String tenPL = sp.getPhanLoai().getLoaiSanPham();
+            PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sp.getPhanLoai().getMaPhanLoai());
+            String tenPL = pl.getLoaiSanPham();
             dateSet.addValue(sp.getSoLuong(), "Số lượng", tenPL);
         }
 
