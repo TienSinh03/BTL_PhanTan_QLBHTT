@@ -300,6 +300,8 @@ go
  SET IDENTITY_INSERT dbo.SanPham OFF
 GO
 
+go
+
  SET IDENTITY_INSERT dbo.HoaDon ON
 go
 ----Them gia tri vao table hoa don
@@ -326,7 +328,7 @@ insert into CTHD (maHD, maSP, soLuong) values (1,4,2);
     insert into CTHD(maHD, maSP, soLuong) values (2,5,2);
     insert into CTHD(maHD, maSP, soLuong) values (2,4,1);
 
-    insert into CTHD(maHD, maSP, soLuong) values (3,8,1);			 s
+    insert into CTHD(maHD, maSP, soLuong) values (3,8,1);			 
     insert into CTHD(maHD, maSP, soLuong) values (3,12,2);
     insert into CTHD(maHD, maSP, soLuong) values (3,1,1);
     insert into CTHD(maHD, maSP, soLuong) values (3,3,1);
@@ -357,19 +359,6 @@ insert into CTHD (maHD, maSP, soLuong) values (1,4,2);
 go
 
 
--- xử lý dữ liệu trong database-----
-select * from SanPham
-select * from KhachHang
-select * from NhanVien
-select * from NhaCungCap
-select * from KichThuoc
-select * from MauSac
-select * from PhanLoai
-select * from ChatLieu
-select * from HoaDon
-select * from CTHD
-select * from PhieuDatHang
-select * from CTPhieuDatHang
 
 
 Select * from NhanVien where maNV like '%%' and hoTen like '%%' and sdt like '%%' and email like '%%' and chucVu like '%%' and diaChi like '%%' and trangThai = 0
@@ -537,3 +526,24 @@ select * from HoaDon
 select * from CTHD
 
 UPDATE SanPham SET soLuong = soLuong - 2 WHERE maSP = 9
+
+select kh.* from KhachHang kh where kh.email = 'a@gmail.com' or kh.sdt = ''
+
+ALTER TABLE KhachHang
+ALTER COLUMN sdt nvarchar(100)  NULL;
+
+
+-- xử lý dữ liệu trong database-----
+select * from SanPham
+select * from KhachHang
+select * from NhanVien
+select * from NhaCungCap
+select * from KichThuoc
+select * from MauSac
+select * from PhanLoai
+select * from ChatLieu
+select * from HoaDon
+select * from CTHD
+select * from PhieuDatHang
+select * from CTPhieuDatHang
+select * from TaiKhoan

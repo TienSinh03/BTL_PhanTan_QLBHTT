@@ -16,12 +16,12 @@ public class CTPhieuDatHang implements Serializable {
 	@Serial
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maPhieuDat")
 	@Id
 	private PhieuDatHang phieuDatHang;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maSP")
 	@Id
 	private SanPham sanPham;

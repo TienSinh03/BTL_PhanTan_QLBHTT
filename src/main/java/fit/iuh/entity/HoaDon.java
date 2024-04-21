@@ -22,11 +22,11 @@ public class HoaDon implements Serializable {
 	@Column(name = "maHD")
 	private long maHoaDon;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maKH")
 	private KhachHang khachHang;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "maNV")
 	private NhanVien nhanVien;
 

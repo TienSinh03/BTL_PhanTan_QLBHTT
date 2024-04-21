@@ -30,7 +30,19 @@ public class Dao_NhanVien extends UnicastRemoteObject implements INhanVienDao {
 
     @Override
     public ArrayList<NhanVien> getAllNhanVien() throws RemoteException{
-        return (ArrayList<NhanVien>) em.createQuery("SELECT nv FROM NhanVien nv").getResultList();
+        try {
+            et.begin();
+            List<NhanVien> listNhanVien = em.createQuery("SELECT nv FROM NhanVien nv", NhanVien.class).getResultList();
+            em.clear();
+            et.commit();
+            return (ArrayList<NhanVien>) listNhanVien;
+        } catch (Exception e) {
+            if (et != null && et.isActive()) {
+                et.rollback();
+            }
+            e.printStackTrace();
+        }
+        return null;
     }
     @Override
     public ArrayList<NhanVien> getAllNhanVienConHoaDong() throws RemoteException{
@@ -90,7 +102,7 @@ public class Dao_NhanVien extends UnicastRemoteObject implements INhanVienDao {
     @Override
     public void xoaNhanVien(long manv) throws RemoteException{
         EntityTransaction et = em.getTransaction();
-        String query = "update NhanVien nv set nv.trangThai = 0 where maNV = :manv";
+        String query = "update NhanVien nv set nv.trangThai = false where maNV = :manv";
         try {
             et.begin();
             em.createQuery(query).setParameter("manv", manv).executeUpdate();

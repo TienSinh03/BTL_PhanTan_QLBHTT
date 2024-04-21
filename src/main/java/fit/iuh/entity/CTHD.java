@@ -14,12 +14,12 @@ public class CTHD implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maSP")
     @Id
     private SanPham sanPham;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maHD")
     @Id
     private HoaDon hoaDon;
