@@ -107,7 +107,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
 
         btn_Huy.setBackground(new java.awt.Color(255, 153, 153));
         btn_Huy.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        btn_Huy.setIcon(new javax.swing.ImageIcon(getClass().getResource("src/main/java/fit/iuh/imageGD/icons8-cancel-30.png"))); // NOI18N
+        btn_Huy.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-cancel-30.png")); // NOI18N
         btn_Huy.setText("Hủy");
         btn_Huy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,7 +117,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
 
         btn_XacNhan.setBackground(new java.awt.Color(58, 193, 80));
         btn_XacNhan.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        btn_XacNhan.setIcon(new javax.swing.ImageIcon(getClass().getResource("src/main/java/fit/iuh/imageGD/icons8-verify-30.png"))); // NOI18N
+        btn_XacNhan.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-verify-30.png")); // NOI18N
         btn_XacNhan.setText("Xác nhận");
         btn_XacNhan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

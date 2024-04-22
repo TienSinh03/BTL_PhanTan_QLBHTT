@@ -159,7 +159,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
         btn_GuiMa.setBackground(new java.awt.Color(97, 103, 122));
         btn_GuiMa.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         btn_GuiMa.setForeground(new java.awt.Color(255, 255, 255));
-        btn_GuiMa.setIcon(new javax.swing.ImageIcon(getClass().getResource("src/main/java/fit/iuh/imageGD/icons8-send-30.png"))); // NOI18N
+        btn_GuiMa.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-send-30.png")); // NOI18N
         btn_GuiMa.setText("Gửi Mã");
         btn_GuiMa.setBorder(null);
         btn_GuiMa.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -182,7 +182,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
 
         btn_XacThuc.setBackground(new java.awt.Color(58, 193, 80));
         btn_XacThuc.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        btn_XacThuc.setIcon(new javax.swing.ImageIcon(getClass().getResource("src/main/java/fit/iuh/imageGD/icons8-verify-30.png"))); // NOI18N
+        btn_XacThuc.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-verify-30.png")); // NOI18N
         btn_XacThuc.setText("Xác thực");
         btn_XacThuc.setBorder(null);
         btn_XacThuc.setEnabled(false);
