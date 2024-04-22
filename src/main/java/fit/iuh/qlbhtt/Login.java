@@ -20,20 +20,20 @@ import javax.swing.JOptionPane;
  *
  * @author DMX
  */
-public class Login extends javax.swing.JFrame {
+public  class Login extends javax.swing.JFrame {
 
-    private final ITaiKhoanDao daoTaiKhoan;
-    private final INhanVienDao daoNhanVien;
-    private Boolean hoatDongIconShow = true;
-    private Boolean hoatDongIconClose = true;
-    public static NhanVien nhanVien = null;
+    private  final ITaiKhoanDao daoTaiKhoan;
+    private  final INhanVienDao daoNhanVien;
+    private  Boolean hoatDongIconShow = true;
+    private  Boolean hoatDongIconClose = true;
+    public  static NhanVien nhanVien = null;
 
-    public static boolean ngonNgu = true;
+    public  static boolean ngonNgu = true;
 
     /**
      * Creates new form Login
      */
-    public Login() throws SQLException {
+    public  Login() throws SQLException {
         daoNhanVien = RMIClientUtil.getNhanVienDao();
         daoTaiKhoan = RMIClientUtil.getTaiKhoanDao();
 
@@ -44,7 +44,7 @@ public class Login extends javax.swing.JFrame {
     this.getRootPane().setDefaultButton(btn_Login);
     }
 
-    public void chuyenDoiNN_English() {
+    public synchronized void chuyenDoiNN_English() {
         btn_Login.setText("Login");
         lbl_Password.setText("Passowrd");
         lbl_TaiKhoan.setText("User");
@@ -52,7 +52,7 @@ public class Login extends javax.swing.JFrame {
         lbl_Title.setText("Login");
     }
 
-    public void chuyenDoiNN_TV() {
+    public synchronized void chuyenDoiNN_TV() {
         btn_Login.setText("Đăng nhập");
         lbl_Password.setText("Mật khẩu");
         lbl_TaiKhoan.setText("Tài khoản");
@@ -60,7 +60,7 @@ public class Login extends javax.swing.JFrame {
         lbl_Title.setText("Đăng nhập");
     }
 
-    public void xuLyDangNhap() throws RemoteException {
+    public synchronized void xuLyDangNhap() throws RemoteException {
         String user = txt_Username.getText();
         String pass = String.valueOf(pwd_MatKhau.getText());
         if (!user.trim().equals("") || !pass.trim().equals("")) {
@@ -92,7 +92,7 @@ public class Login extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized void initComponents() {
 
         jLayeredPane1 = new javax.swing.JLayeredPane();
         pnl_ManHinhDangNhap = new javax.swing.JPanel();
@@ -130,7 +130,7 @@ public class Login extends javax.swing.JFrame {
 
         txt_Username.setFont(new java.awt.Font("Courier New", 0, 13)); // NOI18N
         txt_Username.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_UsernameActionPerformed(evt);
             }
         });
@@ -141,7 +141,7 @@ public class Login extends javax.swing.JFrame {
         btn_Login.setText("Đăng nhập");
         btn_Login.setBorder(null);
         btn_Login.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_LoginActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -150,7 +150,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
         btn_Login.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
+            public synchronized void keyPressed(java.awt.event.KeyEvent evt) {
                 try {
                     btn_LoginKeyPressed(evt);
                 } catch (RemoteException e) {
@@ -174,21 +174,21 @@ public class Login extends javax.swing.JFrame {
         lbl_TaiKhoan.setText("Tài khoản");
 
         pwd_MatKhau.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 pwd_MatKhauActionPerformed(evt);
             }
         });
 
         lbl_IconPWClose.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-password-30-1.png")); // NOI18N
         lbl_IconPWClose.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseClicked(java.awt.event.MouseEvent evt) {
                 lbl_IconPWCloseMouseClicked(evt);
             }
         });
 
         lbl_IconUser.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-user-30.png")); // NOI18N
         lbl_IconUser.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseClicked(java.awt.event.MouseEvent evt) {
                 lbl_IconUserMouseClicked(evt);
             }
         });
@@ -198,13 +198,13 @@ public class Login extends javax.swing.JFrame {
         lbl_QuenMatKhau.setForeground(new java.awt.Color(51, 0, 51));
         lbl_QuenMatKhau.setText("Quên mật khẩu?");
         lbl_QuenMatKhau.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseClicked(java.awt.event.MouseEvent evt) {
                 lbl_QuenMatKhauMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 lbl_QuenMatKhauMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 lbl_QuenMatKhauMouseExited(evt);
             }
         });
@@ -214,7 +214,7 @@ public class Login extends javax.swing.JFrame {
         cmb_NgonNgu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tiếng Việt", "English" }));
         cmb_NgonNgu.setBorder(null);
         cmb_NgonNgu.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            public synchronized void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmb_NgonNguItemStateChanged(evt);
             }
         });
@@ -311,15 +311,15 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_UsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_UsernameActionPerformed
+    private synchronized void txt_UsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_UsernameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_UsernameActionPerformed
 
-    private void pwd_MatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwd_MatKhauActionPerformed
+    private synchronized void pwd_MatKhauActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pwd_MatKhauActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_pwd_MatKhauActionPerformed
 
-    private void lbl_IconPWCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_IconPWCloseMouseClicked
+    private synchronized void lbl_IconPWCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_IconPWCloseMouseClicked
 
         if (hoatDongIconShow) {
 //            lbl_IconPWClose.setIcon(new ImageIcon(getClass().getResource("src/main/java/fit/iuh/imageGD/icons8-show-password-30.png")));
@@ -332,19 +332,19 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_lbl_IconPWCloseMouseClicked
 
-    private void lbl_IconUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_IconUserMouseClicked
+    private synchronized void lbl_IconUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_IconUserMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_lbl_IconUserMouseClicked
 
-    private void lbl_QuenMatKhauMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_QuenMatKhauMouseEntered
+    private synchronized void lbl_QuenMatKhauMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_QuenMatKhauMouseEntered
         lbl_QuenMatKhau.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }//GEN-LAST:event_lbl_QuenMatKhauMouseEntered
 
-    private void lbl_QuenMatKhauMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_QuenMatKhauMouseExited
+    private synchronized void lbl_QuenMatKhauMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_QuenMatKhauMouseExited
         lbl_QuenMatKhau.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }//GEN-LAST:event_lbl_QuenMatKhauMouseExited
 
-    private void lbl_QuenMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_QuenMatKhauMouseClicked
+    private synchronized void lbl_QuenMatKhauMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_QuenMatKhauMouseClicked
         try {
             new ManHinh_TimTaiKhoan().setVisible(true);
             this.setVisible(false);
@@ -354,7 +354,7 @@ public class Login extends javax.swing.JFrame {
 
     }//GEN-LAST:event_lbl_QuenMatKhauMouseClicked
 
-    private void cmb_NgonNguItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmb_NgonNguItemStateChanged
+    private synchronized void cmb_NgonNguItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmb_NgonNguItemStateChanged
         if (cmb_NgonNgu.getSelectedItem().equals("English")) {
             ngonNgu = false;
             chuyenDoiNN_English();
@@ -364,20 +364,20 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cmb_NgonNguItemStateChanged
 
-    private void btn_LoginKeyPressed(java.awt.event.KeyEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LoginKeyPressed
+    private synchronized void btn_LoginKeyPressed(java.awt.event.KeyEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LoginKeyPressed
         if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
             xuLyDangNhap();
         }
     }//GEN-LAST:event_btn_LoginKeyPressed
 
-    private void btn_LoginActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LoginActionPerformed
+    private synchronized void btn_LoginActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LoginActionPerformed
         xuLyDangNhap();
     }//GEN-LAST:event_btn_LoginActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public synchronized static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -403,7 +403,7 @@ public class Login extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public synchronized void run() {
                 try {
                     new Login().setVisible(true);
                 } catch (SQLException ex) {
@@ -414,9 +414,9 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_Login;
-    private javax.swing.JComboBox<String> cmb_NgonNgu;
-    private javax.swing.JLayeredPane jLayeredPane1;
+    private  javax.swing.JButton btn_Login;
+    private  javax.swing.JComboBox<String> cmb_NgonNgu;
+    private  javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLabel lbl_IconPWClose;
     private javax.swing.JLabel lbl_IconUser;
     private javax.swing.JLabel lbl_ImageLogin;

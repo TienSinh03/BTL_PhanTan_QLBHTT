@@ -24,7 +24,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author DMX
  */
-public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
+public  class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
 
     private IHoaDonDao daoHoaDon;
     private ICTHDDao daoCTHD;
@@ -37,7 +37,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
     /**
      * Creates new form quanly
      */
-    public ManHinh_NV_XemDSHoaDon() throws SQLException, RemoteException {
+    public  ManHinh_NV_XemDSHoaDon() throws SQLException, RemoteException {
         daoHoaDon = RMIClientUtil.getHoaDonDao();
         daoCTHD = RMIClientUtil.getCtHoaDonDao();
         daoKhachHang = RMIClientUtil.getKhachHangDao();
@@ -59,7 +59,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
     }
 
     //Setup ngày hiện tại khi load lên
-    public void khoiTaoNgayHienTai() {
+    public synchronized void khoiTaoNgayHienTai() {
         dch_TuNgay.setDate(new Date());
         dch_DenNgay.setDate(new Date());
     }
@@ -67,7 +67,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
     /**
      * Điều kiện từ ngày
      */
-    public boolean dieuKienTuNgay() {
+    public synchronized boolean dieuKienTuNgay() {
         Date ngayHienTai = new Date();
         Date tuNgay = dch_TuNgay.getDate();
 
@@ -82,7 +82,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
     /**
      * Điều kiện đến ngày
      */
-    public boolean dieuKienDenNgay() {
+    public synchronized boolean dieuKienDenNgay() {
         Date ngayHienTai = new Date();
         Date tuNgay = dch_TuNgay.getDate();
         Date denNgay = dch_DenNgay.getDate();
@@ -105,7 +105,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
     /**
      * Đọc dữ liệu lên bảng danh sách hóa đơn
      */
-    public void docDuLieuLenBangDsHoaDon() throws RemoteException {
+    public synchronized void docDuLieuLenBangDsHoaDon() throws RemoteException {
         modelHoaDon.setRowCount(0);
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         for (HoaDon hd : daoHoaDon.getAllHoaDon()) {
@@ -133,7 +133,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
     /**
      * Đọc dữ liệu lên bảng chi tiết hóa đơn
      */
-    public void docDuLieuLenBangCTHD(long maHD) throws RemoteException {
+    public synchronized void docDuLieuLenBangCTHD(long maHD) throws RemoteException {
         modelCTHD.setRowCount(0);
         for (CTHD cthd : daoCTHD.getAllCTHD(maHD)) {
 
@@ -153,7 +153,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
     /**
      * Đọc dữ liệu lên bảng danh sách hóa đơn
      */
-    public void docDuLieuDanhSachHoaDonTheoNgay() throws ParseException, RemoteException {
+    public synchronized void docDuLieuDanhSachHoaDonTheoNgay() throws ParseException, RemoteException {
         modelHoaDon.setRowCount(0);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -183,7 +183,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized  void initComponents() {
 
         pnl_DanhSachHoaDon = new javax.swing.JPanel();
         scr_DanhSachHoaDon = new javax.swing.JScrollPane();
@@ -219,14 +219,14 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public synchronized Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
         tbl_HoaDon.setRowHeight(35);
         tbl_HoaDon.setShowGrid(true);
         tbl_HoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
+            public synchronized void mousePressed(java.awt.event.MouseEvent evt) {
                 try {
                     tbl_HoaDonMousePressed(evt);
                 } catch (RemoteException e) {
@@ -251,7 +251,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public synchronized Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
@@ -326,7 +326,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
         chk_TatCa.setSelected(true);
         chk_TatCa.setText("Tất cả");
         chk_TatCa.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            public synchronized void itemStateChanged(java.awt.event.ItemEvent evt) {
                 try {
                     chk_TatCaItemStateChanged(evt);
                 } catch (ParseException e) {
@@ -342,7 +342,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
         dch_TuNgay.setMinimumSize(new java.awt.Dimension(64, 22));
         dch_TuNgay.setPreferredSize(new java.awt.Dimension(64, 22));
         dch_TuNgay.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+            public synchronized void propertyChange(java.beans.PropertyChangeEvent evt) {
                 try {
                     dch_TuNgayPropertyChange(evt);
                 } catch (ParseException e) {
@@ -358,7 +358,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
         dch_DenNgay.setMinimumSize(new java.awt.Dimension(64, 22));
         dch_DenNgay.setPreferredSize(new java.awt.Dimension(64, 22));
         dch_DenNgay.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+            public synchronized void propertyChange(java.beans.PropertyChangeEvent evt) {
                 try {
                     dch_DenNgayPropertyChange(evt);
                 } catch (ParseException e) {
@@ -421,7 +421,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
         getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tbl_HoaDonMousePressed(java.awt.event.MouseEvent evt) throws RemoteException {//GEN-FIRST:event_tbl_HoaDonMousePressed
+    private synchronized  void tbl_HoaDonMousePressed(java.awt.event.MouseEvent evt) throws RemoteException {//GEN-FIRST:event_tbl_HoaDonMousePressed
         int row = tbl_HoaDon.getSelectedRow();
         if (row != -1) {
             long maHD = Long.parseLong(tbl_HoaDon.getValueAt(row, 0).toString());
@@ -430,7 +430,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tbl_HoaDonMousePressed
 
-    private void dch_TuNgayPropertyChange(java.beans.PropertyChangeEvent evt) throws ParseException, RemoteException {//GEN-FIRST:event_dch_TuNgayPropertyChange
+    private synchronized  void dch_TuNgayPropertyChange(java.beans.PropertyChangeEvent evt) throws ParseException, RemoteException {//GEN-FIRST:event_dch_TuNgayPropertyChange
         if (!dieuKienTuNgay()) {
             return;
         }
@@ -441,7 +441,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_dch_TuNgayPropertyChange
 
-    private void chk_TatCaItemStateChanged(java.awt.event.ItemEvent evt) throws ParseException, RemoteException {//GEN-FIRST:event_chk_TatCaItemStateChanged
+    private synchronized  void chk_TatCaItemStateChanged(java.awt.event.ItemEvent evt) throws ParseException, RemoteException {//GEN-FIRST:event_chk_TatCaItemStateChanged
 
         if (chk_TatCa.isSelected()) {
             docDuLieuLenBangDsHoaDon();
@@ -453,7 +453,7 @@ public class ManHinh_NV_XemDSHoaDon extends javax.swing.JPanel {
 
     }//GEN-LAST:event_chk_TatCaItemStateChanged
 
-    private void dch_DenNgayPropertyChange(java.beans.PropertyChangeEvent evt) throws ParseException, RemoteException {//GEN-FIRST:event_dch_DenNgayPropertyChange
+    private synchronized  void dch_DenNgayPropertyChange(java.beans.PropertyChangeEvent evt) throws ParseException, RemoteException {//GEN-FIRST:event_dch_DenNgayPropertyChange
         if (!dieuKienDenNgay()) {
             return;
         }

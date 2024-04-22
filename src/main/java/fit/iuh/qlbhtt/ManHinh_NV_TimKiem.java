@@ -22,18 +22,18 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author DMX
  */
-public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
+public  class ManHinh_NV_TimKiem extends javax.swing.JPanel {
 
     private DefaultTableModel modelNhanVien;
     private INhanVienDao daoNhanVien;
-    public static boolean activeThayDoiTT = false;
-    public static NhanVien nhanVien = null;
+    public  static boolean activeThayDoiTT = false;
+    public  static NhanVien nhanVien = null;
     private final NhanVien nhanVien_Login = Login.nhanVien;
 
     /**
      * Creates new form quanly
      */
-    public ManHinh_NV_TimKiem() throws SQLException, RemoteException {
+    public  ManHinh_NV_TimKiem() throws SQLException, RemoteException {
         daoNhanVien = RMIClientUtil.getNhanVienDao();
         initComponents();
         activeThayDoiTT = false;
@@ -48,7 +48,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
     /**
      * Cài đặt role khi nhân viên đăng nhập
      */
-    public void setRole() {
+    public synchronized void setRole() {
         if (nhanVien_Login.getChuVu().equalsIgnoreCase("Nhân Viên")) {
             btn_CapNhat.setEnabled(false);
         }
@@ -57,7 +57,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
     /**
      * Load dữ liệu comboBox chức vụ
      */
-    public void loadDuLieuChucVu() throws RemoteException {
+    public synchronized void loadDuLieuChucVu() throws RemoteException {
         String giaTriKiemTa = null;
         for (NhanVien nv : daoNhanVien.getAllNhanVien()) {
             if (giaTriKiemTa != null && giaTriKiemTa.equals(nv.getChuVu())) {
@@ -72,7 +72,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
     /**
      * Xóa trắng các Jtext filed
      */
-    public void xoaTrangTxt() {
+    public synchronized void xoaTrangTxt() {
         txt_TenNV.setText("");
         txt_SoDienThoai.setText("");
         txt_DiaChi.setText("");
@@ -83,7 +83,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
         rad_Nu.setSelected(false);
     }
 
-    public void xoaDongBang() {
+    public synchronized void xoaDongBang() {
         modelNhanVien = (DefaultTableModel) tbl_NhanVien.getModel();
         modelNhanVien.setRowCount(0);
     }
@@ -91,7 +91,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
     /**
      * Load dữ liệu vào bảng
      */
-    public void docDuLieuNhanVien() throws RemoteException {
+    public synchronized void docDuLieuNhanVien() throws RemoteException {
 
         modelNhanVien = (DefaultTableModel) tbl_NhanVien.getModel();
         modelNhanVien.setRowCount(0);
@@ -113,7 +113,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
     /**
      * Xử lý tìm kiếm nhân viên
      */
-    public void xuLyTimKiemNhanVien() throws RemoteException {
+    public synchronized void xuLyTimKiemNhanVien() throws RemoteException {
         xoaDongBang();
 
         String msConvert = null;
@@ -161,7 +161,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized  void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         pnl_DanhSachNhanVien = new javax.swing.JPanel();
@@ -209,17 +209,17 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public synchronized Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
         tbl_NhanVien.setRowHeight(35);
         tbl_NhanVien.setShowGrid(true);
         tbl_NhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbl_NhanVienMouseClicked(evt);
             }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
+            public synchronized void mousePressed(java.awt.event.MouseEvent evt) {
                 tbl_NhanVienMousePressed(evt);
             }
         });
@@ -309,7 +309,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
         cmb_ChucVu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cmb_ChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
         cmb_ChucVu.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            public synchronized void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmb_ChucVuItemStateChanged(evt);
             }
         });
@@ -405,15 +405,15 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
         btn_TimKiem.setText("Tìm kiếm");
         btn_TimKiem.setBorder(null);
         btn_TimKiem.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_TimKiemMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_TimKiemMouseExited(evt);
             }
         });
         btn_TimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_TimKiemActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -427,15 +427,15 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
         btn_XoaTrang.setText("Xóa trắng");
         btn_XoaTrang.setBorder(null);
         btn_XoaTrang.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_XoaTrangMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_XoaTrangMouseExited(evt);
             }
         });
         btn_XoaTrang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_XoaTrangActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -449,15 +449,15 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
         btn_CapNhat.setText("Thay đổi trạng thái");
         btn_CapNhat.setBorder(null);
         btn_CapNhat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_CapNhatMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_CapNhatMouseExited(evt);
             }
         });
         btn_CapNhat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_CapNhatActionPerformed(evt);
             }
         });
@@ -509,40 +509,40 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
         getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_TimKiemActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_TimKiemActionPerformed
+    private synchronized  void btn_TimKiemActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_TimKiemActionPerformed
         xuLyTimKiemNhanVien();
     }//GEN-LAST:event_btn_TimKiemActionPerformed
 
-    private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XoaTrangActionPerformed
+    private synchronized  void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XoaTrangActionPerformed
         xoaTrangTxt();
         docDuLieuNhanVien();
     }//GEN-LAST:event_btn_XoaTrangActionPerformed
 
-    private void btn_TimKiemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TimKiemMouseEntered
+    private synchronized  void btn_TimKiemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TimKiemMouseEntered
         btn_TimKiem.setBackground(new Color(0x9EDDFF));
         btn_TimKiem.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_TimKiemMouseEntered
 
-    private void btn_TimKiemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TimKiemMouseExited
+    private synchronized  void btn_TimKiemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TimKiemMouseExited
         btn_TimKiem.setBackground(UIManager.getColor("Menu.background"));
         btn_TimKiem.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_TimKiemMouseExited
 
-    private void btn_XoaTrangMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseEntered
+    private synchronized  void btn_XoaTrangMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseEntered
         btn_XoaTrang.setBackground(new Color(0x9EDDFF));
         btn_XoaTrang.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_XoaTrangMouseEntered
 
-    private void btn_XoaTrangMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseExited
+    private synchronized  void btn_XoaTrangMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseExited
         btn_XoaTrang.setBackground(UIManager.getColor("Menu.background"));
         btn_XoaTrang.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_XoaTrangMouseExited
 
-    private void cmb_ChucVuItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmb_ChucVuItemStateChanged
+    private synchronized  void cmb_ChucVuItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmb_ChucVuItemStateChanged
 
     }//GEN-LAST:event_cmb_ChucVuItemStateChanged
 
-    private void tbl_NhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_NhanVienMouseClicked
+    private synchronized  void tbl_NhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_NhanVienMouseClicked
         int row = tbl_NhanVien.getSelectedRow();
         if (row != -1) {
             txt_MaNV.setText(tbl_NhanVien.getValueAt(row, 0).toString());
@@ -565,15 +565,15 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tbl_NhanVienMouseClicked
 
-    private void btn_CapNhatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseEntered
+    private synchronized  void btn_CapNhatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_CapNhatMouseEntered
 
-    private void btn_CapNhatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseExited
+    private synchronized  void btn_CapNhatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_CapNhatMouseExited
 
-    private void btn_CapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CapNhatActionPerformed
+    private synchronized  void btn_CapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CapNhatActionPerformed
         int row = tbl_NhanVien.getSelectedRow();
         activeThayDoiTT = true;
 
@@ -585,7 +585,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btn_CapNhatActionPerformed
 
-    private void tbl_NhanVienMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_NhanVienMousePressed
+    private synchronized  void tbl_NhanVienMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_NhanVienMousePressed
         int row = tbl_NhanVien.getSelectedRow();
 
         if (row != -1) {
@@ -609,7 +609,7 @@ public class ManHinh_NV_TimKiem extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public static javax.swing.JButton btn_CapNhat;
+    public  static javax.swing.JButton btn_CapNhat;
     private javax.swing.JButton btn_TimKiem;
     private javax.swing.JButton btn_XoaTrang;
     private javax.swing.ButtonGroup buttonGroup1;

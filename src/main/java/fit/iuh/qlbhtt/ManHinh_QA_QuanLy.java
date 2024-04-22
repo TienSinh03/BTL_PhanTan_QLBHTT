@@ -35,7 +35,7 @@ import javax.swing.UIManager;
  *
  * @author DMX
  */
-public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
+public  class ManHinh_QA_QuanLy extends javax.swing.JPanel {
     private DefaultTableModel modelSanPham;
     private ISanPhamDao dao_SanPham;
     private IChatLieuDao dao_ChatLieu;
@@ -51,7 +51,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
     /**
      * Creates new form quanly
      */
-    public ManHinh_QA_QuanLy() throws SQLException, RemoteException {
+    public  ManHinh_QA_QuanLy() throws SQLException, RemoteException {
         dao_SanPham = RMIClientUtil.getSanPhamDao();
         dao_ChatLieu = RMIClientUtil.getChatLieuDao();
         dao_KichThuoc = RMIClientUtil.getKichThuocDao();
@@ -74,7 +74,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         docDuLieuCMB();
     }
     
-    public void chuyenDoiNgonNgu() {
+    public synchronized void chuyenDoiNgonNgu() {
         
         btn_CapNhat.setText("Updates");
         btn_Luu.setText("Save");
@@ -107,7 +107,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized  void initComponents() {
 
         pnl_DanhSachQuanAo = new javax.swing.JPanel();
         scr_DanhSachQuanAo = new javax.swing.JScrollPane();
@@ -171,7 +171,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
 
-                public Class getColumnClass(int columnIndex) {
+                public synchronized Class getColumnClass(int columnIndex) {
                     return types [columnIndex];
                 }
             });
@@ -188,7 +188,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
 
-                public Class getColumnClass(int columnIndex) {
+                public synchronized Class getColumnClass(int columnIndex) {
                     return types [columnIndex];
                 }
             });
@@ -196,7 +196,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         tbl_QuanAo.setRowHeight(35);
         tbl_QuanAo.setShowGrid(true);
         tbl_QuanAo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseClicked(java.awt.event.MouseEvent evt) {
                 try {
                     tbl_QuanAoMouseClicked(evt);
                 } catch (RemoteException e) {
@@ -252,7 +252,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         txt_TenQA.setEditable(false);
         txt_TenQA.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_TenQA.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_TenQAActionPerformed(evt);
             }
         });
@@ -260,7 +260,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         txt_MaQA.setEditable(false);
         txt_MaQA.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_MaQA.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_MaQAActionPerformed(evt);
             }
         });
@@ -298,7 +298,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         txt_GiaNhap.setEditable(false);
         txt_GiaNhap.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_GiaNhap.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_GiaNhapActionPerformed(evt);
             }
         });
@@ -306,7 +306,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         txt_GiaBan.setEditable(false);
         txt_GiaBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_GiaBan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_GiaBanActionPerformed(evt);
             }
         });
@@ -314,7 +314,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         txt_SoLuong.setEditable(false);
         txt_SoLuong.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_SoLuong.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_SoLuongActionPerformed(evt);
             }
         });
@@ -365,15 +365,15 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         btn_ChonAnh.setBorder(null);
         btn_ChonAnh.setEnabled(false);
         btn_ChonAnh.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_ChonAnhMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_ChonAnhMouseExited(evt);
             }
         });
         btn_ChonAnh.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_ChonAnhActionPerformed(evt);
             }
         });
@@ -511,15 +511,15 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         btn_Them.setBorder(null);
         btn_Them.setPreferredSize(new java.awt.Dimension(80, 30));
         btn_Them.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_ThemMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_ThemMouseExited(evt);
             }
         });
         btn_Them.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_ThemActionPerformed(evt);
             }
         });
@@ -530,15 +530,15 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         btn_XoaTrang.setBorder(null);
         btn_XoaTrang.setPreferredSize(new java.awt.Dimension(80, 30));
         btn_XoaTrang.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_XoaTrangMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_XoaTrangMouseExited(evt);
             }
         });
         btn_XoaTrang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_XoaTrangActionPerformed(evt);
             }
         });
@@ -548,15 +548,15 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         btn_CapNhat.setText("Cập nhật");
         btn_CapNhat.setBorder(null);
         btn_CapNhat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_CapNhatMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_CapNhatMouseExited(evt);
             }
         });
         btn_CapNhat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_CapNhatActionPerformed(evt);
             }
         });
@@ -567,15 +567,15 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         btn_Luu.setBorder(null);
         btn_Luu.setEnabled(false);
         btn_Luu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_LuuMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_LuuMouseExited(evt);
             }
         });
         btn_Luu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_LuuActionPerformed(evt);
             }
         });
@@ -630,27 +630,27 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_TenQAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TenQAActionPerformed
+    private synchronized  void txt_TenQAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TenQAActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_TenQAActionPerformed
 
-    private void txt_MaQAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_MaQAActionPerformed
+    private synchronized  void txt_MaQAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_MaQAActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_MaQAActionPerformed
 
-    private void txt_GiaNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_GiaNhapActionPerformed
+    private synchronized  void txt_GiaNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_GiaNhapActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_GiaNhapActionPerformed
 
-    private void txt_GiaBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_GiaBanActionPerformed
+    private synchronized  void txt_GiaBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_GiaBanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_GiaBanActionPerformed
 
-    private void txt_SoLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_SoLuongActionPerformed
+    private synchronized  void txt_SoLuongActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_SoLuongActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_SoLuongActionPerformed
 
-    private void btn_CapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CapNhatActionPerformed
+    private synchronized  void btn_CapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CapNhatActionPerformed
         int row = tbl_QuanAo.getSelectedRow();
         if(row!=-1){
             if(btn_CapNhat.getText().equalsIgnoreCase("Cập nhật")) {
@@ -782,7 +782,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         return true; 
     }
     
-    private void btn_LuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LuuActionPerformed
+    private synchronized  void btn_LuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LuuActionPerformed
         if(trangThaiThem) {
             if (validData()) {
                 try {
@@ -852,7 +852,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_LuuActionPerformed
 
-    private void btn_ChonAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ChonAnhActionPerformed
+    private synchronized  void btn_ChonAnhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ChonAnhActionPerformed
         JFileChooser filechoose = new JFileChooser("data/");
         FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("hinh anh", "jpg", "png");
         filechoose.setFileFilter(imageFilter);
@@ -866,59 +866,59 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_ChonAnhActionPerformed
 
-    private void btn_ThemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseEntered
+    private synchronized  void btn_ThemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseEntered
          if(btn_Them.isEnabled()) {
             btn_Them.setBackground(new Color(0x9EDDFF));
             btn_Them.setForeground(new Color(0x141E46));
        }
     }//GEN-LAST:event_btn_ThemMouseEntered
 
-    private void btn_ThemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseExited
+    private synchronized  void btn_ThemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseExited
         if(btn_Them.isEnabled()) {
             btn_Them.setBackground(UIManager.getColor("Menu.background"));
             btn_Them.setForeground(UIManager.getColor("Menu.foreground"));
         }
     }//GEN-LAST:event_btn_ThemMouseExited
 
-    private void btn_CapNhatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseEntered
+    private synchronized  void btn_CapNhatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseEntered
         if(btn_CapNhat.isEnabled()) {
         btn_CapNhat.setBackground(new Color(0x9EDDFF));
        btn_CapNhat.setForeground(new Color(0x141E46));}
     }//GEN-LAST:event_btn_CapNhatMouseEntered
 
-    private void btn_CapNhatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseExited
+    private synchronized  void btn_CapNhatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseExited
         if(btn_CapNhat.isEnabled()) {
         btn_CapNhat.setBackground(UIManager.getColor("Menu.background"));
         btn_CapNhat.setForeground(UIManager.getColor("Menu.foreground"));}
     }//GEN-LAST:event_btn_CapNhatMouseExited
 
-    private void btn_LuuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseEntered
+    private synchronized  void btn_LuuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseEntered
         if(btn_Luu.isEnabled()) {
         btn_Luu.setBackground(new Color(0x9EDDFF));
        btn_Luu.setForeground(new Color(0x141E46));}
     }//GEN-LAST:event_btn_LuuMouseEntered
 
-    private void btn_LuuMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseExited
+    private synchronized  void btn_LuuMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseExited
         if(btn_Luu.isEnabled()) {
         btn_Luu.setBackground(UIManager.getColor("Menu.background"));
         btn_Luu.setForeground(UIManager.getColor("Menu.foreground"));}
     }//GEN-LAST:event_btn_LuuMouseExited
 
-    private void btn_ChonAnhMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ChonAnhMouseEntered
+    private synchronized  void btn_ChonAnhMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ChonAnhMouseEntered
         if(btn_ChonAnh.isEnabled()) {
             btn_ChonAnh.setBackground(new Color(0x9EDDFF));
             btn_ChonAnh.setForeground(new Color(0x141E46));
        }
     }//GEN-LAST:event_btn_ChonAnhMouseEntered
 
-    private void btn_ChonAnhMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ChonAnhMouseExited
+    private synchronized  void btn_ChonAnhMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ChonAnhMouseExited
         if(btn_ChonAnh.isEnabled()) {
             btn_ChonAnh.setBackground(UIManager.getColor("Menu.background"));
             btn_ChonAnh.setForeground(UIManager.getColor("Menu.foreground"));
         }
     }//GEN-LAST:event_btn_ChonAnhMouseExited
 
-    private void btn_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemActionPerformed
+    private synchronized  void btn_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemActionPerformed
         if(btn_Them.getText().equalsIgnoreCase("Thêm")) {
             trangThaiThem = true;
             // Vo hieu or kich hoat chuc nang
@@ -964,7 +964,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_ThemActionPerformed
 
-    public ImageIcon ResizeImage(String imgPath, String desc){
+    public synchronized ImageIcon ResizeImage(String imgPath, String desc){
         ImageIcon myImage = new ImageIcon(imgPath);
         Image img = myImage.getImage();
         Image newImg = img.getScaledInstance(pnl_HinhAnhSP.getWidth(), pnl_HinhAnhSP.getHeight(), Image.SCALE_SMOOTH);
@@ -973,7 +973,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         return image;
     }
     
-    private void tbl_QuanAoMouseClicked(java.awt.event.MouseEvent evt) throws RemoteException {//GEN-FIRST:event_tbl_QuanAoMouseClicked
+    private synchronized  void tbl_QuanAoMouseClicked(java.awt.event.MouseEvent evt) throws RemoteException {//GEN-FIRST:event_tbl_QuanAoMouseClicked
         int row =  tbl_QuanAo.getSelectedRow();
         if(row!=-1) {
            //Load thong tin vao txt, combobox        
@@ -1016,25 +1016,25 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
        }
     }//GEN-LAST:event_tbl_QuanAoMouseClicked
 
-    private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XoaTrangActionPerformed
+    private synchronized  void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XoaTrangActionPerformed
         xoaTrang();
     }//GEN-LAST:event_btn_XoaTrangActionPerformed
 
-    private void btn_XoaTrangMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseExited
+    private synchronized  void btn_XoaTrangMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseExited
         if(btn_XoaTrang.isEnabled()) {
             btn_XoaTrang.setBackground(UIManager.getColor("Menu.background"));
             btn_XoaTrang.setForeground(UIManager.getColor("Menu.foreground"));
         }
     }//GEN-LAST:event_btn_XoaTrangMouseExited
 
-    private void btn_XoaTrangMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseEntered
+    private synchronized  void btn_XoaTrangMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseEntered
         if(btn_XoaTrang.isEnabled()) {
             btn_XoaTrang.setBackground(new Color(0x9EDDFF));
             btn_XoaTrang.setForeground(new Color(0x141E46));
         }
     }//GEN-LAST:event_btn_XoaTrangMouseEntered
     
-    private void xuLyThemSanPham() throws ParseException, RemoteException {
+    private synchronized  void xuLyThemSanPham() throws ParseException, RemoteException {
         //Get and add data
         String tenQA = txt_TenQA.getText();
         String soLuong = txt_SoLuong.getText();
@@ -1072,7 +1072,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
 
     }
 
-    private void xuLyCapNhatSanPham() throws ParseException, RemoteException {
+    private synchronized  void xuLyCapNhatSanPham() throws ParseException, RemoteException {
         int row = tbl_QuanAo.getSelectedRow();
         if(row!=-1){
             //Get and update data
@@ -1113,7 +1113,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn dòng cần cập nhật!");
     }
     
-    private void xuLyXoaSanPham() throws RemoteException {
+    private synchronized  void xuLyXoaSanPham() throws RemoteException {
         int row = tbl_QuanAo.getSelectedRow();
         if(row!=-1){
              if(JOptionPane.showConfirmDialog(this, "Bạn có chắc là xóa dòng này không?", "Cảnh Báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -1128,7 +1128,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
          }
     }
     
-    public void xoaTrang() {
+    public synchronized void xoaTrang() {
         txt_MaQA.setText("");
         txt_TenQA.setText("");
         txt_GiaBan.setText("");
@@ -1144,7 +1144,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         tbl_QuanAo.clearSelection();
     }
     
-    public void docDuLieuQuanAo() throws RemoteException {
+    public synchronized void docDuLieuQuanAo() throws RemoteException {
         modelSanPham = (DefaultTableModel) tbl_QuanAo.getModel();
         modelSanPham.setRowCount(0);
 
@@ -1172,7 +1172,7 @@ public class ManHinh_QA_QuanLy extends javax.swing.JPanel {
         }
     }
     
-    public void docDuLieuCMB() throws RemoteException {
+    public synchronized void docDuLieuCMB() throws RemoteException {
         //Doc du lieu ComboBox chat lieu
         ArrayList<ChatLieu> ds_ChatLieu = new ArrayList<>();
         ds_ChatLieu = dao_ChatLieu.getAllChatLieu();

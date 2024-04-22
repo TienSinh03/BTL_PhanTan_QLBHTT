@@ -40,12 +40,12 @@ import org.jfree.data.category.DefaultCategoryDataset;
  *
  * @author phant
  */
-public class ManHinh_NV_BieuDoThongKeDoanhThu extends javax.swing.JFrame {
+public  class ManHinh_NV_BieuDoThongKeDoanhThu extends javax.swing.JFrame {
     private IHoaDonDao dao_HoaDon;
     /**
      * Creates new form Form_BieuDoTKDT
      */
-    public ManHinh_NV_BieuDoThongKeDoanhThu() throws SQLException, RemoteException {
+    public  ManHinh_NV_BieuDoThongKeDoanhThu() throws SQLException, RemoteException {
         dao_HoaDon = RMIClientUtil.getHoaDonDao();
 //        connect = new Connect();
 //        connect.connect();
@@ -55,7 +55,7 @@ public class ManHinh_NV_BieuDoThongKeDoanhThu extends javax.swing.JFrame {
 //        veBieuDoNV();
     }
 
-    public void loadComboxNam() throws RemoteException {
+    public synchronized void loadComboxNam() throws RemoteException {
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         Calendar calendar = Calendar.getInstance();
         ArrayList<Integer> namList = new ArrayList<>();
@@ -73,7 +73,7 @@ public class ManHinh_NV_BieuDoThongKeDoanhThu extends javax.swing.JFrame {
     }
 
 //    NHO LAM LAI
-    private void veBieuDoNV() throws RemoteException {
+    private synchronized void veBieuDoNV() throws RemoteException {
         String nam = cmb_Nam.getSelectedItem().toString();
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();//Khởi tạo để chứa dữ liệu cột
@@ -119,7 +119,7 @@ public class ManHinh_NV_BieuDoThongKeDoanhThu extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized void initComponents() {
 
         pnl_ManHinhChinh = new javax.swing.JPanel();
         lbl_Nam = new javax.swing.JLabel();
@@ -135,7 +135,7 @@ public class ManHinh_NV_BieuDoThongKeDoanhThu extends javax.swing.JFrame {
 
         cmb_Nam.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cmb_Nam.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            public synchronized void itemStateChanged(java.awt.event.ItemEvent evt) {
                 try {
                     cmb_NamItemStateChanged(evt);
                 } catch (RemoteException e) {
@@ -170,14 +170,14 @@ public class ManHinh_NV_BieuDoThongKeDoanhThu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cmb_NamItemStateChanged(java.awt.event.ItemEvent evt) throws RemoteException {//GEN-FIRST:event_cmb_NamItemStateChanged
+    private synchronized void cmb_NamItemStateChanged(java.awt.event.ItemEvent evt) throws RemoteException {//GEN-FIRST:event_cmb_NamItemStateChanged
         veBieuDoNV();
     }//GEN-LAST:event_cmb_NamItemStateChanged
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public synchronized static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -204,7 +204,7 @@ public class ManHinh_NV_BieuDoThongKeDoanhThu extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public synchronized void run() {
                 try {
                     new ManHinh_NV_BieuDoThongKeDoanhThu().setVisible(true);
                 } catch (SQLException ex) {

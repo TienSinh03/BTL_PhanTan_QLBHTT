@@ -19,18 +19,18 @@ import javax.swing.JOptionPane;
  *
  * @author phant
  */
-public class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
+public  class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
 
     private INhanVienDao dao_NhanVien;
     private ITaiKhoanDao dao_TaiKhoan;
-    public static NhanVien nhanVien = null;
-    public static TaiKhoan taiKhoan = null;
+    public  static NhanVien nhanVien = null;
+    public  static TaiKhoan taiKhoan = null;
     private boolean ngonNgu = Login.ngonNgu;
 
     /**
      * Creates new form ManHinh_TimTaiKhoan
      */
-    public ManHinh_TimTaiKhoan() throws SQLException {
+    public  ManHinh_TimTaiKhoan() throws SQLException {
         dao_NhanVien = RMIClientUtil.getNhanVienDao();
         dao_TaiKhoan = RMIClientUtil.getTaiKhoanDao();
 
@@ -41,7 +41,7 @@ public class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
         }
     }
 
-    public void chuyenDoiNN() {
+    public synchronized void chuyenDoiNN() {
         lbl_TieuDeChinh.setText("SEARCH ACCOUNT");
         lbl_TieuDePhu.setText("Please enter email or phone number to find your account");
         btn_Huy.setText("Cancel");
@@ -51,7 +51,7 @@ public class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
     /**
      * Tìm kiếm tài khoản theo email hoặc sdt
      */
-    public void xuLyTimKiemTaiKhoan() throws RemoteException {
+    public synchronized void xuLyTimKiemTaiKhoan() throws RemoteException {
 
         String timKiem = txt_TimKiem.getText();
         int count = 0;
@@ -83,7 +83,7 @@ public class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized void initComponents() {
 
         lbl_panelChinh = new javax.swing.JPanel();
         lbl_TieuDeChinh = new javax.swing.JLabel();
@@ -108,7 +108,7 @@ public class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
         btn_TimKiem.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-search-30.png")); // NOI18N
         btn_TimKiem.setText("Tìm Kiếm");
         btn_TimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_TimKiemActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -122,7 +122,7 @@ public class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
         btn_Huy.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-cancel-30.png")); // NOI18N
         btn_Huy.setText("Hủy");
         btn_Huy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_HuyActionPerformed(evt);
             }
         });
@@ -176,7 +176,7 @@ public class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_HuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_HuyActionPerformed
+    private synchronized void btn_HuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_HuyActionPerformed
         try {
             new Login().setVisible(true);
             this.setVisible(false);
@@ -186,7 +186,7 @@ public class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btn_HuyActionPerformed
 
-    private void btn_TimKiemActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_TimKiemActionPerformed
+    private synchronized void btn_TimKiemActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_TimKiemActionPerformed
         xuLyTimKiemTaiKhoan();
 
     }//GEN-LAST:event_btn_TimKiemActionPerformed
@@ -194,7 +194,7 @@ public class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public synchronized static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -220,7 +220,7 @@ public class ManHinh_TimTaiKhoan extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public synchronized void run() {
                 try {
                     new ManHinh_TimTaiKhoan().setVisible(true);
                 } catch (SQLException ex) {

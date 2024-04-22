@@ -24,7 +24,7 @@ import javax.swing.event.DocumentListener;
  *
  * @author phant
  */
-public class ManHinh_XacThucEmail extends javax.swing.JFrame {
+public  class ManHinh_XacThucEmail extends javax.swing.JFrame {
 
     private int otp;
     public static String emailAdd;
@@ -36,7 +36,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
     /**
      * Creates new form ManHinh_XacThucEmail
      */
-    public ManHinh_XacThucEmail() {
+    public  ManHinh_XacThucEmail() {
         dao_sendmail = RMIClientUtil.getSendMailDao();
         initComponents();
         setLocationRelativeTo(null);
@@ -46,19 +46,19 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
         //Sự kiện lắng người người dùng nhập
         txt_nhapOTP.getDocument().addDocumentListener(new DocumentListener() {
             @Override
-            public void insertUpdate(DocumentEvent e) {
+            public synchronized void insertUpdate(DocumentEvent e) {
                 btn_XacThuc.setEnabled(true);
             }
 
             @Override
-            public void removeUpdate(DocumentEvent e) {
+            public synchronized void removeUpdate(DocumentEvent e) {
                 if (txt_nhapOTP.getText().isEmpty()) {
                     btn_XacThuc.setEnabled(false);
                 }
             }
 
             @Override
-            public void changedUpdate(DocumentEvent e) {
+            public synchronized void changedUpdate(DocumentEvent e) {
                 throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
             }
 
@@ -67,7 +67,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
         hienThiNhanVienNghi();
     }
 
-    public void chuyenDoiNN() {
+    public synchronized void chuyenDoiNN() {
         lbl_TieuDeChinh.setText("SEARCH ACCOUNT");
         btn_GuiMa.setText("Send Code");
         btn_XacThuc.setText("Verify");
@@ -77,7 +77,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
         lbl_DangNhap.setText("<html><u>Log in with password</u></html>");
     }
 
-    public void hienThiNhanVienNghi() {
+    public synchronized void hienThiNhanVienNghi() {
         if (!nhanVien.isTrangThai()) {
             if (ngonNgu) {
                 lbl_thongBaoNghi.setText("Nhân viên này đã nghỉ, không được thực hiện xác thực");
@@ -93,7 +93,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
     /**
      * Load lên JtextField
      */
-    public void loadDuLieu() {
+    public synchronized void loadDuLieu() {
         txt_TenNhanVien.setText(nhanVien.getHoTen());
         txt_Email.setText(nhanVien.getEmail());
     }
@@ -101,7 +101,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
     /**
      * Xử lý gửi mã về gmail
      */
-    public void xuLyGuiCode() throws RemoteException {
+    public synchronized void xuLyGuiCode() throws RemoteException {
         Random radom = new Random();
         int min = 100000;
         int max = 999999;
@@ -119,7 +119,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized void initComponents() {
 
         pnl_NenChinh = new javax.swing.JPanel();
         lbl_TenNV = new javax.swing.JLabel();
@@ -163,15 +163,15 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
         btn_GuiMa.setText("Gửi Mã");
         btn_GuiMa.setBorder(null);
         btn_GuiMa.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_GuiMaMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_GuiMaMouseExited(evt);
             }
         });
         btn_GuiMa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_GuiMaActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -187,15 +187,15 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
         btn_XacThuc.setBorder(null);
         btn_XacThuc.setEnabled(false);
         btn_XacThuc.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_XacThucMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_XacThucMouseExited(evt);
             }
         });
         btn_XacThuc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_XacThucActionPerformed(evt);
             }
         });
@@ -209,13 +209,13 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
         lbl_DangNhap.setForeground(new java.awt.Color(0, 0, 51));
         lbl_DangNhap.setText("<html><u>Đăng nhập bằng mật khẩu</u></html>");
         lbl_DangNhap.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseClicked(java.awt.event.MouseEvent evt) {
                 lbl_DangNhapMouseClicked(evt);
             }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 lbl_DangNhapMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 lbl_DangNhapMouseExited(evt);
             }
         });
@@ -314,30 +314,30 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_GuiMaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_GuiMaMouseEntered
+    private synchronized void btn_GuiMaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_GuiMaMouseEntered
 
         btn_GuiMa.setBackground(new Color(0x9EDDFF));
         btn_GuiMa.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_GuiMaMouseEntered
 
-    private void btn_GuiMaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_GuiMaMouseExited
+    private synchronized void btn_GuiMaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_GuiMaMouseExited
 
         btn_GuiMa.setBackground(new Color(0x61677A));
         btn_GuiMa.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_GuiMaMouseExited
 
-    private void btn_GuiMaActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_GuiMaActionPerformed
+    private synchronized void btn_GuiMaActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_GuiMaActionPerformed
         xuLyGuiCode();
     }//GEN-LAST:event_btn_GuiMaActionPerformed
 
-    private void btn_XacThucMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XacThucMouseEntered
+    private synchronized void btn_XacThucMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XacThucMouseEntered
         if (btn_XacThuc.isEnabled()) {
             btn_XacThuc.setBackground(new Color(0x9EDDFF));
             btn_XacThuc.setForeground(new Color(0x141E46));
         }
     }//GEN-LAST:event_btn_XacThucMouseEntered
 
-    private void btn_XacThucMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XacThucMouseExited
+    private synchronized void btn_XacThucMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XacThucMouseExited
         if (btn_XacThuc.isEnabled()) {
             btn_XacThuc.setBackground(new Color(0x009933));
             btn_XacThuc.setForeground(new Color(0x000000));
@@ -346,7 +346,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btn_XacThucMouseExited
 
-    private void btn_XacThucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XacThucActionPerformed
+    private synchronized void btn_XacThucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XacThucActionPerformed
         int otp2 = Integer.parseInt(txt_nhapOTP.getText());
         if (otp == otp2) {
             JOptionPane.showMessageDialog(this, "Xác thực thành công");
@@ -362,17 +362,17 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_XacThucActionPerformed
 
-    private void lbl_DangNhapMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_DangNhapMouseEntered
+    private synchronized void lbl_DangNhapMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_DangNhapMouseEntered
         lbl_DangNhap.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Thay đổi hình dạng chuột
         lbl_DangNhap.setForeground(new Color(0x0099FF));
     }//GEN-LAST:event_lbl_DangNhapMouseEntered
 
-    private void lbl_DangNhapMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_DangNhapMouseExited
+    private synchronized void lbl_DangNhapMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_DangNhapMouseExited
         lbl_DangNhap.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         lbl_DangNhap.setForeground(new Color(0x000033));
     }//GEN-LAST:event_lbl_DangNhapMouseExited
 
-    private void lbl_DangNhapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_DangNhapMouseClicked
+    private synchronized void lbl_DangNhapMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_DangNhapMouseClicked
         try {
             new Login().setVisible(true);
             this.setVisible(false);
@@ -385,7 +385,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public synchronized static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -411,7 +411,7 @@ public class ManHinh_XacThucEmail extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public synchronized void run() {
                 new ManHinh_XacThucEmail().setVisible(true);
             }
         });

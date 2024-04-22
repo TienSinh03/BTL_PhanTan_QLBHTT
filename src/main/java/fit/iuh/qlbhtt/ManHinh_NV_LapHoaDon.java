@@ -53,7 +53,7 @@ import static fit.iuh.qlbhtt.HomePage.pnl_GiaoDienChucNang;
  *
  * @author DMX
  */
-public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyCloseFrame {
+public  class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyCloseFrame {
 
     private DefaultTableModel modelSanPham;
     private DefaultTableModel modelGioHang;
@@ -75,13 +75,13 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
     long maPDH = 0;
     ArrayList<SanPham> gioHang;
 
-    public static NhanVien nhanVien = Login.nhanVien;
+    public  static NhanVien nhanVien = Login.nhanVien;
     private boolean ngonNgu = Login.ngonNgu;
 
     /**
      * Creates new form quanly
      */
-    public ManHinh_NV_LapHoaDon() throws SQLException, RemoteException {
+    public  ManHinh_NV_LapHoaDon() throws SQLException, RemoteException {
         dao_SanPham = RMIClientUtil.getSanPhamDao();
         dao_ChatLieu = RMIClientUtil.getChatLieuDao();
         dao_KichThuoc = RMIClientUtil.getKichThuocDao();
@@ -116,7 +116,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         //Tự động tính tiền giỏ hàng
         FocusAdapter focusListener = new FocusAdapter() {
             @Override
-            public void focusLost(FocusEvent e) {
+            public synchronized void focusLost(FocusEvent e) {
                 // Xử lý khi trường văn bản mất focus (khi bạn nhấn vào nơi khác)
                 tinhToanTienTra();
             }
@@ -126,7 +126,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         khoaChinhSuaTable();
     }
 
-    public void chuyenDoiNgonNgu() {
+    public synchronized  void chuyenDoiNgonNgu() {
         btn_LapHoaDon.setText("Make an Invoice");
         btn_Them.setText("Insert");
         btn_Giam.setText("Subtract");
@@ -162,7 +162,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized void initComponents() {
 
         pnl_DanhSachSanPham = new javax.swing.JPanel();
         scr_DanhSachSanPham = new javax.swing.JScrollPane();
@@ -240,7 +240,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
 
-                public Class getColumnClass(int columnIndex) {
+                public synchronized Class getColumnClass(int columnIndex) {
                     return types [columnIndex];
                 }
             });
@@ -257,7 +257,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
 
-                public Class getColumnClass(int columnIndex) {
+                public synchronized Class getColumnClass(int columnIndex) {
                     return types [columnIndex];
                 }
             });
@@ -268,7 +268,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         tbl_SanPham.setRowHeight(30);
         tbl_SanPham.setShowGrid(true);
         tbl_SanPham.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseClicked(java.awt.event.MouseEvent evt) {
                 try {
                     tbl_SanPhamMouseClicked(evt);
                 } catch (RemoteException e) {
@@ -294,15 +294,15 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         btn_Giam.setText("Giảm");
         btn_Giam.setBorder(null);
         btn_Giam.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_GiamMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_GiamMouseExited(evt);
             }
         });
         btn_Giam.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_GiamActionPerformed(evt);
             }
         });
@@ -312,15 +312,15 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         btn_Them.setText("Thêm");
         btn_Them.setBorder(null);
         btn_Them.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_ThemMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_ThemMouseExited(evt);
             }
         });
         btn_Them.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_ThemActionPerformed(evt);
             }
         });
@@ -396,7 +396,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
 
-                public Class getColumnClass(int columnIndex) {
+                public synchronized Class getColumnClass(int columnIndex) {
                     return types [columnIndex];
                 }
             });
@@ -413,7 +413,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                     java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
                 };
 
-                public Class getColumnClass(int columnIndex) {
+                public synchronized Class getColumnClass(int columnIndex) {
                     return types [columnIndex];
                 }
             });
@@ -421,7 +421,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         tbl_GioHang.setRowHeight(30);
         tbl_GioHang.setShowGrid(true);
         tbl_GioHang.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseClicked(java.awt.event.MouseEvent evt) {
                 try {
                     tbl_GioHangMouseClicked(evt);
                 } catch (RemoteException e) {
@@ -495,19 +495,11 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
         txt_TenSP.setEditable(false);
         txt_TenSP.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txt_TenSP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_TenSPActionPerformed(evt);
-            }
-        });
+
 
         txt_MaSP.setEditable(false);
         txt_MaSP.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txt_MaSP.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_MaSPActionPerformed(evt);
-            }
-        });
+
 
         lbl_MaSP.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lbl_MaSP.setText("Mã sản phẩm");
@@ -549,7 +541,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         cmb_PhanLoai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
 //        cmb_PhanLoai.setEnabled(false);
         cmb_PhanLoai.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            public synchronized void itemStateChanged(java.awt.event.ItemEvent evt) {
                 try {
                     cmb_PhanLoaiItemStateChanged(evt);
                 } catch (RemoteException e) {
@@ -563,7 +555,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         cmb_KichThuoc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
 //        cmb_KichThuoc.setEnabled(false);
         cmb_KichThuoc.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            public synchronized void itemStateChanged(java.awt.event.ItemEvent evt) {
                 try {
                     cmb_KichThuocItemStateChanged(evt);
                 } catch (RemoteException e) {
@@ -584,7 +576,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         cmb_MauSac.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cmb_MauSac.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
         cmb_MauSac.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            public synchronized void itemStateChanged(java.awt.event.ItemEvent evt) {
                 try {
                     cmb_MauSacItemStateChanged(evt);
                 } catch (RemoteException e) {
@@ -596,11 +588,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
         txt_GiaBan.setEditable(false);
         txt_GiaBan.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txt_GiaBan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_GiaBanActionPerformed(evt);
-            }
-        });
+
 
         pnl_KhuVucTTKhachHang.setBackground(new java.awt.Color(199, 210, 213));
         if(ngonNgu) {
@@ -614,26 +602,21 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
         txt_TenKH.setEditable(false);
         txt_TenKH.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txt_TenKH.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_TenKHActionPerformed(evt);
-            }
-        });
 
         btn_TimKH.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         btn_TimKH.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-search-client-30.png")); // NOI18N
         btn_TimKH.setText("Tìm ");
         btn_TimKH.setPreferredSize(new java.awt.Dimension(100, 37));
         btn_TimKH.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_TimKHMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_TimKHMouseExited(evt);
             }
         });
         btn_TimKH.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_TimKHActionPerformed(evt);
             }
         });
@@ -649,15 +632,15 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         btn_ThemKhachHang.setText("Thêm");
         btn_ThemKhachHang.setPreferredSize(new java.awt.Dimension(110, 37));
         btn_ThemKhachHang.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_ThemKhachHangMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_ThemKhachHangMouseExited(evt);
             }
         });
         btn_ThemKhachHang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_ThemKhachHangActionPerformed(evt);
             }
         });
@@ -786,15 +769,15 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         btn_LapHoaDon.setText("Lập hóa đơn");
         btn_LapHoaDon.setBorder(null);
         btn_LapHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_LapHoaDonMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_LapHoaDonMouseExited(evt);
             }
         });
         btn_LapHoaDon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_LapHoaDonActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -814,7 +797,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         txt_TienKHDua.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         txt_TienKHDua.setToolTipText("Tiền khách đưa");
         txt_TienKHDua.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
+            public synchronized void keyReleased(java.awt.event.KeyEvent evt) {
                 txt_TienKHDuaKeyReleased(evt);
             }
         });
@@ -921,23 +904,8 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_TenSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TenSPActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_TenSPActionPerformed
 
-    private void txt_MaSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_MaSPActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_MaSPActionPerformed
-
-    private void txt_GiaBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_GiaBanActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_GiaBanActionPerformed
-
-    private void txt_TenKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TenKHActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_TenKHActionPerformed
-
-    private void btn_TimKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TimKHActionPerformed
+    private synchronized void btn_TimKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_TimKHActionPerformed
         try {
             //xuLyTimKiemKhachHang();
             xuLyChonKhachHang();
@@ -948,7 +916,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }//GEN-LAST:event_btn_TimKHActionPerformed
 
-    private void btn_ThemKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemKhachHangActionPerformed
+    private synchronized void btn_ThemKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemKhachHangActionPerformed
         ManHinh_KH_QuanLy pnl_KH_QuanLy = null;
         try {
             pnl_KH_QuanLy = new ManHinh_KH_QuanLy();
@@ -963,57 +931,57 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_btn_ThemKhachHangActionPerformed
 
-    private void btn_TimKHMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TimKHMouseEntered
+    private synchronized void btn_TimKHMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TimKHMouseEntered
         btn_TimKH.setBackground(new Color(0x9EDDFF));
         btn_TimKH.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_TimKHMouseEntered
 
-    private void btn_TimKHMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TimKHMouseExited
+    private synchronized void btn_TimKHMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TimKHMouseExited
         btn_TimKH.setBackground(UIManager.getColor("Menu.background"));
         btn_TimKH.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_TimKHMouseExited
 
-    private void btn_ThemKhachHangMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemKhachHangMouseEntered
+    private synchronized void btn_ThemKhachHangMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemKhachHangMouseEntered
         btn_ThemKhachHang.setBackground(new Color(0x9EDDFF));
         btn_ThemKhachHang.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_ThemKhachHangMouseEntered
 
-    private void btn_ThemKhachHangMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemKhachHangMouseExited
+    private synchronized void btn_ThemKhachHangMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemKhachHangMouseExited
         btn_ThemKhachHang.setBackground(UIManager.getColor("Menu.background"));
         btn_ThemKhachHang.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_ThemKhachHangMouseExited
 
-    private void btn_ThemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseEntered
+    private synchronized void btn_ThemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseEntered
         btn_Them.setBackground(new Color(0xFCE9F1));
         btn_Them.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_ThemMouseEntered
 
-    private void btn_ThemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseExited
+    private synchronized void btn_ThemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseExited
         btn_Them.setBackground(UIManager.getColor("Menu.background"));
         btn_Them.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_ThemMouseExited
 
-    private void btn_GiamMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_GiamMouseEntered
+    private synchronized void btn_GiamMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_GiamMouseEntered
         btn_Giam.setBackground(new Color(0xFCE9F1));
         btn_Giam.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_GiamMouseEntered
 
-    private void btn_GiamMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_GiamMouseExited
+    private synchronized void btn_GiamMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_GiamMouseExited
         btn_Giam.setBackground(UIManager.getColor("Menu.background"));
         btn_Giam.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_GiamMouseExited
 
-    private void btn_LapHoaDonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LapHoaDonMouseExited
+    private synchronized void btn_LapHoaDonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LapHoaDonMouseExited
         btn_LapHoaDon.setBackground(UIManager.getColor("Menu.background"));
         btn_LapHoaDon.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_LapHoaDonMouseExited
 
-    private void btn_LapHoaDonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LapHoaDonMouseEntered
+    private synchronized void btn_LapHoaDonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LapHoaDonMouseEntered
         btn_LapHoaDon.setBackground(new Color(0x9EDDFF));
         btn_LapHoaDon.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_LapHoaDonMouseEntered
 
-    public ImageIcon ResizeImage(String imgPath, String desc) {
+    public synchronized  ImageIcon ResizeImage(String imgPath, String desc) {
         ImageIcon myImage = new ImageIcon(imgPath);
         Image img = myImage.getImage();
         Image newImg = img.getScaledInstance(pnl_HinhAnhSanPham.getWidth(), pnl_HinhAnhSanPham.getHeight(), Image.SCALE_SMOOTH);
@@ -1022,7 +990,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         return image;
     }
 
-    private void tbl_SanPhamMouseClicked(java.awt.event.MouseEvent evt) throws RemoteException {//GEN-FIRST:event_tbl_SanPhamMouseClicked
+    private synchronized void tbl_SanPhamMouseClicked(java.awt.event.MouseEvent evt) throws RemoteException {//GEN-FIRST:event_tbl_SanPhamMouseClicked
         int row = tbl_SanPham.getSelectedRow();
         if (row != -1) {
             //Load thong tin vao txt, combobox
@@ -1049,7 +1017,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }//GEN-LAST:event_tbl_SanPhamMouseClicked
 
-    private void btn_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemActionPerformed
+    private synchronized void btn_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemActionPerformed
         if (kiemTraThongTinKH()) {
             txt_TienKHDua.setEditable(true);
             xuLyThemVaoGioHang();
@@ -1057,7 +1025,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
             JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin khách hàng để dùng các thao tác");
     }//GEN-LAST:event_btn_ThemActionPerformed
 
-    private void tbl_GioHangMouseClicked(java.awt.event.MouseEvent evt) throws RemoteException {//GEN-FIRST:event_tbl_GioHangMouseClicked
+    private synchronized void tbl_GioHangMouseClicked(java.awt.event.MouseEvent evt) throws RemoteException {//GEN-FIRST:event_tbl_GioHangMouseClicked
         int row = tbl_GioHang.getSelectedRow();
         if (row != -1) {
             //Load thong tin vao txt, combobox
@@ -1085,14 +1053,14 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
     }//GEN-LAST:event_tbl_GioHangMouseClicked
 
 
-    private void btn_GiamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_GiamActionPerformed
+    private synchronized void btn_GiamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_GiamActionPerformed
         if (kiemTraThongTinKH()) {
             xuLyGiamGioHang();
         } else
             JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin khách hàng để dùng các thao tác");
     }//GEN-LAST:event_btn_GiamActionPerformed
 
-    private void btn_LapHoaDonActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LapHoaDonActionPerformed
+    private synchronized void btn_LapHoaDonActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LapHoaDonActionPerformed
         if (kiemTraThongTinKH()) {
             if (kiemTraTienKHDua() && kiemTraSoLuongMua()) {
                 xulyLapHoaDon();
@@ -1101,7 +1069,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
             JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin khách hàng để dùng các thao tác");
     }//GEN-LAST:event_btn_LapHoaDonActionPerformed
 
-    private void txt_TienKHDuaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_TienKHDuaKeyReleased
+    private synchronized void txt_TienKHDuaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_TienKHDuaKeyReleased
         // TODO add your handling code here:
         try {
             Double.parseDouble(txt_TienKHDua.getText().replace(",", "").trim());
@@ -1112,15 +1080,15 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
 
     }//GEN-LAST:event_txt_TienKHDuaKeyReleased
 
-    private void cmb_PhanLoaiItemStateChanged(ItemEvent evt) throws RemoteException {
+    private synchronized void cmb_PhanLoaiItemStateChanged(ItemEvent evt) throws RemoteException {
         thongKeDsSanPhamTheoTieuChi();
     }
 
-    private void cmb_MauSacItemStateChanged(ItemEvent evt) throws RemoteException {
+    private synchronized void cmb_MauSacItemStateChanged(ItemEvent evt) throws RemoteException {
         thongKeDsSanPhamTheoTieuChi();
     }
 
-    private void cmb_KichThuocItemStateChanged(ItemEvent evt) throws RemoteException {
+    private synchronized void cmb_KichThuocItemStateChanged(ItemEvent evt) throws RemoteException {
         thongKeDsSanPhamTheoTieuChi();
     }
 
@@ -1128,7 +1096,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
     /**
      * Thông kê danh sách sản phẩm theo các tiêu chí
      */
-    public void thongKeDsSanPhamTheoTieuChi() throws RemoteException {
+    public synchronized  void thongKeDsSanPhamTheoTieuChi() throws RemoteException {
         modelSanPham = (DefaultTableModel) tbl_SanPham.getModel();
         modelSanPham.setRowCount(0);
 
@@ -1172,7 +1140,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }
 
-    public void xuLyThemVaoGioHang() {
+    public synchronized  void xuLyThemVaoGioHang() {
         int row = tbl_SanPham.getSelectedRow();
         if (row != -1) {
             String soLuongMuaString = txt_SoLuongNhap.getText().trim();
@@ -1268,7 +1236,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }
 
-    public void xuLyGiamGioHang() {
+    public synchronized  void xuLyGiamGioHang() {
         int row = tbl_GioHang.getSelectedRow();
         if (row != -1) {
             String soLuongGiamString = txt_SoLuongNhap.getText().trim();
@@ -1328,9 +1296,11 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }
 
-    private void kiemTraDonDatCuaKH(KhachHang kh) throws RemoteException {
+    private synchronized void kiemTraDonDatCuaKH(KhachHang kh) throws RemoteException {
         System.out.println("kh2" + kh.getMaKH());
         PhieuDatHang pdh = dao_PhieuDatHang.getPDTTheoMaKH(kh.getMaKH());
+        modelGioHang = (DefaultTableModel) tbl_GioHang.getModel();
+        modelGioHang.setRowCount(0);
         if (pdh != null) {
             maPDH = pdh.getMaPhieuDat();
             ArrayList<CTPhieuDatHang> ctpdh = dao_CTPhieuDatHang.getAllCTPhieuDatHang(pdh.getMaPhieuDat());
@@ -1341,7 +1311,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
                 gioHang.add(sanPhamAddGioHang);
 //                System.out.println("sp trong chtd: " + sanPhamAddGioHang);
                 //Them vao model gio hang
-                modelGioHang = (DefaultTableModel) tbl_GioHang.getModel();
+
                 SanPham sanPham = dao_SanPham.getSanPhamTheoMa(cTPhieuDatHang.getSanPham().getMaSP());
 
                 PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(sanPham.getPhanLoai().getMaPhanLoai());
@@ -1368,10 +1338,15 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
             capNhatTongTienGioHang();
             txt_TienKHDua.setEditable(true);
             JOptionPane.showMessageDialog(this, "Khách hàng có một đơn đặt trước đó");
+        } else {
+            boolean xoa = gioHang.removeAll(gioHang);
+            System.out.println("sp xoa: " + xoa);
+            lbl_SoTienTong.setText("");
+            txt_TongTienGioHang.setText("");
         }
     }
     @Override
-    public void xuLyFrameClose() throws RemoteException {
+    public synchronized  void xuLyFrameClose() throws RemoteException {
         if (Form_DanhSachKhachHang.khachHang_Form != null) {
             khachHang = Form_DanhSachKhachHang.khachHang_Form;
             System.out.println("kh" + khachHang);
@@ -1381,12 +1356,12 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }
 
-    private void xuLyChonKhachHang() throws SQLException, RemoteException {
+    private synchronized void xuLyChonKhachHang() throws SQLException, RemoteException {
         Form_DanhSachKhachHang frm = new Form_DanhSachKhachHang(this);
         frm.setVisible(true);
     }
 
-    private void xuLyTimKiemKhachHang() throws RemoteException {
+    private synchronized void xuLyTimKiemKhachHang() throws RemoteException {
         String tenKhachHang = txt_TenKH.getText().trim();
         String soDienThoai = txt_SoDienThoai.getText().trim();
 
@@ -1411,14 +1386,14 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }
 
-    public void xuLyGiamSLSanPhamTrongKho() throws RemoteException {
+    public synchronized  void xuLyGiamSLSanPhamTrongKho() throws RemoteException {
         for (SanPham sanPham : gioHang) {
 //            System.out.println("sp" + sanPham);
             dao_SanPham.giamSoLuongSanPham(sanPham);
         }
     }
 
-    public void xulyLapHoaDon() throws RemoteException {
+    public synchronized  void xulyLapHoaDon() throws RemoteException {
         HoaDon hd = new HoaDon(khachHang, Login.nhanVien, new Date());
         //Them vao csdl HoaDon
         dao_HoaDon.themHoaDon(hd);
@@ -1454,7 +1429,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         resetPanel();
     }
 
-    public void xuatHoaDon(HoaDon hd) {
+    public synchronized  void xuatHoaDon(HoaDon hd) {
         try {
 
             Font fontMain = FontFactory.getFont("src/main/java/fit/iuh/fonts/vuArial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -1678,7 +1653,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }
 
-    private boolean kiemTraSoLuongMua() throws RemoteException {
+    private synchronized boolean kiemTraSoLuongMua() throws RemoteException {
         for (SanPham sanPham : gioHang) {
             int slTonDuKien = dao_SanPham.getSanPhamTheoMa(sanPham.getMaSP()).getSoLuong() - sanPham.getSoLuong();
             if (sanPham.getSoLuong() > dao_SanPham.getSanPhamTheoMa(sanPham.getMaSP()).getSoLuong() || slTonDuKien < 0) {
@@ -1689,7 +1664,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         return true;
     }
 
-    public void resetPanel() throws RemoteException {
+    public synchronized  void resetPanel() throws RemoteException {
         modelGioHang = (DefaultTableModel) tbl_GioHang.getModel();
         modelGioHang.setRowCount(0);
         modelSanPham = (DefaultTableModel) tbl_SanPham.getModel();
@@ -1703,7 +1678,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         khachHang = null;
     }
 
-    public void xoaTrang() {
+    public synchronized  void xoaTrang() {
         txt_MaSP.setText("");
         txt_TenSP.setText("");
         txt_GiaBan.setText("");
@@ -1718,7 +1693,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         file = null;
     }
 
-    public void capNhatTongTienGioHang() {
+    public synchronized  void capNhatTongTienGioHang() {
         if (gioHang.size() != 0) {
             double tongTien = 0;
             for (SanPham sanPham : gioHang) {
@@ -1732,7 +1707,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }
 
-    public boolean kiemTraThongTinKH() {
+    public synchronized boolean kiemTraThongTinKH() {
         if (khachHang != null) {
             return true;
         } else {
@@ -1740,7 +1715,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }
 
-    public boolean kiemTraTienKHDua() {
+    public synchronized boolean kiemTraTienKHDua() {
         String tienKhachDua = txt_TienKHDua.getText().replace(",", "").trim();
 
         if (gioHang.size() == 0) {
@@ -1775,7 +1750,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         return true;
     }
 
-    public void tinhToanTienTra() {
+    public synchronized  void tinhToanTienTra() {
         String tongTienString = lbl_SoTienTong.getText().replace(",", "").trim();
         String tienKHDuaString = txt_TienKHDua.getText().replace(",", "").trim();
         double tienTra;
@@ -1797,7 +1772,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         //}
     }
 
-    public void docDuLieuSanPham() throws RemoteException {
+    public synchronized  void docDuLieuSanPham() throws RemoteException {
         modelSanPham = (DefaultTableModel) tbl_SanPham.getModel();
         for (SanPham qa : dao_SanPham.getAllSanPham()) {
             PhanLoai pl = dao_PhanLoai.getDLPhanLoaiSPTheoMa(qa.getPhanLoai().getMaPhanLoai());
@@ -1820,7 +1795,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }
 
-    public void docDuLieuCMB() throws RemoteException {
+    public synchronized  void docDuLieuCMB() throws RemoteException {
         //Doc du lieu ComboBox chat lieu
         //ArrayList<ChatLieu> ds_ChatLieu = new ArrayList<>();
         //ds_ChatLieu = dao_ChatLieu.getAllChatLieu();
@@ -1865,44 +1840,44 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         //}
     }
 
-    public void khoaChinhSuaTable() {
+    public synchronized  void khoaChinhSuaTable() {
         // Tạo một TableCellEditor tùy chỉnh để không cho phép chỉnh sửa
         TableCellEditor nonEditableEditor = new TableCellEditor() {
             @Override
-            public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            public synchronized Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
                 return null; // Trả về null để không cho phép chỉnh sửa
             }
 
             @Override
-            public Object getCellEditorValue() {
+            public synchronized Object getCellEditorValue() {
                 return null;
             }
 
             @Override
-            public boolean isCellEditable(EventObject anEvent) {
+            public synchronized boolean isCellEditable(EventObject anEvent) {
                 return false;
             }
 
             @Override
-            public boolean shouldSelectCell(EventObject anEvent) {
+            public synchronized boolean shouldSelectCell(EventObject anEvent) {
                 return false;
             }
 
             @Override
-            public boolean stopCellEditing() {
+            public synchronized boolean stopCellEditing() {
                 return false;
             }
 
             @Override
-            public void cancelCellEditing() {
+            public synchronized void cancelCellEditing() {
             }
 
             @Override
-            public void addCellEditorListener(CellEditorListener l) {
+            public synchronized void addCellEditorListener(CellEditorListener l) {
             }
 
             @Override
-            public void removeCellEditorListener(CellEditorListener l) {
+            public synchronized void removeCellEditorListener(CellEditorListener l) {
             }
         };
 
@@ -1918,7 +1893,7 @@ public class ManHinh_NV_LapHoaDon extends javax.swing.JPanel implements XyLyClos
         }
     }
 
-    public void guiHoaDonVeEmail(HoaDon hd) throws RemoteException {
+    public synchronized  void guiHoaDonVeEmail(HoaDon hd) throws RemoteException {
         KhachHang kh = dao_KhachHang.getKhachHangTheoMa(hd.getKhachHang().getMaKH());
         String emailKhachHang = kh.getEmail();
         SimpleDateFormat fomtter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");

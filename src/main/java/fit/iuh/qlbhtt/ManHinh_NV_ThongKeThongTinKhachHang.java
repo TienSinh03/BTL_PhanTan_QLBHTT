@@ -46,7 +46,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author DMX
  */
-public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
+public   class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
 
     private IHoaDonDao dao_HoaDon = RMIClientUtil.getHoaDonDao();
     private DefaultTableModel dtm;
@@ -61,7 +61,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
     /**
      * Creates new form quanly
      */
-    public ManHinh_NV_ThongKeThongTinKhachHang() throws SQLException, RemoteException {
+    public   ManHinh_NV_ThongKeThongTinKhachHang() throws SQLException, RemoteException {
         initComponents();
 
         dtm = (DefaultTableModel) tbl_ThongKe.getModel();
@@ -76,7 +76,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
     /**
      * Load dữ liệu lên bảng
      */
-    private void tblThongKeKhachHang() throws RemoteException {
+    private synchronized  void tblThongKeKhachHang() throws RemoteException {
         dtm.setRowCount(0);
         ArrayList<KhachHang> listKH = dao_HoaDon.thongKeThongTinKhachHangDaMuaHang();
         int soLuongKH = listKH.size();
@@ -94,7 +94,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
      * Thống kê top 5 khách hàng có doanh thu cao nhất
      *
      */
-    private void tblThongKeTop5KhachHangDoanhThu() throws RemoteException {
+    private synchronized  void tblThongKeTop5KhachHangDoanhThu() throws RemoteException {
         dtm.setRowCount(0);
         ArrayList<KhachHang> listKH = dao_HoaDon.thongKeThongTinTop5KhachHangDTCaoNhat();
         int soLuongKH = listKH.size();
@@ -111,7 +111,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
     /**
      * Thống kê top 5 khách hàng thường xuyên mua hàng
      */
-    private void tblThongKeTop5KhachHangThuongXuyenMuaHang() throws RemoteException {
+    private synchronized  void tblThongKeTop5KhachHangThuongXuyenMuaHang() throws RemoteException {
         dtm.setRowCount(0);
         ArrayList<KhachHang> listKH = dao_HoaDon.thongKeThongTinTop5KhachHangThuongXuyenMuaHang();
         int soLuongKH = listKH.size();
@@ -128,7 +128,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
     /**
      * Thống kê top 5 khách hàng mua nhiều
      */
-    private void tblThongKeTop5KhachHangCoSLMuaNhieuNhat() throws RemoteException {
+    private synchronized  void tblThongKeTop5KhachHangCoSLMuaNhieuNhat() throws RemoteException {
         dtm.setRowCount(0);
         ArrayList<KhachHang> listKH = dao_HoaDon.thongKeThongTinTop5KhachHangSLNhieuNhat();
         int soLuongKH = listKH.size();
@@ -142,7 +142,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         txt_TongSanPhamBan.setText(soLuongKH + "");
     }
 
-    private void lamMoi() {
+    private synchronized  void lamMoi() {
         txt_MaKH.setText("");
         txt_TenKH.setText("");
         txt_SoLuongSPMua.setText("");
@@ -153,7 +153,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
     /**
      * Lấy giá trị trên bảng add vào ArrayList
      */
-    public ArrayList<KhachHang> getGiaTriTrongBang() throws ParseException {
+    public synchronized  ArrayList<KhachHang> getGiaTriTrongBang() throws ParseException {
         ArrayList<KhachHang> listKH = new ArrayList<>();
         for (int i = 0; i < tbl_ThongKe.getRowCount(); i++) {
             long maKH = Long.parseLong(tbl_ThongKe.getValueAt(i, 0).toString());
@@ -171,7 +171,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
      *
      * @param
      */
-    public void xuatBaoCaoThongKe(ArrayList<KhachHang> listKH) {
+    public synchronized  void xuatBaoCaoThongKe(ArrayList<KhachHang> listKH) {
         try {
 
             Font fontMain = FontFactory.getFont("src/main/java/fit/iuh/fonts/vuArial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -403,7 +403,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized  void initComponents() {
 
         pnl_DanhSachThongKe = new javax.swing.JPanel();
         scr_DanhSachThongKe = new javax.swing.JScrollPane();
@@ -452,14 +452,14 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public synchronized  Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
         tbl_ThongKe.setRowHeight(35);
         tbl_ThongKe.setShowGrid(true);
         tbl_ThongKe.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbl_ThongKeMouseClicked(evt);
             }
         });
@@ -520,7 +520,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         txt_TongSanPhamBan.setText("0");
         txt_TongSanPhamBan.setBorder(null);
         txt_TongSanPhamBan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_TongSanPhamBanActionPerformed(evt);
             }
         });
@@ -574,7 +574,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         txt_SoLuongHoaDon.setEditable(false);
         txt_SoLuongHoaDon.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_SoLuongHoaDon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_SoLuongHoaDonActionPerformed(evt);
             }
         });
@@ -658,15 +658,15 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         btn_Top5KHDT.setMinimumSize(new java.awt.Dimension(107, 18));
         btn_Top5KHDT.setPreferredSize(new java.awt.Dimension(107, 18));
         btn_Top5KHDT.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_Top5KHDTMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_Top5KHDTMouseExited(evt);
             }
         });
         btn_Top5KHDT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_Top5KHDTActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -682,15 +682,15 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         btn_XuatThongKe.setMinimumSize(new java.awt.Dimension(107, 18));
         btn_XuatThongKe.setPreferredSize(new java.awt.Dimension(107, 18));
         btn_XuatThongKe.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_XuatThongKeMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_XuatThongKeMouseExited(evt);
             }
         });
         btn_XuatThongKe.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_XuatThongKeActionPerformed(evt);
             }
         });
@@ -702,15 +702,15 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         btn_LamMoi.setMinimumSize(new java.awt.Dimension(107, 18));
         btn_LamMoi.setPreferredSize(new java.awt.Dimension(107, 18));
         btn_LamMoi.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_LamMoiMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_LamMoiMouseExited(evt);
             }
         });
         btn_LamMoi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_LamMoiActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -723,7 +723,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         btn_Top5KHHD.setText("Top 5 Khách hàng thường xuyên mua hàng nhất");
         btn_Top5KHHD.setBorder(null);
         btn_Top5KHHD.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_Top5KHHDActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -736,7 +736,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         btn_Top5KHSL.setText("Top 5 khách hàng có số lượng mua nhiều nhất");
         btn_Top5KHSL.setBorder(null);
         btn_Top5KHSL.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_Top5KHSLActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -799,41 +799,41 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_TongSanPhamBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TongSanPhamBanActionPerformed
+    private synchronized  void txt_TongSanPhamBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TongSanPhamBanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_TongSanPhamBanActionPerformed
 
-    private void btn_XuatThongKeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XuatThongKeMouseEntered
+    private synchronized  void btn_XuatThongKeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XuatThongKeMouseEntered
         btn_XuatThongKe.setBackground(new Color(0x9EDDFF));
         btn_XuatThongKe.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_XuatThongKeMouseEntered
 
-    private void btn_XuatThongKeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XuatThongKeMouseExited
+    private synchronized  void btn_XuatThongKeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XuatThongKeMouseExited
         btn_XuatThongKe.setBackground(UIManager.getColor("Menu.background"));
         btn_XuatThongKe.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_XuatThongKeMouseExited
 
-    private void btn_Top5KHDTMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Top5KHDTMouseEntered
+    private synchronized  void btn_Top5KHDTMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Top5KHDTMouseEntered
         btn_Top5KHDT.setBackground(new Color(0x9EDDFF));
         btn_Top5KHDT.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_Top5KHDTMouseEntered
 
-    private void btn_Top5KHDTMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Top5KHDTMouseExited
+    private synchronized  void btn_Top5KHDTMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_Top5KHDTMouseExited
         btn_Top5KHDT.setBackground(UIManager.getColor("Menu.background"));
         btn_Top5KHDT.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_Top5KHDTMouseExited
 
-    private void btn_LamMoiMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LamMoiMouseEntered
+    private synchronized  void btn_LamMoiMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LamMoiMouseEntered
         btn_LamMoi.setBackground(new Color(0x9EDDFF));
         btn_LamMoi.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_LamMoiMouseEntered
 
-    private void btn_LamMoiMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LamMoiMouseExited
+    private synchronized  void btn_LamMoiMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LamMoiMouseExited
         btn_LamMoi.setBackground(UIManager.getColor("Menu.background"));
         btn_LamMoi.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_LamMoiMouseExited
 
-    private void tbl_ThongKeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_ThongKeMouseClicked
+    private synchronized  void tbl_ThongKeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_ThongKeMouseClicked
         int row = tbl_ThongKe.getSelectedRow();
         if (row != -1) {
             txt_MaKH.setText(tbl_ThongKe.getValueAt(row, 0).toString());
@@ -845,7 +845,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tbl_ThongKeMouseClicked
 
-    private void btn_Top5KHDTActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_Top5KHDTActionPerformed
+    private synchronized  void btn_Top5KHDTActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_Top5KHDTActionPerformed
         activeTatCa = false;
         activeTop5KhachHangChiTieuCao = true;
         activeTop5KhachHangSoLuongMuaNhieu= false;
@@ -853,7 +853,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         tblThongKeTop5KhachHangDoanhThu();
     }//GEN-LAST:event_btn_Top5KHDTActionPerformed
 
-    private void btn_XuatThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XuatThongKeActionPerformed
+    private synchronized  void btn_XuatThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_XuatThongKeActionPerformed
         ArrayList<KhachHang> listKH = null;
         try {
             listKH = getGiaTriTrongBang();
@@ -863,7 +863,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         xuatBaoCaoThongKe(listKH);
     }//GEN-LAST:event_btn_XuatThongKeActionPerformed
 
-    private void btn_LamMoiActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LamMoiActionPerformed
+    private synchronized  void btn_LamMoiActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LamMoiActionPerformed
         activeTatCa = true;
         activeTop5KhachHangChiTieuCao = false;
         activeTop5KhachHangSoLuongMuaNhieu= false;
@@ -871,11 +871,11 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         tblThongKeKhachHang();
     }//GEN-LAST:event_btn_LamMoiActionPerformed
 
-    private void txt_SoLuongHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_SoLuongHoaDonActionPerformed
+    private synchronized  void txt_SoLuongHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_SoLuongHoaDonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_SoLuongHoaDonActionPerformed
 
-    private void btn_Top5KHHDActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_Top5KHHDActionPerformed
+    private synchronized  void btn_Top5KHHDActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_Top5KHHDActionPerformed
         activeTatCa = false;
         activeTop5KhachHangChiTieuCao = false;
         activeTop5KhachHangSoLuongMuaNhieu= false;
@@ -883,7 +883,7 @@ public class ManHinh_NV_ThongKeThongTinKhachHang extends javax.swing.JPanel {
         tblThongKeTop5KhachHangThuongXuyenMuaHang();
     }//GEN-LAST:event_btn_Top5KHHDActionPerformed
 
-    private void btn_Top5KHSLActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_Top5KHSLActionPerformed
+    private synchronized  void btn_Top5KHSLActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_Top5KHSLActionPerformed
         activeTatCa = false;
         activeTop5KhachHangChiTieuCao = false;
         activeTop5KhachHangSoLuongMuaNhieu= true;

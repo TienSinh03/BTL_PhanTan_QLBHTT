@@ -23,19 +23,19 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author DMX
  */
-public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
+public  class ManHinh_NV_QuanLy extends javax.swing.JPanel {
 
     private DefaultTableModel modelNhanVien;
     private INhanVienDao daoNhanVien;
     private ITaiKhoanDao daoTaiKhoan;
     private boolean kiemTraHoaDongThem = false;
     private boolean kiemTraHoaDongSua = false;
-    public boolean activeThayDoitt = ManHinh_NV_TimKiem.activeThayDoiTT;
+    public  boolean activeThayDoitt = ManHinh_NV_TimKiem.activeThayDoiTT;
 
     /**
      * Creates new form quanly
      */
-    public ManHinh_NV_QuanLy() throws SQLException, RemoteException {
+    public  ManHinh_NV_QuanLy() throws SQLException, RemoteException {
         daoNhanVien = RMIClientUtil.getNhanVienDao();
         daoTaiKhoan = RMIClientUtil.getTaiKhoanDao();
 //        connect = new Connect();
@@ -56,7 +56,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     /**
      * Load dữ liệu comboBox chức vụ
      */
-    public void loadDuLieuChucVu() throws RemoteException {
+    public synchronized void loadDuLieuChucVu() throws RemoteException {
         String giaTriKiemTa = null;
         ArrayList<String> listCV = new ArrayList<>();
         for (NhanVien nv : daoNhanVien.getAllNhanVien()) {
@@ -73,7 +73,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     /**
      * Load dữ liệu vào bảng
      */
-    public void docDuLieuNhanVien() throws RemoteException {
+    public synchronized void docDuLieuNhanVien() throws RemoteException {
 
         modelNhanVien = (DefaultTableModel) tbl_NhanVien.getModel();
         modelNhanVien.setRowCount(0);
@@ -100,7 +100,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     /**
      * Kiem tra hoat dong cua cac JtextField
      */
-    public void kiemTraHoatDongTextNhap(boolean kiemTra) {
+    public synchronized void kiemTraHoatDongTextNhap(boolean kiemTra) {
         txt_TenNV.setEditable(kiemTra);
         txt_SoDienThoai.setEditable(kiemTra);
         txt_Email.setEditable(kiemTra);
@@ -114,7 +114,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     /**
      * Huy thao tac hoat dong cua componet
      */
-    public void huyThaoTac() {
+    public synchronized void huyThaoTac() {
         kiemTraHoaDongThem = false;
         kiemTraHoaDongSua = false;
         btn_Them.setEnabled(true);
@@ -128,7 +128,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     /**
      * Xóa trắng các Jtext filed
      */
-    public void xoaTrangTxt() {
+    public synchronized void xoaTrangTxt() {
         txt_TenNV.setText("");
         txt_SoDienThoai.setText("");
         txt_DiaChi.setText("");
@@ -143,7 +143,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     /**
      * regex thông tin nhập vào khi thêm hoặc sửa nhân viên
      */
-    public boolean rangBuocDuLieuNhap() {
+    public synchronized boolean rangBuocDuLieuNhap() {
         //tạo regex cho các textfield
         String regexSoDienThoai = "^[0-9]{10}$"; //-> 0123456789
         String regexEmail = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+(\\.[a-zA-Z0-9]+)$"; // -> abc@abc.abc
@@ -184,7 +184,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     /**
      * Xử lý thêm nhân viên
      */
-    public void xuLyThemNhanVien() throws RemoteException {
+    public synchronized void xuLyThemNhanVien() throws RemoteException {
         if (!rangBuocDuLieuNhap()) {
             return;
         }
@@ -251,7 +251,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     /**
      * Xử lý xóa nhân viên
      */
-    public void xuLyXoaNhanVien() throws RemoteException {
+    public synchronized void xuLyXoaNhanVien() throws RemoteException {
         int row = tbl_NhanVien.getSelectedRow();
         if (row != -1) {
             if (JOptionPane.showConfirmDialog(this, "Bạn có chắc là xóa nhân viên này không?", "Cảnh Báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -272,7 +272,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     /**
      * Xử lý cập nhật nhân viên
      */
-    public void xuLyCapNhatNhanVien() throws RemoteException {
+    public synchronized void xuLyCapNhatNhanVien() throws RemoteException {
         if (!rangBuocDuLieuNhap()) {
             return;
         }
@@ -328,7 +328,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     /**
      * Load giá trị txt từ class Tìm Kiếm nhân viên
      */
-    public void loadNVTuTacVuTimKiem() {
+    public synchronized void loadNVTuTacVuTimKiem() {
         NhanVien nv = ManHinh_NV_TimKiem.nhanVien;
 
         if (nv != null) {
@@ -355,7 +355,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         pnl_DanhSachNhanVien = new javax.swing.JPanel();
@@ -406,14 +406,14 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public synchronized Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
         tbl_NhanVien.setRowHeight(35);
         tbl_NhanVien.setShowGrid(true);
         tbl_NhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbl_NhanVienMouseClicked(evt);
             }
         });
@@ -460,7 +460,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         txt_TenNV.setEditable(false);
         txt_TenNV.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_TenNV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_TenNVActionPerformed(evt);
             }
         });
@@ -468,7 +468,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         txt_MaNV.setEditable(false);
         txt_MaNV.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_MaNV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_MaNVActionPerformed(evt);
             }
         });
@@ -509,7 +509,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         txt_SoDienThoai.setEditable(false);
         txt_SoDienThoai.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_SoDienThoai.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_SoDienThoaiActionPerformed(evt);
             }
         });
@@ -517,7 +517,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         txt_Email.setEditable(false);
         txt_Email.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_Email.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_EmailActionPerformed(evt);
             }
         });
@@ -525,7 +525,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         txt_DiaChi.setEditable(false);
         txt_DiaChi.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt_DiaChi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_DiaChiActionPerformed(evt);
             }
         });
@@ -533,7 +533,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         cmb_ChucVu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cmb_ChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
         cmb_ChucVu.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+            public synchronized void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cmb_ChucVuItemStateChanged(evt);
             }
         });
@@ -631,15 +631,15 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         btn_Them.setText("Thêm");
         btn_Them.setBorder(null);
         btn_Them.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_ThemMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_ThemMouseExited(evt);
             }
         });
         btn_Them.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_ThemActionPerformed(evt);
             }
         });
@@ -649,15 +649,15 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         btn_Xoa.setText("Xóa");
         btn_Xoa.setBorder(null);
         btn_Xoa.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_XoaMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_XoaMouseExited(evt);
             }
         });
         btn_Xoa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_XoaActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -671,15 +671,15 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         btn_CapNhat.setText("Cập nhật");
         btn_CapNhat.setBorder(null);
         btn_CapNhat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_CapNhatMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_CapNhatMouseExited(evt);
             }
         });
         btn_CapNhat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_CapNhatActionPerformed(evt);
             }
         });
@@ -690,15 +690,15 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         btn_Luu.setBorder(null);
         btn_Luu.setEnabled(false);
         btn_Luu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_LuuMouseEntered(evt);
             }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_LuuMouseExited(evt);
             }
         });
         btn_Luu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_LuuActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -758,19 +758,19 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_TenNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TenNVActionPerformed
+    private synchronized void txt_TenNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TenNVActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_TenNVActionPerformed
 
-    private void txt_MaNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_MaNVActionPerformed
+    private synchronized void txt_MaNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_MaNVActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_MaNVActionPerformed
 
-    private void btn_XoaActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XoaActionPerformed
+    private synchronized void btn_XoaActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XoaActionPerformed
         xuLyXoaNhanVien();
     }//GEN-LAST:event_btn_XoaActionPerformed
 
-    private void btn_CapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CapNhatActionPerformed
+    private synchronized void btn_CapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CapNhatActionPerformed
         if (btn_CapNhat.getText().equalsIgnoreCase("Cập nhật")) {
             btn_CapNhat.setText("Hủy");
             btn_Them.setEnabled(false);
@@ -786,7 +786,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_CapNhatActionPerformed
 
-    private void btn_LuuActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LuuActionPerformed
+    private synchronized void btn_LuuActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LuuActionPerformed
         if (kiemTraHoaDongThem) {
             xuLyThemNhanVien();
         } else if (kiemTraHoaDongSua) {
@@ -794,19 +794,19 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_LuuActionPerformed
 
-    private void txt_SoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_SoDienThoaiActionPerformed
+    private synchronized void txt_SoDienThoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_SoDienThoaiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_SoDienThoaiActionPerformed
 
-    private void txt_EmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_EmailActionPerformed
+    private synchronized void txt_EmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_EmailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_EmailActionPerformed
 
-    private void txt_DiaChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_DiaChiActionPerformed
+    private synchronized void txt_DiaChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_DiaChiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_DiaChiActionPerformed
 
-    private void btn_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemActionPerformed
+    private synchronized void btn_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemActionPerformed
         if (btn_Them.getText().equalsIgnoreCase("Thêm")) {
             btn_Them.setText("Hủy");
             btn_CapNhat.setEnabled(false);
@@ -821,7 +821,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_ThemActionPerformed
 
-    private void tbl_NhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_NhanVienMouseClicked
+    private synchronized void tbl_NhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_NhanVienMouseClicked
         int row = tbl_NhanVien.getSelectedRow();
         if (row != -1) {
             txt_MaNV.setText(tbl_NhanVien.getValueAt(row, 0).toString());
@@ -839,7 +839,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tbl_NhanVienMouseClicked
 
-    private void btn_ThemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseEntered
+    private synchronized void btn_ThemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseEntered
         if (btn_Them.isEnabled()) {
             btn_Them.setBackground(new Color(0x9EDDFF));
             btn_Them.setForeground(new Color(0x141E46));
@@ -847,56 +847,56 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btn_ThemMouseEntered
 
-    private void btn_ThemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseExited
+    private synchronized void btn_ThemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseExited
         if (btn_Them.isEnabled()) {
             btn_Them.setBackground(UIManager.getColor("Menu.background"));
             btn_Them.setForeground(UIManager.getColor("Menu.foreground"));
         }
     }//GEN-LAST:event_btn_ThemMouseExited
 
-    private void btn_XoaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaMouseEntered
+    private synchronized void btn_XoaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaMouseEntered
         if (btn_Xoa.isEnabled()) {
             btn_Xoa.setBackground(new Color(0x9EDDFF));
             btn_Xoa.setForeground(new Color(0x141E46));
         }
     }//GEN-LAST:event_btn_XoaMouseEntered
 
-    private void btn_XoaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaMouseExited
+    private synchronized void btn_XoaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaMouseExited
         if (btn_Xoa.isEnabled()) {
             btn_Xoa.setBackground(UIManager.getColor("Menu.background"));
             btn_Xoa.setForeground(UIManager.getColor("Menu.foreground"));
         }
     }//GEN-LAST:event_btn_XoaMouseExited
 
-    private void btn_CapNhatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseEntered
+    private synchronized void btn_CapNhatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseEntered
         if (btn_CapNhat.isEnabled()) {
             btn_CapNhat.setBackground(new Color(0x9EDDFF));
             btn_CapNhat.setForeground(new Color(0x141E46));
         }
     }//GEN-LAST:event_btn_CapNhatMouseEntered
 
-    private void btn_CapNhatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseExited
+    private synchronized void btn_CapNhatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseExited
         if (btn_CapNhat.isEnabled()) {
             btn_CapNhat.setBackground(UIManager.getColor("Menu.background"));
             btn_CapNhat.setForeground(UIManager.getColor("Menu.foreground"));
         }
     }//GEN-LAST:event_btn_CapNhatMouseExited
 
-    private void btn_LuuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseEntered
+    private synchronized void btn_LuuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseEntered
         if (btn_Luu.isEnabled()) {
             btn_Luu.setBackground(new Color(0x9EDDFF));
             btn_Luu.setForeground(new Color(0x141E46));
         }
     }//GEN-LAST:event_btn_LuuMouseEntered
 
-    private void btn_LuuMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseExited
+    private synchronized void btn_LuuMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseExited
         if (btn_Luu.isEnabled()) {
             btn_Luu.setBackground(UIManager.getColor("Menu.background"));
             btn_Luu.setForeground(UIManager.getColor("Menu.foreground"));
         }
     }//GEN-LAST:event_btn_LuuMouseExited
 
-    private void cmb_ChucVuItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmb_ChucVuItemStateChanged
+    private synchronized void cmb_ChucVuItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmb_ChucVuItemStateChanged
 
     }//GEN-LAST:event_cmb_ChucVuItemStateChanged
 
@@ -907,7 +907,7 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     private javax.swing.JButton btn_Them;
     private javax.swing.JButton btn_Xoa;
     private javax.swing.ButtonGroup buttonGroup1;
-    public static javax.swing.JComboBox<String> cmb_ChucVu;
+    public  static javax.swing.JComboBox<String> cmb_ChucVu;
     private javax.swing.JLabel lbl_ChucVu;
     private javax.swing.JLabel lbl_DiaChi;
     private javax.swing.JLabel lbl_Email;
@@ -921,15 +921,15 @@ public class ManHinh_NV_QuanLy extends javax.swing.JPanel {
     private javax.swing.JPanel pnl_NV_TieuDe;
     private javax.swing.JPanel pnl_NutChucNang;
     private javax.swing.JPanel pnl_ThongTin;
-    public static javax.swing.JRadioButton rad_Nam;
-    public static javax.swing.JRadioButton rad_Nu;
-    public static javax.swing.JRadioButton rad_TrangThai;
+    public  static javax.swing.JRadioButton rad_Nam;
+    public  static javax.swing.JRadioButton rad_Nu;
+    public  static javax.swing.JRadioButton rad_TrangThai;
     private javax.swing.JScrollPane scr_DanhSachNhanVien;
     private javax.swing.JTable tbl_NhanVien;
-    public static javax.swing.JTextField txt_DiaChi;
-    public static javax.swing.JTextField txt_Email;
-    public static javax.swing.JTextField txt_MaNV;
-    public static javax.swing.JTextField txt_SoDienThoai;
-    public static javax.swing.JTextField txt_TenNV;
+    public  static javax.swing.JTextField txt_DiaChi;
+    public  static javax.swing.JTextField txt_Email;
+    public  static javax.swing.JTextField txt_MaNV;
+    public  static javax.swing.JTextField txt_SoDienThoai;
+    public  static javax.swing.JTextField txt_TenNV;
     // End of variables declaration//GEN-END:variables
 }

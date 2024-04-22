@@ -17,15 +17,15 @@ import javax.swing.JFrame;
 /**
  * @author DMX
  */
-public class HomePage extends javax.swing.JFrame {
+public  class HomePage extends javax.swing.JFrame {
 
-    private final NhanVien nhanVien = Login.nhanVien;
-    private final boolean ngonNgu = Login.ngonNgu;
+    private  final NhanVien nhanVien = Login.nhanVien;
+    private  final boolean ngonNgu = Login.ngonNgu;
 
     /**
      * Creates new form HomePage
      */
-    public HomePage() throws SQLException {
+    public  HomePage() throws SQLException {
         initComponents();
         setTitle("Nhóm 10 - Quản Lý Bán Quần Áo Thời Trang");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -46,7 +46,7 @@ public class HomePage extends javax.swing.JFrame {
         setRole();
     }
 
-    public void chuyenDoiNgonNgu() {
+    public synchronized void chuyenDoiNgonNgu() {
         mnu_SanPham.setText("Clothes");
         mni_SP_QuanLy.setText("Management");
         mni_SP_TimKiem.setText("Search");
@@ -87,7 +87,7 @@ public class HomePage extends javax.swing.JFrame {
     /**
      * Cài đặt role khi nhân viên đăng nhập
      */
-    public void setRole() {
+    public synchronized void setRole() {
         if (nhanVien.getChuVu().equalsIgnoreCase("Nhân Viên")) {
             //mni_SP_ChatLieu.setVisible(false);
             //mni_SP_MauSac.setVisible(false);
@@ -105,7 +105,7 @@ public class HomePage extends javax.swing.JFrame {
     /**
      * Ẩn thanh ngang
      */
-    public void anThanhNgang(boolean kiemTra) {
+    public synchronized void anThanhNgang(boolean kiemTra) {
         //spr_SP_ThanhNgang1.setVisible(kiemTra);
         //spr_SP_ThanhNgang2.setVisible(kiemTra);
         //spr_SP_ThanhNgang3.setVisible(kiemTra);
@@ -117,7 +117,7 @@ public class HomePage extends javax.swing.JFrame {
     }
 
     //tạo hàm mở tab quản lý nhân viên
-    public static void activeQLNVForm() {
+    public synchronized static void activeQLNVForm() {
         ManHinh_NV_QuanLy pnl_NV_QuanLy = null;
         try {
             pnl_NV_QuanLy = new ManHinh_NV_QuanLy();
@@ -139,7 +139,7 @@ public class HomePage extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized void initComponents() {
 
         pnl_GiaoDienChucNang = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -219,7 +219,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_SP_QuanLy.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         mni_SP_QuanLy.setPreferredSize(new java.awt.Dimension(160, 35));
         mni_SP_QuanLy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_SP_QuanLyActionPerformed(evt);
             }
         });
@@ -232,7 +232,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_SP_TimKiem.setText("Tìm Kiếm");
         mni_SP_TimKiem.setPreferredSize(new java.awt.Dimension(117, 35));
         mni_SP_TimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_SP_TimKiemActionPerformed(evt);
             }
         });
@@ -245,7 +245,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_SP_ChatLieu.setText("Chất Liệu");
         mni_SP_ChatLieu.setPreferredSize(new java.awt.Dimension(117, 35));
         mni_SP_ChatLieu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_SP_ChatLieuActionPerformed(evt);
             }
         });
@@ -266,7 +266,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_SP_MauSac.setText("Màu Sắc");
         mni_SP_MauSac.setPreferredSize(new java.awt.Dimension(112, 35));
         mni_SP_MauSac.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_SP_MauSacActionPerformed(evt);
             }
         });
@@ -287,7 +287,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_SP_KichThuoc.setText("Kích Thước");
         mni_SP_KichThuoc.setPreferredSize(new java.awt.Dimension(126, 35));
         mni_SP_KichThuoc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_SP_KichThuocActionPerformed(evt);
             }
         });
@@ -308,7 +308,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_SP_DanhMuc.setText("Danh Mục");
         mni_SP_DanhMuc.setPreferredSize(new java.awt.Dimension(122, 35));
         mni_SP_DanhMuc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_SP_DanhMucActionPerformed(evt);
             }
         });
@@ -346,7 +346,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_PK_QuanLy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mni_PK_QuanLy.setPreferredSize(new java.awt.Dimension(160, 36));
         mni_PK_QuanLy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_PK_QuanLyActionPerformed(evt);
             }
         });
@@ -368,7 +368,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_PK_TimKiem.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mni_PK_TimKiem.setPreferredSize(new java.awt.Dimension(102, 36));
         mni_PK_TimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_PK_TimKiemActionPerformed(evt);
             }
         });
@@ -407,7 +407,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_NV_DatHang.setMinimumSize(new java.awt.Dimension(220, 35));
         mni_NV_DatHang.setPreferredSize(new java.awt.Dimension(220, 35));
         mni_NV_DatHang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NV_DatHangActionPerformed(evt);
             }
         });
@@ -429,7 +429,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_NV_LapHoaDon.setText("Lập Hóa Đơn");
         mni_NV_LapHoaDon.setPreferredSize(new java.awt.Dimension(121, 35));
         mni_NV_LapHoaDon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NV_LapHoaDonActionPerformed(evt);
             }
         });
@@ -443,7 +443,7 @@ public class HomePage extends javax.swing.JFrame {
 
         mni_NV_HuyDonDat.setText("Hủy đơn đặt");
         mni_NV_HuyDonDat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NV_HuyDonDatActionPerformed(evt);
             }
         });
@@ -457,7 +457,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_NV_ThongKeDoanhThu.setText("Thống Kê Doanh Thu");
         mni_NV_ThongKeDoanhThu.setPreferredSize(new java.awt.Dimension(163, 35));
         mni_NV_ThongKeDoanhThu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NV_ThongKeDoanhThuActionPerformed(evt);
             }
         });
@@ -472,7 +472,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_NV_ThongKeSanPham.setText("Thống Kê Sản Phẩm");
         mni_NV_ThongKeSanPham.setPreferredSize(new java.awt.Dimension(158, 35));
         mni_NV_ThongKeSanPham.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NV_ThongKeSanPhamActionPerformed(evt);
             }
         });
@@ -486,7 +486,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_NV_ThongKeThongTinKH.setText("Thống Kê Thông Tin Khách Hàng");
         mni_NV_ThongKeThongTinKH.setPreferredSize(new java.awt.Dimension(245, 35));
         mni_NV_ThongKeThongTinKH.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NV_ThongKeThongTinKHActionPerformed(evt);
             }
         });
@@ -500,7 +500,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_NV_XemDSHoaDon.setText("Xem Danh Sách Hóa Đơn");
         mni_NV_XemDSHoaDon.setPreferredSize(new java.awt.Dimension(185, 35));
         mni_NV_XemDSHoaDon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NV_XemDSHoaDonActionPerformed(evt);
             }
         });
@@ -513,7 +513,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_NV_QuanLy.setText("Quản Lý");
         mni_NV_QuanLy.setPreferredSize(new java.awt.Dimension(96, 35));
         mni_NV_QuanLy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NV_QuanLyActionPerformed(evt);
             }
         });
@@ -526,7 +526,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_NV_TimKiem.setText("Tìm Kiếm");
         mni_NV_TimKiem.setPreferredSize(new java.awt.Dimension(102, 35));
         mni_NV_TimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NV_TimKiemActionPerformed(evt);
             }
         });
@@ -548,7 +548,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_KH_QuanLy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mni_KH_QuanLy.setPreferredSize(new java.awt.Dimension(96, 35));
         mni_KH_QuanLy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_KH_QuanLyActionPerformed(evt);
             }
         });
@@ -562,7 +562,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_KH_TimKiem.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mni_KH_TimKiem.setPreferredSize(new java.awt.Dimension(160, 35));
         mni_KH_TimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_KH_TimKiemActionPerformed(evt);
             }
         });
@@ -583,7 +583,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_TK_QuanLy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mni_TK_QuanLy.setPreferredSize(new java.awt.Dimension(160, 35));
         mni_TK_QuanLy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_TK_QuanLyActionPerformed(evt);
             }
         });
@@ -604,7 +604,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_NCC_QuanLy.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mni_NCC_QuanLy.setPreferredSize(new java.awt.Dimension(160, 35));
         mni_NCC_QuanLy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NCC_QuanLyActionPerformed(evt);
             }
         });
@@ -618,7 +618,7 @@ public class HomePage extends javax.swing.JFrame {
         mni_NCC_TimKiem.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         mni_NCC_TimKiem.setPreferredSize(new java.awt.Dimension(160, 35));
         mni_NCC_TimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mni_NCC_TimKiemActionPerformed(evt);
             }
         });
@@ -633,12 +633,12 @@ public class HomePage extends javax.swing.JFrame {
         mnu_DangXuat.setMinimumSize(new java.awt.Dimension(120, 22));
         mnu_DangXuat.setPreferredSize(new java.awt.Dimension(200, 30));
         mnu_DangXuat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized void mouseClicked(java.awt.event.MouseEvent evt) {
                 mnu_DangXuatMouseClicked(evt);
             }
         });
         mnu_DangXuat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 mnu_DangXuatActionPerformed(evt);
             }
         });
@@ -673,7 +673,7 @@ public class HomePage extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mni_SP_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_QuanLyActionPerformed
+    private synchronized void mni_SP_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_QuanLyActionPerformed
         // TODO add your handling code here:
         ManHinh_QA_QuanLy pnl_QuanLySP = null;
         try {
@@ -689,7 +689,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_SP_QuanLyActionPerformed
 
-    private void mni_NCC_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NCC_QuanLyActionPerformed
+    private synchronized void mni_NCC_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NCC_QuanLyActionPerformed
         ManHinh_NCC_QuanLy pnl_NCC_QuanLy = null;
         try {
             pnl_NCC_QuanLy = new ManHinh_NCC_QuanLy();
@@ -704,7 +704,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_NCC_QuanLyActionPerformed
 
-    private void mni_KH_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_KH_QuanLyActionPerformed
+    private synchronized void mni_KH_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_KH_QuanLyActionPerformed
         ManHinh_KH_QuanLy pnl_KH_QuanLy = null;
         try {
             pnl_KH_QuanLy = new ManHinh_KH_QuanLy();
@@ -719,7 +719,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_KH_QuanLyActionPerformed
 
-    private void mni_KH_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_KH_TimKiemActionPerformed
+    private synchronized void mni_KH_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_KH_TimKiemActionPerformed
         ManHinh_KH_TimKiem pnl_KH_TimKiem = null;
         try {
             pnl_KH_TimKiem = new ManHinh_KH_TimKiem();
@@ -734,7 +734,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_KH_TimKiemActionPerformed
 
-    private void mni_SP_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_TimKiemActionPerformed
+    private synchronized void mni_SP_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_TimKiemActionPerformed
         ManHinh_QA_TimKiem pnl_TimKiemSP = null;
         try {
             pnl_TimKiemSP = new ManHinh_QA_TimKiem();
@@ -749,7 +749,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();       // TODO add your handling code here:
     }//GEN-LAST:event_mni_SP_TimKiemActionPerformed
 
-    private void mni_NV_DatHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_DatHangActionPerformed
+    private synchronized void mni_NV_DatHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_DatHangActionPerformed
         ManHinh_NV_DatHang pnl_NV_DatHang = null;
         try {
             pnl_NV_DatHang = new ManHinh_NV_DatHang();
@@ -764,7 +764,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();        // TODO add your handling code here:
     }//GEN-LAST:event_mni_NV_DatHangActionPerformed
 
-    private void mni_NV_LapHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_LapHoaDonActionPerformed
+    private synchronized void mni_NV_LapHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_LapHoaDonActionPerformed
         ManHinh_NV_LapHoaDon pnl_NV_LapHoaDon = null;
         try {
             pnl_NV_LapHoaDon = new ManHinh_NV_LapHoaDon();
@@ -779,7 +779,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_NV_LapHoaDonActionPerformed
 
-    private void mni_NV_ThongKeDoanhThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_ThongKeDoanhThuActionPerformed
+    private synchronized void mni_NV_ThongKeDoanhThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_ThongKeDoanhThuActionPerformed
         ManHinh_NV_ThongKeDoanhThu pnl_NV_ThongKeDoanhThu = null;
         try {
             pnl_NV_ThongKeDoanhThu = new ManHinh_NV_ThongKeDoanhThu();
@@ -794,7 +794,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_NV_ThongKeDoanhThuActionPerformed
 
-    private void mni_NV_ThongKeSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_ThongKeSanPhamActionPerformed
+    private synchronized void mni_NV_ThongKeSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_ThongKeSanPhamActionPerformed
         ManHinh_NV_ThongKeSanPham pnl_NV_ThongKeSanPham = null;
         try {
             pnl_NV_ThongKeSanPham = new ManHinh_NV_ThongKeSanPham();
@@ -809,7 +809,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_NV_ThongKeSanPhamActionPerformed
 
-    private void mni_NV_ThongKeThongTinKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_ThongKeThongTinKHActionPerformed
+    private synchronized void mni_NV_ThongKeThongTinKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_ThongKeThongTinKHActionPerformed
         ManHinh_NV_ThongKeThongTinKhachHang pnl_NV_ThongKeThongTinKhachHang = null;
         try {
             pnl_NV_ThongKeThongTinKhachHang = new ManHinh_NV_ThongKeThongTinKhachHang();
@@ -822,7 +822,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_NV_ThongKeThongTinKHActionPerformed
 
-    private void mni_NV_XemDSHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_XemDSHoaDonActionPerformed
+    private synchronized void mni_NV_XemDSHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_XemDSHoaDonActionPerformed
         ManHinh_NV_XemDSHoaDon pnl_NV_XemDSHoaDon = null;
         try {
             pnl_NV_XemDSHoaDon = new ManHinh_NV_XemDSHoaDon();
@@ -837,7 +837,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_NV_XemDSHoaDonActionPerformed
 
-    private void mni_NV_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_QuanLyActionPerformed
+    private synchronized void mni_NV_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_QuanLyActionPerformed
         ManHinh_NV_QuanLy pnl_NV_QuanLy = null;
         try {
             pnl_NV_QuanLy = new ManHinh_NV_QuanLy();
@@ -852,7 +852,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_NV_QuanLyActionPerformed
 
-    private void mni_NV_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_TimKiemActionPerformed
+    private synchronized void mni_NV_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_TimKiemActionPerformed
         ManHinh_NV_TimKiem pnl_NV_TimKiem = null;
         try {
             pnl_NV_TimKiem = new ManHinh_NV_TimKiem();
@@ -867,7 +867,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_NV_TimKiemActionPerformed
 
-    private void mni_TK_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_TK_QuanLyActionPerformed
+    private synchronized void mni_TK_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_TK_QuanLyActionPerformed
         ManHinh_TaiKhoan_QuanLy pnl_TK_QuanLy = null;
         try {
             pnl_TK_QuanLy = new ManHinh_TaiKhoan_QuanLy();
@@ -882,7 +882,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_TK_QuanLyActionPerformed
 
-    private void mni_NCC_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NCC_TimKiemActionPerformed
+    private synchronized void mni_NCC_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NCC_TimKiemActionPerformed
         ManHinh_NCC_TimKiem pnl_KH_QuanLy = null;
         try {
             pnl_KH_QuanLy = new ManHinh_NCC_TimKiem();
@@ -897,7 +897,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_NCC_TimKiemActionPerformed
 
-    private void mni_SP_KichThuocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_KichThuocActionPerformed
+    private synchronized void mni_SP_KichThuocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_KichThuocActionPerformed
         ManHinh_QA_KichThuoc pnl_QA_KichThuoc = null;
         try {
             pnl_QA_KichThuoc = new ManHinh_QA_KichThuoc();
@@ -912,7 +912,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_SP_KichThuocActionPerformed
 
-    private void mni_SP_ChatLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_ChatLieuActionPerformed
+    private synchronized void mni_SP_ChatLieuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_ChatLieuActionPerformed
         ManHinh_QA_ChatLieu pnl_QA_ChatLieu = null;
         try {
             pnl_QA_ChatLieu = new ManHinh_QA_ChatLieu();
@@ -928,7 +928,7 @@ public class HomePage extends javax.swing.JFrame {
 
     }//GEN-LAST:event_mni_SP_ChatLieuActionPerformed
 
-    private void mni_SP_MauSacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_MauSacActionPerformed
+    private synchronized void mni_SP_MauSacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_MauSacActionPerformed
         ManHinh_QA_MauSac pnl_QA_MauSac = null;
         try {
             pnl_QA_MauSac = new ManHinh_QA_MauSac();
@@ -943,7 +943,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_SP_MauSacActionPerformed
 
-    private void mni_SP_DanhMucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_DanhMucActionPerformed
+    private synchronized void mni_SP_DanhMucActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_SP_DanhMucActionPerformed
         ManHinh_QA_DanhMuc pnl_QA_DanhMuc = null;
         try {
             pnl_QA_DanhMuc = new ManHinh_QA_DanhMuc();
@@ -958,7 +958,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_SP_DanhMucActionPerformed
 
-    private void mni_PK_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_PK_QuanLyActionPerformed
+    private synchronized void mni_PK_QuanLyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_PK_QuanLyActionPerformed
         ManHinh_PK_QuanLy pnl_PK_QuanLy = null;
         try {
             pnl_PK_QuanLy = new ManHinh_PK_QuanLy();
@@ -973,7 +973,7 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_PK_QuanLyActionPerformed
 
-    private void mni_PK_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_PK_TimKiemActionPerformed
+    private synchronized void mni_PK_TimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_PK_TimKiemActionPerformed
         ManHinh_PK_TimKiem pnl_PK_TimKiem = null;
         try {
             pnl_PK_TimKiem = new ManHinh_PK_TimKiem();
@@ -988,12 +988,12 @@ public class HomePage extends javax.swing.JFrame {
         pnl_GiaoDienChucNang.repaint();
     }//GEN-LAST:event_mni_PK_TimKiemActionPerformed
 
-    private void mnu_DangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnu_DangXuatActionPerformed
+    private synchronized void mnu_DangXuatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnu_DangXuatActionPerformed
 
 
     }//GEN-LAST:event_mnu_DangXuatActionPerformed
 
-    private void mnu_DangXuatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mnu_DangXuatMouseClicked
+    private synchronized void mnu_DangXuatMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mnu_DangXuatMouseClicked
 
         try {
             new Login().setVisible(true);
@@ -1003,7 +1003,7 @@ public class HomePage extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mnu_DangXuatMouseClicked
 
-    private void mni_NV_HuyDonDatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_HuyDonDatActionPerformed
+    private synchronized void mni_NV_HuyDonDatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mni_NV_HuyDonDatActionPerformed
         ManHinh_NV_HuyDonDat pnlHinh_NV_HuyDonDat = null;
         try {
             pnlHinh_NV_HuyDonDat = new ManHinh_NV_HuyDonDat();
@@ -1021,7 +1021,7 @@ public class HomePage extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public synchronized static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -1047,7 +1047,7 @@ public class HomePage extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public synchronized void run() {
                 try {
                     new HomePage().setVisible(true);
                 } catch (SQLException ex) {

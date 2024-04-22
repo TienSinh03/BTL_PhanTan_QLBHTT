@@ -22,14 +22,14 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author DMX
  */
-public class Form_DanhSachKhachHang extends javax.swing.JFrame {
+public  class Form_DanhSachKhachHang extends javax.swing.JFrame {
     private IKhachHangDao dao_KhachHang;
     private DefaultTableModel modelKhachHang;
-    public static KhachHang khachHang_Form = null;
+    public  static KhachHang khachHang_Form = null;
     /**
      * Creates new form Form_DanhSachKhachHang
      */
-    public Form_DanhSachKhachHang(final XyLyCloseFrame parentPanel) throws SQLException, RemoteException {
+    public  Form_DanhSachKhachHang(final XyLyCloseFrame parentPanel) throws SQLException, RemoteException {
         dao_KhachHang = RMIClientUtil.getKhachHangDao();
 
         initComponents();
@@ -40,7 +40,7 @@ public class Form_DanhSachKhachHang extends javax.swing.JFrame {
         
         btn_Thoat.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public synchronized void actionPerformed(ActionEvent e) {
                 // Khi nút "Thoát" trên JFrame được nhấn, gọi phương thức trên JPanel cha để xử lý sự kiện
                 try {
                     parentPanel.xuLyFrameClose();
@@ -91,7 +91,7 @@ public class Form_DanhSachKhachHang extends javax.swing.JFrame {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public synchronized Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
@@ -102,14 +102,14 @@ public class Form_DanhSachKhachHang extends javax.swing.JFrame {
 
         btn_Thoat.setText("Thoát");
         btn_Thoat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_ThoatActionPerformed(evt);
             }
         });
 
         btn_Chon.setText("Chọn");
         btn_Chon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_ChonActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -206,7 +206,7 @@ public class Form_DanhSachKhachHang extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public synchronized static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -232,7 +232,7 @@ public class Form_DanhSachKhachHang extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public synchronized void run() {
                 try {
                     new Form_DanhSachKhachHang(null).setVisible(true);
                 } catch (SQLException | RemoteException ex) {
@@ -242,7 +242,7 @@ public class Form_DanhSachKhachHang extends javax.swing.JFrame {
         });
     }
     
-    public void docDuLieuKhachHang() throws RemoteException {
+    public synchronized void docDuLieuKhachHang() throws RemoteException {
         modelKhachHang = (DefaultTableModel) tbl_DSKhachHang.getModel();
         for (KhachHang kh : dao_KhachHang.getAllKhachHang()) {
             Object[] object = new Object[5];

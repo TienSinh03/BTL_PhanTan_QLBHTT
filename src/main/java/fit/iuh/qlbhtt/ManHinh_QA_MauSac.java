@@ -20,7 +20,7 @@ import javax.swing.UIManager;
 /**
  * @author DMX
  */
-public class ManHinh_QA_MauSac extends javax.swing.JPanel {
+public   class ManHinh_QA_MauSac extends javax.swing.JPanel {
 
     private IMauSacDao dao_MauSac;
     private DefaultTableModel modelMauSac;
@@ -30,7 +30,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
     /**
      * Creates new form quanly
      */
-    public ManHinh_QA_MauSac() throws SQLException, RemoteException {
+    public   ManHinh_QA_MauSac() throws SQLException, RemoteException {
         dao_MauSac = RMIClientUtil.getMauSacDao();
 //        connect = new Connect();
 //        connect.connect();
@@ -45,7 +45,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
     /**
      * Huy thao tac hoat dong cua componet
      */
-    private void huyThaoTacNhap() {
+    private synchronized  void huyThaoTacNhap() {
         kiemTraCapNhat = false;
         kiemTraThem = false;
         btn_CapNhat.setText("Cập nhật");
@@ -60,7 +60,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
     /**
      * Kiem tra hoat dong cua cac JtextField
      */
-    public void kiemTraTextNhap(boolean kiemTra) {
+    public synchronized  void kiemTraTextNhap(boolean kiemTra) {
         if (kiemTraCapNhat || kiemTraThem) {
             txt_MaMauSac.setEditable(!kiemTra);
 
@@ -74,7 +74,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
     /**
      * Xóa trắng text field
      */
-    public void xoaTrang() {
+    public synchronized  void xoaTrang() {
         txt_MaMauSac.setText("");
         txt_TenMauSac.setText("");
     }
@@ -82,7 +82,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
     /**
      * Đọc dữ liệu và load dữ liệu lên table
      */
-    public void docDuLieuLenBang() throws RemoteException {
+    public synchronized  void docDuLieuLenBang() throws RemoteException {
         modelMauSac = (DefaultTableModel) tbl_MauSac.getModel();
         modelMauSac.setRowCount(0);
         for (MauSac mauSac : dao_MauSac.getAllMauSac()) {
@@ -96,7 +96,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
     /**
      * Xử lý thêm Màu sắc
      */
-    public void xuLyThemMauSac() throws RemoteException {
+    public synchronized  void xuLyThemMauSac() throws RemoteException {
         String tenMauSac = txt_TenMauSac.getText();
 
         MauSac mauSac = new MauSac(tenMauSac);
@@ -116,7 +116,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
 //    /**
 //     * Xử lý xóa Màu sắc
 //     */
-//    public void xuLyXoaMauSac() {
+//    public synchronized  void xuLyXoaMauSac() {
 //        int row = tbl_MauSac.getSelectedRow();
 //        if (row != -1) {
 //            if (JOptionPane.showConfirmDialog(this, "Bạn có chắc là xóa dòng này không?", "Cảnh Báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -134,7 +134,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
     /**
      * Xử lý cập nhật Màu sắc
      */
-    public void xuLyCapNhatMauSac() throws RemoteException {
+    public synchronized  void xuLyCapNhatMauSac() throws RemoteException {
         long maMauSac = Long.parseLong(txt_MaMauSac.getText());
         String tenMauSac = txt_TenMauSac.getText();
 
@@ -160,7 +160,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
     /**
      * Tìm kiếm chất liệu
      */
-    public void xuLyTimKiemMauSac() throws RemoteException {
+    public synchronized  void xuLyTimKiemMauSac() throws RemoteException {
         String msConvert = null;
         if (txt_MaMauSac.getText().equals("")) {
             msConvert = "0";
@@ -230,7 +230,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized  void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         pnl_DanhSachMauSac = new javax.swing.JPanel();
@@ -271,7 +271,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
                     java.lang.String.class, java.lang.String.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public synchronized  Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
         });
@@ -280,7 +280,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         tbl_MauSac.setRowHeight(35);
         tbl_MauSac.setShowGrid(true);
         tbl_MauSac.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbl_MauSacMouseClicked(evt);
             }
         });
@@ -329,7 +329,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         txt_MaMauSac.setMinimumSize(new java.awt.Dimension(64, 30));
         txt_MaMauSac.setPreferredSize(new java.awt.Dimension(64, 30));
         txt_MaMauSac.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_MaMauSacActionPerformed(evt);
             }
         });
@@ -344,7 +344,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         txt_TenMauSac.setMinimumSize(new java.awt.Dimension(64, 30));
         txt_TenMauSac.setPreferredSize(new java.awt.Dimension(64, 30));
         txt_TenMauSac.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_TenMauSacActionPerformed(evt);
             }
         });
@@ -388,16 +388,16 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         btn_Them.setText("Thêm");
         btn_Them.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btn_Them.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_ThemMouseEntered(evt);
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_ThemMouseExited(evt);
             }
         });
         btn_Them.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_ThemActionPerformed(evt);
             }
         });
@@ -407,16 +407,16 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         btn_CapNhat.setText("Cập nhật");
         btn_CapNhat.setBorder(null);
         btn_CapNhat.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_CapNhatMouseEntered(evt);
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_CapNhatMouseExited(evt);
             }
         });
         btn_CapNhat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_CapNhatActionPerformed(evt);
             }
         });
@@ -427,16 +427,16 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         btn_Luu.setBorder(null);
         btn_Luu.setEnabled(false);
         btn_Luu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_LuuMouseEntered(evt);
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_LuuMouseExited(evt);
             }
         });
         btn_Luu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_LuuActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -450,16 +450,16 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         btn_XoaTrang.setText("Xóa trắng");
         btn_XoaTrang.setBorder(null);
         btn_XoaTrang.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_XoaTrangMouseEntered(evt);
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public synchronized  void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_XoaTrangMouseExited(evt);
             }
         });
         btn_XoaTrang.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_XoaTrangActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -472,7 +472,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         btn_TimKiem.setText("Tìm kiếm");
         btn_TimKiem.setBorder(null);
         btn_TimKiem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized  void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_TimKiemActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -533,11 +533,11 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         getAccessibleContext().setAccessibleDescription("");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt_MaMauSacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_MaMauSacActionPerformed
+    private synchronized  void txt_MaMauSacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_MaMauSacActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_MaMauSacActionPerformed
 
-    private void btn_CapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CapNhatActionPerformed
+    private synchronized  void btn_CapNhatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_CapNhatActionPerformed
         if (btn_CapNhat.getText().equalsIgnoreCase("Cập nhật")) {
             btn_CapNhat.setText("Hủy");
             btn_Them.setEnabled(false);
@@ -551,7 +551,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_CapNhatActionPerformed
 
-    private void btn_LuuActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LuuActionPerformed
+    private synchronized  void btn_LuuActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_LuuActionPerformed
         if (kiemTraThem) {
             xuLyThemMauSac();
         } else if (kiemTraCapNhat) {
@@ -559,11 +559,11 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_LuuActionPerformed
 
-    private void txt_TenMauSacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TenMauSacActionPerformed
+    private synchronized  void txt_TenMauSacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TenMauSacActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_TenMauSacActionPerformed
 
-    private void btn_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemActionPerformed
+    private synchronized  void btn_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ThemActionPerformed
         if (btn_Them.getText().equalsIgnoreCase("Thêm")) {
             btn_Them.setText("Hủy");
             btn_CapNhat.setEnabled(false);
@@ -577,7 +577,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_ThemActionPerformed
 
-    private void tbl_MauSacMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_MauSacMouseClicked
+    private synchronized  void tbl_MauSacMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_MauSacMouseClicked
         int row = tbl_MauSac.getSelectedRow();
         if (row != -1) {
             txt_MaMauSac.setText(tbl_MauSac.getValueAt(row, 0).toString());
@@ -585,26 +585,26 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tbl_MauSacMouseClicked
 
-    private void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XoaTrangActionPerformed
+    private synchronized  void btn_XoaTrangActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XoaTrangActionPerformed
         xoaTrang();
         docDuLieuLenBang();
     }//GEN-LAST:event_btn_XoaTrangActionPerformed
 
-    private void btn_ThemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseEntered
+    private synchronized  void btn_ThemMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseEntered
         if (btn_Them.isEnabled()) {
             btn_Them.setBackground(new Color(0x9EDDFF));
             btn_Them.setForeground(new Color(0x141E46));
         }
     }//GEN-LAST:event_btn_ThemMouseEntered
 
-    private void btn_ThemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseExited
+    private synchronized  void btn_ThemMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_ThemMouseExited
         if (btn_Them.isEnabled()) {
             btn_Them.setBackground(UIManager.getColor("Menu.background"));
             btn_Them.setForeground(UIManager.getColor("Menu.foreground"));
         }
     }//GEN-LAST:event_btn_ThemMouseExited
 
-    private void btn_CapNhatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseEntered
+    private synchronized  void btn_CapNhatMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseEntered
         if (btn_CapNhat.isEnabled()) {
             btn_CapNhat.setBackground(new Color(0x9EDDFF));
             btn_CapNhat.setForeground(new Color(0x141E46));
@@ -612,7 +612,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btn_CapNhatMouseEntered
 
-    private void btn_CapNhatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseExited
+    private synchronized  void btn_CapNhatMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CapNhatMouseExited
         if (btn_CapNhat.isEnabled()) {
             btn_CapNhat.setBackground(UIManager.getColor("Menu.background"));
             btn_CapNhat.setForeground(UIManager.getColor("Menu.foreground"));
@@ -620,7 +620,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btn_CapNhatMouseExited
 
-    private void btn_LuuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseEntered
+    private synchronized  void btn_LuuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseEntered
         if (btn_Luu.isEnabled()) {
             btn_Luu.setBackground(new Color(0x9EDDFF));
             btn_Luu.setForeground(new Color(0x141E46));
@@ -628,7 +628,7 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btn_LuuMouseEntered
 
-    private void btn_LuuMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseExited
+    private synchronized  void btn_LuuMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_LuuMouseExited
         if (btn_Luu.isEnabled()) {
             btn_Luu.setBackground(UIManager.getColor("Menu.background"));
             btn_Luu.setForeground(UIManager.getColor("Menu.foreground"));
@@ -636,17 +636,17 @@ public class ManHinh_QA_MauSac extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btn_LuuMouseExited
 
-    private void btn_XoaTrangMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseEntered
+    private synchronized  void btn_XoaTrangMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseEntered
         btn_XoaTrang.setBackground(new Color(0x9EDDFF));
         btn_XoaTrang.setForeground(new Color(0x141E46));
     }//GEN-LAST:event_btn_XoaTrangMouseEntered
 
-    private void btn_XoaTrangMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseExited
+    private synchronized  void btn_XoaTrangMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_XoaTrangMouseExited
         btn_XoaTrang.setBackground(UIManager.getColor("Menu.background"));
         btn_XoaTrang.setForeground(UIManager.getColor("Menu.foreground"));
     }//GEN-LAST:event_btn_XoaTrangMouseExited
 
-    private void btn_TimKiemActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_TimKiemActionPerformed
+    private synchronized  void btn_TimKiemActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_TimKiemActionPerformed
         xuLyTimKiemMauSac();
     }//GEN-LAST:event_btn_TimKiemActionPerformed
 

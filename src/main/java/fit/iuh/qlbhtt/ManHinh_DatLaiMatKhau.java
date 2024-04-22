@@ -18,16 +18,16 @@ import javax.swing.JOptionPane;
  *
  * @author phant
  */
-public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
+public  class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
 
-    private ITaiKhoanDao dao_TaiKhoan;
-    private final TaiKhoan taiKhoan = ManHinh_TimTaiKhoan.taiKhoan;
-    private boolean ngonNgu = Login.ngonNgu;
+    private  ITaiKhoanDao dao_TaiKhoan;
+    private  final TaiKhoan taiKhoan = ManHinh_TimTaiKhoan.taiKhoan;
+    private  boolean ngonNgu = Login.ngonNgu;
 
     /**
      * Creates new form ManHinh_DatLaiMatKhau
      */
-    public ManHinh_DatLaiMatKhau() throws SQLException {
+    public  ManHinh_DatLaiMatKhau() throws SQLException {
         dao_TaiKhoan = RMIClientUtil.getTaiKhoanDao();
         initComponents();
         setLocationRelativeTo(null);
@@ -36,7 +36,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
         }
     }
 
-    public void chuyenDoiNN() {
+    public synchronized void chuyenDoiNN() {
         lbl_MatKhau.setText("New Password:");
         lbl_XacNhanMK.setText("Verify Password:");
         lbl_TieuDe.setText("RESET PASSWORD");
@@ -47,7 +47,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
     /**
      * Xử lý đổi mật khẩu
      */
-    public void xuLyDoiMatKhau() throws RemoteException {
+    public synchronized void xuLyDoiMatKhau() throws RemoteException {
         String xacNhanMK = txt_XacNhanMK.getText();
         String matKhau = txt_MatKhau.getText();
         if (matKhau.equals(xacNhanMK)) {
@@ -74,7 +74,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized void initComponents() {
 
         pnl_pnlChinh = new javax.swing.JPanel();
         lbl_XacNhanMK = new javax.swing.JLabel();
@@ -110,7 +110,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
         btn_Huy.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-cancel-30.png")); // NOI18N
         btn_Huy.setText("Hủy");
         btn_Huy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_HuyActionPerformed(evt);
             }
         });
@@ -120,7 +120,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
         btn_XacNhan.setIcon(new javax.swing.ImageIcon("src/main/java/fit/iuh/imageGD/icons8-verify-30.png")); // NOI18N
         btn_XacNhan.setText("Xác nhận");
         btn_XacNhan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public synchronized void actionPerformed(java.awt.event.ActionEvent evt) {
                 try {
                     btn_XacNhanActionPerformed(evt);
                 } catch (RemoteException e) {
@@ -189,7 +189,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btn_HuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_HuyActionPerformed
+    private synchronized void btn_HuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_HuyActionPerformed
 
         try {
             new Login().setVisible(true);
@@ -202,7 +202,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btn_HuyActionPerformed
 
-    private void btn_XacNhanActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XacNhanActionPerformed
+    private synchronized void btn_XacNhanActionPerformed(java.awt.event.ActionEvent evt) throws RemoteException {//GEN-FIRST:event_btn_XacNhanActionPerformed
         xuLyDoiMatKhau();
 
     }//GEN-LAST:event_btn_XacNhanActionPerformed
@@ -210,7 +210,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-//    public static void main(String args[]) {
+//    public synchronized static void main(String args[]) {
 //        /* Set the Nimbus look and feel */
 //        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
 //        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -236,7 +236,7 @@ public class ManHinh_DatLaiMatKhau extends javax.swing.JFrame {
 //
 //        /* Create and display the form */
 //        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
+//            public synchronized void run() {
 //                new ManHinh_DatLaiMatKhau().setVisible(true);
 //            }
 //        });

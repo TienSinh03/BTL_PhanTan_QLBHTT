@@ -30,13 +30,13 @@ import org.jfree.data.category.DefaultCategoryDataset;
  *
  * @author phant
  */
-public class ManHinh_NV_BieuDoThongKeSP extends javax.swing.JFrame {
+public  class ManHinh_NV_BieuDoThongKeSP extends javax.swing.JFrame {
     private ISanPhamDao dao_SanPham;
     private IPhanLoaiDao dao_PhanLoai;
     /**
      * Creates new form ManHinh_NV_BieuDoThongKeSP
      */
-    public ManHinh_NV_BieuDoThongKeSP() throws SQLException, RemoteException {
+    public  ManHinh_NV_BieuDoThongKeSP() throws SQLException, RemoteException {
         dao_SanPham = RMIClientUtil.getSanPhamDao();
         dao_PhanLoai = RMIClientUtil.getPhanLoaiDao();
         initComponents();
@@ -45,7 +45,7 @@ public class ManHinh_NV_BieuDoThongKeSP extends javax.swing.JFrame {
         hienThiBieuDoTK();
     }
 
-    public void hienThiBieuDoTK() throws RemoteException {
+    public synchronized void hienThiBieuDoTK() throws RemoteException {
         DefaultCategoryDataset dateSet = new DefaultCategoryDataset(); //Khởi tạo để chứa dữ liệu cột
         
         for(SanPham sp: dao_SanPham.getSoLuongSPTheoMaPL()) {
@@ -89,7 +89,7 @@ public class ManHinh_NV_BieuDoThongKeSP extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private synchronized void initComponents() {
 
         pnl_HienThiBieuDo = new javax.swing.JPanel();
 
@@ -115,7 +115,7 @@ public class ManHinh_NV_BieuDoThongKeSP extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public synchronized static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -141,7 +141,7 @@ public class ManHinh_NV_BieuDoThongKeSP extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            public synchronized void run() {
                 try {
                     new ManHinh_NV_BieuDoThongKeSP().setVisible(true);
                 } catch (SQLException ex) {
